@@ -1,0 +1,224 @@
+<?php
+
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\{ApplicationController, CommissionController, CountryController, CourseController, CourseIntakeController, DashboardController, LeadController, PaymentController, RoleController as LocalRoleController, SettingController, StudentController, UniversityController};
+
+
+Route::get('/', function () {
+    return redirect()->route('tyro-login.login');
+});
+
+Route::get('/dashboard', [DashboardController::class, 'index'])->name('tyro-dashboard.index');
+
+Route::prefix('dashboard/settings')->name('admin.settings.')->middleware('can:manage-settings')->group(function () {
+    Route::get('/', [SettingController::class, 'index'])->name('index');
+    Route::post('/update', [SettingController::class, 'update'])->name('update');
+});
+
+// Notifications
+Route::prefix('dashboard/notifications')->name('admin.notifications.')->group(function () {
+    Route::get('{id}/read', [App\Http\Controllers\Admin\NotificationController::class, 'markAsRead'])->name('read');
+    Route::get('read-all', [App\Http\Controllers\Admin\NotificationController::class, 'markAllAsRead'])->name('readAll');
+});
+
+// Country Management
+Route::prefix('dashboard/countries')->name('admin.countries.')->middleware('can:*editor')->group(function () {
+    Route::get('/', [CountryController::class, 'index'])->name('index');
+    Route::get('/create', [CountryController::class, 'create'])->name('create');
+    Route::post('/', [CountryController::class, 'store'])->name('store');
+    Route::get('{country}/edit', [CountryController::class, 'edit'])->name('edit');
+    Route::put('{country}', [CountryController::class, 'update'])->name('update');
+    Route::delete('{country}', [CountryController::class, 'destroy'])->name('destroy');
+});
+
+// University Management
+Route::prefix('dashboard/universities')->name('admin.universities.')->middleware('can:*editor')->group(function () {
+    Route::get('/', [UniversityController::class, 'index'])->name('index');
+    Route::get('/create', [UniversityController::class, 'create'])->name('create');
+    Route::post('/', [UniversityController::class, 'store'])->name('store');
+    Route::get('{university}/edit', [UniversityController::class, 'edit'])->name('edit');
+    Route::put('{university}', [UniversityController::class, 'update'])->name('update');
+    Route::delete('{university}', [UniversityController::class, 'destroy'])->name('destroy');
+});
+
+// Course Management
+Route::prefix('dashboard/courses')->name('admin.courses.')->middleware('can:*editor')->group(function () {
+    Route::get('/', [CourseController::class, 'index'])->name('index');
+    Route::get('/create', [CourseController::class, 'create'])->name('create');
+    Route::post('/', [CourseController::class, 'store'])->name('store');
+    Route::get('{course}/edit', [CourseController::class, 'edit'])->name('edit');
+    Route::put('{course}', [CourseController::class, 'update'])->name('update');
+    Route::delete('{course}', [CourseController::class, 'destroy'])->name('destroy');
+});
+
+// CourseIntake Management
+Route::prefix('dashboard/course-intakes')->name('admin.course-intakes.')->middleware('can:*editor')->group(function () {
+    Route::get('/', [CourseIntakeController::class, 'index'])->name('index');
+    Route::get('/create', [CourseIntakeController::class, 'create'])->name('create');
+    Route::post('/', [CourseIntakeController::class, 'store'])->name('store');
+    Route::get('{courseIntake}/edit', [CourseIntakeController::class, 'edit'])->name('edit');
+    Route::put('{courseIntake}', [CourseIntakeController::class, 'update'])->name('update');
+    Route::delete('{courseIntake}', [CourseIntakeController::class, 'destroy'])->name('destroy');
+});
+
+// Student Management
+Route::prefix('dashboard/students')->name('admin.students.')->group(function () {
+    Route::get('/', [StudentController::class, 'index'])->name('index')->middleware('can:*consultant|*application');
+    Route::get('/create', [StudentController::class, 'create'])->name('create')->middleware('can:*consultant');
+    Route::post('/', [StudentController::class, 'store'])->name('store')->middleware('can:*consultant');
+    Route::get('{student}', [StudentController::class, 'show'])->name('show')->middleware('can:*consultant|*application');
+    Route::get('{student}/edit', [StudentController::class, 'edit'])->name('edit')->middleware('can:*consultant');
+    Route::put('{student}', [StudentController::class, 'update'])->name('update')->middleware('can:*consultant');
+    Route::delete('{student}', [StudentController::class, 'destroy'])->name('destroy')->middleware('can:*consultant');
+});
+
+// Payment Management
+Route::prefix('dashboard/payments')->name('admin.payments.')->group(function () {
+    Route::get('/', [PaymentController::class, 'index'])->name('index')->middleware('can:*accountant');
+    Route::get('/create', [PaymentController::class, 'create'])->name('create')->middleware('can:*accountant');
+    Route::post('/', [PaymentController::class, 'store'])->name('store')->middleware('can:*accountant');
+    Route::get('{payment}/edit', [PaymentController::class, 'edit'])->name('edit')->middleware('can:*accountant');
+    Route::get('{payment}/download-invoice', [PaymentController::class, 'downloadInvoice'])->name('download-invoice')->middleware('can:*accountant');
+    Route::get('/get-application-balance', [PaymentController::class, 'getApplicationBalance'])->name('get-application-balance');
+    Route::put('{payment}', [PaymentController::class, 'update'])->name('update')->middleware('can:*accountant');
+    Route::delete('{payment}', [PaymentController::class, 'destroy'])->name('destroy')->middleware('can:*accountant');
+});
+
+// Commission Management
+Route::prefix('dashboard/commissions')->name('admin.commissions.')->middleware('can:*accountant')->group(function () {
+    Route::get('/', [CommissionController::class, 'index'])->name('index');
+    Route::post('{commission}/update-status', [CommissionController::class, 'updateStatus'])->name('update-status');
+});
+
+// Role Management Overrides
+Route::prefix('dashboard/roles')->name('tyro-dashboard.roles.')->group(function () {
+    Route::get('/', [LocalRoleController::class, 'index'])->name('index');
+    Route::get('/create', [LocalRoleController::class, 'create'])->name('create');
+    Route::post('/', [LocalRoleController::class, 'store'])->name('store');
+    Route::get('{id}/edit', [LocalRoleController::class, 'edit'])->name('edit');
+    Route::put('{id}', [LocalRoleController::class, 'update'])->name('update');
+    Route::post('{id}/toggle', [LocalRoleController::class, 'toggleStatus'])->name('toggle');
+    Route::delete('{id}', [LocalRoleController::class, 'destroy'])->name('destroy');
+});
+
+// Marketing - Lead Management
+Route::prefix('dashboard/marketing')->name('admin.marketing.')->group(function () {
+    Route::get('leads/get-universities', [LeadController::class, 'getUniversities'])->name('leads.get-universities');
+    Route::get('leads/get-courses', [LeadController::class, 'getCourses'])->name('leads.get-courses');
+    Route::get('leads', [LeadController::class, 'index'])->name('leads.index')->middleware('can:*marketing|*consultant');
+    Route::get('leads/create', [LeadController::class, 'create'])->name('leads.create')->middleware('can:*marketing');
+    Route::post('leads', [LeadController::class, 'store'])->name('leads.store')->middleware('can:*marketing');
+    Route::get('leads/{lead}', [LeadController::class, 'show'])->name('leads.show')->middleware('can:*marketing|*consultant');
+    Route::get('leads/{lead}/edit', [LeadController::class, 'edit'])->name('leads.edit')->middleware('can:*marketing');
+    Route::put('leads/{lead}', [LeadController::class, 'update'])->name('leads.update')->middleware('can:*marketing');
+    Route::delete('leads/{lead}', [LeadController::class, 'destroy'])->name('leads.destroy')->middleware('can:*marketing');
+});
+
+// Expense Management
+Route::prefix('dashboard/expenses')->name('admin.expenses.')->group(function () {
+    Route::get('/', [App\Http\Controllers\Admin\ExpenseController::class, 'index'])->name('index')->middleware('can:*accountant');
+    Route::get('/create', [App\Http\Controllers\Admin\ExpenseController::class, 'create'])->name('create')->middleware('can:*accountant');
+    Route::post('/', [App\Http\Controllers\Admin\ExpenseController::class, 'store'])->name('store')->middleware('can:*accountant');
+    Route::get('{expense}/pdf', [App\Http\Controllers\Admin\ExpenseController::class, 'downloadPdf'])->name('download-pdf')->middleware('can:*accountant');
+    Route::get('{expense}/edit', [App\Http\Controllers\Admin\ExpenseController::class, 'edit'])->name('edit')->middleware('can:*accountant');
+    Route::put('{expense}', [App\Http\Controllers\Admin\ExpenseController::class, 'update'])->name('update')->middleware('can:*accountant');
+    Route::delete('{expense}', [App\Http\Controllers\Admin\ExpenseController::class, 'destroy'])->name('destroy')->middleware('can:*accountant');
+});
+
+// Office Accounts Management
+Route::prefix('dashboard/office-accounts')->name('admin.office-accounts.')->group(function () {
+    Route::get('/', [App\Http\Controllers\Admin\OfficeAccountController::class, 'index'])->name('index')->middleware('can:*accountant');
+    Route::get('/create', [App\Http\Controllers\Admin\OfficeAccountController::class, 'create'])->name('create')->middleware('can:*accountant');
+    Route::post('/', [App\Http\Controllers\Admin\OfficeAccountController::class, 'store'])->name('store')->middleware('can:*accountant');
+    Route::get('{officeAccount}/edit', [App\Http\Controllers\Admin\OfficeAccountController::class, 'edit'])->name('edit')->middleware('can:*accountant');
+    Route::put('{officeAccount}', [App\Http\Controllers\Admin\OfficeAccountController::class, 'update'])->name('update')->middleware('can:*accountant');
+    Route::delete('{officeAccount}', [App\Http\Controllers\Admin\OfficeAccountController::class, 'destroy'])->name('destroy')->middleware('can:*accountant');
+});
+
+// Office Transactions Management
+Route::prefix('dashboard/office-transactions')->name('admin.office-transactions.')->group(function () {
+    Route::get('/', [App\Http\Controllers\Admin\OfficeTransactionController::class, 'index'])->name('index')->middleware('can:*accountant');
+    Route::get('/create', [App\Http\Controllers\Admin\OfficeTransactionController::class, 'create'])->name('create')->middleware('can:*accountant');
+    Route::post('/', [App\Http\Controllers\Admin\OfficeTransactionController::class, 'store'])->name('store')->middleware('can:*accountant');
+    Route::get('{officeTransaction}', [App\Http\Controllers\Admin\OfficeTransactionController::class, 'show'])->name('show')->middleware('can:*accountant');
+    Route::delete('{officeTransaction}', [App\Http\Controllers\Admin\OfficeTransactionController::class, 'destroy'])->name('destroy')->middleware('can:*accountant');
+});
+
+// Budget Management
+Route::prefix('dashboard/budgets')->name('admin.budgets.')->group(function () {
+    Route::get('/', [App\Http\Controllers\Admin\BudgetController::class, 'index'])->name('index')->middleware('can:*accountant');
+    Route::get('/create', [App\Http\Controllers\Admin\BudgetController::class, 'create'])->name('create')->middleware('can:*accountant');
+    Route::post('/', [App\Http\Controllers\Admin\BudgetController::class, 'store'])->name('store')->middleware('can:*accountant');
+    Route::get('{budget}/edit', [App\Http\Controllers\Admin\BudgetController::class, 'edit'])->name('edit')->middleware('can:*accountant');
+    Route::put('{budget}', [App\Http\Controllers\Admin\BudgetController::class, 'update'])->name('update')->middleware('can:*accountant');
+    Route::delete('{budget}', [App\Http\Controllers\Admin\BudgetController::class, 'destroy'])->name('destroy')->middleware('can:*accountant');
+});
+
+// Finance Categories
+Route::prefix('dashboard/finance-categories')->name('admin.finance-categories.')->group(function () {
+    Route::get('/', [App\Http\Controllers\Admin\FinanceCategoryController::class, 'index'])->name('index')->middleware('can:*accountant');
+    Route::post('/', [App\Http\Controllers\Admin\FinanceCategoryController::class, 'store'])->name('store')->middleware('can:*accountant');
+    Route::put('{category}', [App\Http\Controllers\Admin\FinanceCategoryController::class, 'update'])->name('update')->middleware('can:*accountant');
+    Route::delete('{category}', [App\Http\Controllers\Admin\FinanceCategoryController::class, 'destroy'])->name('destroy')->middleware('can:*accountant');
+});
+
+// Financial Reports
+Route::prefix('dashboard/reports')->name('admin.reports.')->group(function () {
+    Route::get('/summary', [App\Http\Controllers\Admin\ReportController::class, 'summary'])->name('summary')->middleware('can:*accountant');
+    Route::get('/download-pdf', [App\Http\Controllers\Admin\ReportController::class, 'downloadPdf'])->name('download-pdf')->middleware('can:*accountant');
+});
+
+// Currencies
+Route::prefix('dashboard/currencies')->name('admin.currencies.')->group(function () {
+    Route::get('/refresh', [App\Http\Controllers\Admin\CurrencyController::class, 'refresh'])->name('refresh')->middleware('can:*accountant|*consultant|*application');
+    Route::get('/', [App\Http\Controllers\Admin\CurrencyController::class, 'index'])->name('index')->middleware('can:*accountant|*consultant|*application');
+    Route::post('/', [App\Http\Controllers\Admin\CurrencyController::class, 'store'])->name('store')->middleware('can:*accountant');
+    Route::put('{currency}', [App\Http\Controllers\Admin\CurrencyController::class, 'update'])->name('update')->middleware('can:*accountant');
+    Route::delete('{currency}', [App\Http\Controllers\Admin\CurrencyController::class, 'destroy'])->name('destroy')->middleware('can:*accountant');
+});
+
+// Salary Management
+Route::prefix('dashboard/salaries')->name('admin.salaries.')->group(function () {
+    Route::get('/get-employee-details', [App\Http\Controllers\Admin\SalaryController::class, 'getEmployeeDetails'])->name('get-employee-details');
+    Route::get('/check-existing', [App\Http\Controllers\Admin\SalaryController::class, 'checkExistingSalary'])->name('check-existing');
+    Route::get('/export-excel', [App\Http\Controllers\Admin\SalaryController::class, 'exportExcel'])->name('export-excel')->middleware('can:*accountant');
+    Route::get('/export-pdf', [App\Http\Controllers\Admin\SalaryController::class, 'exportPdf'])->name('export-pdf')->middleware('can:*accountant');
+    Route::post('/{salary}/mark-paid', [App\Http\Controllers\Admin\SalaryController::class, 'markAsPaid'])->name('mark-paid')->middleware('can:*accountant');
+    Route::post('/bulk-store', [App\Http\Controllers\Admin\SalaryController::class, 'bulkStore'])->name('bulk-store')->middleware('can:*accountant');
+    Route::post('/bulk-update-basic-salary', [App\Http\Controllers\Admin\SalaryController::class, 'bulkUpdateBasicSalary'])->name('bulk-update-basic-salary')->middleware('can:*accountant');
+    Route::post('/bulk-update-account-details', [App\Http\Controllers\Admin\SalaryController::class, 'bulkUpdateAccountDetails'])->name('bulk-update-account-details')->middleware('can:*accountant');
+    Route::get('/generate', [App\Http\Controllers\Admin\SalaryController::class, 'generate'])->name('generate')->middleware('can:*accountant');
+    Route::get('/bulk-pay-form', [App\Http\Controllers\Admin\SalaryController::class, 'bulkPayForm'])->name('bulk-pay-form')->middleware('can:*accountant');
+    Route::post('/bulk-pay', [App\Http\Controllers\Admin\SalaryController::class, 'bulkPay'])->name('bulk-pay')->middleware('can:*accountant');
+    Route::get('/', [App\Http\Controllers\Admin\SalaryController::class, 'index'])->name('index')->middleware('can:*accountant');
+    Route::get('/create', [App\Http\Controllers\Admin\SalaryController::class, 'create'])->name('create')->middleware('can:*accountant');
+    Route::post('/', [App\Http\Controllers\Admin\SalaryController::class, 'store'])->name('store')->middleware('can:*accountant');
+    Route::get('/{salary}', [App\Http\Controllers\Admin\SalaryController::class, 'show'])->name('show')->middleware('can:*accountant');
+    Route::get('/{salary}/edit', [App\Http\Controllers\Admin\SalaryController::class, 'edit'])->name('edit')->middleware('can:*accountant');
+    Route::put('/{salary}', [App\Http\Controllers\Admin\SalaryController::class, 'update'])->name('update')->middleware('can:*accountant');
+    Route::delete('/{salary}', [App\Http\Controllers\Admin\SalaryController::class, 'destroy'])->name('destroy')->middleware('can:*accountant');
+});
+
+// Application Management
+Route::prefix('dashboard/applications')->name('admin.applications.')->group(function () {
+    Route::get('/get-student-details', [ApplicationController::class, 'getStudentDetails'])->name('get-student-details');
+    Route::get('/get-universities', [ApplicationController::class, 'getUniversities'])->name('get-universities');
+    Route::get('/get-courses', [ApplicationController::class, 'getCourses'])->name('get-courses');
+    Route::get('/get-intakes', [ApplicationController::class, 'getIntakes'])->name('get-intakes');
+    Route::get('/{application}/download-pdf', [ApplicationController::class, 'downloadPdf'])->name('download-pdf')->middleware('can:*consultant|*application');
+    Route::get('/', [ApplicationController::class, 'index'])->name('index')->middleware('can:*consultant|*application');
+    Route::get('/create', [ApplicationController::class, 'create'])->name('create')->middleware('can:*consultant');
+    Route::post('/', [ApplicationController::class, 'store'])->name('store')->middleware('can:*consultant');
+    Route::get('{application}/edit', [ApplicationController::class, 'edit'])->name('edit')->middleware('can:*consultant|*application');
+    Route::put('{application}', [ApplicationController::class, 'update'])->name('update')->middleware('can:*consultant|*application');
+    Route::delete('{application}', [ApplicationController::class, 'destroy'])->name('destroy')->middleware('can:*consultant');
+
+    // Route::get('/', [ApplicationController::class , 'index2'])->name('index2')->middleware('can:*application');
+    //  Route::get('{application}/edit', [ApplicationController::class , 'edit2'])->name('edit2')->middleware('can:*application');
+    // Route::put('{application}', [ApplicationController::class , 'update2'])->name('update2')->middleware('can:*application');
+});
+
+// Storage file serving route - handled through Laravel route to ensure proper access control
+Route::get('/storage/{path}', [App\Http\Controllers\FileServingController::class, 'serveFile'])
+    ->where('path', '.*')
+    ->name('serve-file');
