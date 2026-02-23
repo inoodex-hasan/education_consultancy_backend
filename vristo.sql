@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Feb 23, 2026 at 07:20 AM
+-- Generation Time: Feb 23, 2026 at 09:45 AM
 -- Server version: 8.4.3
 -- PHP Version: 8.3.26
 
@@ -94,9 +94,9 @@ CREATE TABLE `cache` (
 --
 
 INSERT INTO `cache` (`key`, `value`, `expiration`) VALUES
-('admin-dashboard-cache-tyro:user-1:roles', 'a:1:{i:0;s:5:\"admin\";}', 1771831380),
-('admin-dashboard-cache-tyro:user-4:privileges', 'a:1:{i:0;s:11:\"*accountant\";}', 1771830696),
-('admin-dashboard-cache-tyro:user-4:roles', 'a:1:{i:0;s:10:\"accountant\";}', 1771830696),
+('admin-dashboard-cache-tyro:user-1:roles', 'a:1:{i:0;s:5:\"admin\";}', 1771836838),
+('admin-dashboard-cache-tyro:user-4:privileges', 'a:1:{i:0;s:11:\"*accountant\";}', 1771840008),
+('admin-dashboard-cache-tyro:user-4:roles', 'a:1:{i:0;s:10:\"accountant\";}', 1771840008),
 ('admin-dashboard-cache-tyro:user-5:privileges', 'a:1:{i:0;s:7:\"*editor\";}', 1771831245),
 ('admin-dashboard-cache-tyro:user-5:roles', 'a:1:{i:0;s:6:\"editor\";}', 1771831245),
 ('admin-dashboard-cache-tyro:user-6:privileges', 'a:1:{i:0;s:12:\"*application\";}', 1771831053),
@@ -274,12 +274,12 @@ CREATE TABLE `expenses` (
 INSERT INTO `expenses` (`id`, `description`, `amount`, `expense_date`, `category`, `payment_method`, `office_account_id`, `created_by`, `notes`, `created_at`, `updated_at`, `salary_id`) VALUES
 (6, 'Office Rent', 15000.00, '2026-02-22', 'Rent', 'bank_transfer', 2, 4, NULL, '2026-02-22 11:26:59', '2026-02-22 11:26:59', NULL),
 (7, 'Marketing', 5000.00, '2026-02-22', 'Marketing', 'mobile_banking', 1, 4, NULL, '2026-02-22 11:28:20', '2026-02-22 11:28:20', NULL),
-(8, 'Inoodex - Salary Payment', 15000.00, '2026-02-23', 'Salaries', 'bank_transfer', 2, 4, NULL, '2026-02-23 00:41:15', '2026-02-23 00:41:15', 20),
-(9, 'Salary Payment - Marketing (2026-01)', 18000.00, '2026-02-23', 'Salaries', 'bank_transfer', 1, 4, NULL, '2026-02-23 00:48:20', '2026-02-23 00:48:20', 21),
-(10, 'Salary Payment - Consultant (2026-01)', 12000.00, '2026-02-23', 'Salaries', 'bank_transfer', 1, 4, NULL, '2026-02-23 00:48:20', '2026-02-23 00:48:20', 22),
-(11, 'Salary Payment - Accountant (2026-01)', 20000.00, '2026-02-23', 'Salaries', 'bank_transfer', 1, 4, NULL, '2026-02-23 00:48:20', '2026-02-23 00:48:20', 23),
-(12, 'Salary Payment - Editor (2026-01)', 12000.00, '2026-02-23', 'Salaries', 'bank_transfer', 1, 4, NULL, '2026-02-23 00:48:20', '2026-02-23 00:48:20', 24),
-(13, 'Salary Payment - Application (2026-01)', 15000.00, '2026-02-23', 'Salaries', 'bank_transfer', 1, 4, NULL, '2026-02-23 00:48:20', '2026-02-23 00:48:20', 25);
+(8, 'Inoodex - Salary Payment', 15000.00, '2026-02-23', 'Salaries', 'bank_transfer', 2, 4, NULL, '2026-02-23 00:41:15', '2026-02-23 00:41:15', NULL),
+(9, 'Salary Payment - Marketing (2026-01)', 18000.00, '2026-02-23', 'Salaries', 'bank_transfer', 1, 4, NULL, '2026-02-23 00:48:20', '2026-02-23 00:48:20', NULL),
+(10, 'Salary Payment - Consultant (2026-01)', 12000.00, '2026-02-23', 'Salaries', 'bank_transfer', 1, 4, NULL, '2026-02-23 00:48:20', '2026-02-23 00:48:20', NULL),
+(11, 'Salary Payment - Accountant (2026-01)', 20000.00, '2026-02-23', 'Salaries', 'bank_transfer', 1, 4, NULL, '2026-02-23 00:48:20', '2026-02-23 00:48:20', NULL),
+(12, 'Salary Payment - Editor (2026-01)', 12000.00, '2026-02-23', 'Salaries', 'bank_transfer', 1, 4, NULL, '2026-02-23 00:48:20', '2026-02-23 00:48:20', NULL),
+(13, 'Salary Payment - Application (2026-01)', 15000.00, '2026-02-23', 'Salaries', 'bank_transfer', 1, 4, NULL, '2026-02-23 00:48:20', '2026-02-23 00:48:20', NULL);
 
 -- --------------------------------------------------------
 
@@ -551,7 +551,7 @@ CREATE TABLE `office_accounts` (
 --
 
 INSERT INTO `office_accounts` (`id`, `account_name`, `account_type`, `provider_name`, `account_number`, `opening_balance`, `branch_name`, `status`, `remaining_balance`, `created_by`, `notes`, `created_at`, `updated_at`) VALUES
-(1, 'Inoodex', 'mfs', 'bKash', '01234567890', 0.00, NULL, 'active', -32000.00, 4, NULL, '2026-02-18 00:48:45', '2026-02-23 00:48:20'),
+(1, 'Inoodex', 'mfs', 'bKash', '01234567890', 0.00, NULL, 'active', -14000.00, 4, NULL, '2026-02-18 00:48:45', '2026-02-23 03:44:33'),
 (2, 'Inoodex', 'bank', 'Dutch Banla Bank', '0123456789', 0.00, 'Banani', 'active', 70000.00, 4, NULL, '2026-02-18 00:55:47', '2026-02-23 00:41:15'),
 (3, 'Office Cash', 'cash', NULL, '1', 100000.00, NULL, 'active', 100000.00, 4, NULL, '2026-02-23 01:07:07', '2026-02-23 01:07:07');
 
@@ -584,13 +584,7 @@ INSERT INTO `office_transactions` (`id`, `from_account_id`, `to_account_id`, `am
 (10, 2, NULL, 15000.00, '2026-02-22', 'expense', 'Expense: Office Rent', NULL, 4, '2026-02-22 11:26:59', '2026-02-22 11:26:59'),
 (11, 1, NULL, 5000.00, '2026-02-22', 'expense', 'Expense: Marketing', NULL, 4, '2026-02-22 11:28:20', '2026-02-22 11:28:20'),
 (12, NULL, 1, 50000.00, '2026-02-22', 'income', 'Payment: REC-20260222-0002', 'Payment for application #APP-2026-00001', 4, '2026-02-22 11:28:46', '2026-02-22 11:28:46'),
-(13, NULL, 2, 50000.00, '2026-02-23', 'income', 'Payment: REC-20260223-0001', 'Payment for application #APP-2026-00001', 4, '2026-02-22 23:14:32', '2026-02-22 23:14:32'),
-(14, 2, NULL, 15000.00, '2026-02-23', 'expense', 'Expense: Inoodex - Salary Payment', NULL, 4, '2026-02-23 00:41:15', '2026-02-23 00:41:15'),
-(15, 1, NULL, 18000.00, '2026-02-23', 'expense', 'Salary: Marketing', NULL, 4, '2026-02-23 00:48:20', '2026-02-23 00:48:20'),
-(16, 1, NULL, 12000.00, '2026-02-23', 'expense', 'Salary: Consultant', NULL, 4, '2026-02-23 00:48:20', '2026-02-23 00:48:20'),
-(17, 1, NULL, 20000.00, '2026-02-23', 'expense', 'Salary: Accountant', NULL, 4, '2026-02-23 00:48:20', '2026-02-23 00:48:20'),
-(18, 1, NULL, 12000.00, '2026-02-23', 'expense', 'Salary: Editor', NULL, 4, '2026-02-23 00:48:20', '2026-02-23 00:48:20'),
-(19, 1, NULL, 15000.00, '2026-02-23', 'expense', 'Salary: Application', NULL, 4, '2026-02-23 00:48:20', '2026-02-23 00:48:20');
+(13, NULL, 2, 50000.00, '2026-02-23', 'income', 'Payment: REC-20260223-0001', 'Payment for application #APP-2026-00001', 4, '2026-02-22 23:14:32', '2026-02-22 23:14:32');
 
 -- --------------------------------------------------------
 
@@ -777,18 +771,6 @@ CREATE TABLE `salaries` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Dumping data for table `salaries`
---
-
-INSERT INTO `salaries` (`id`, `user_id`, `employee_name`, `month`, `basic_salary`, `overtime_amount`, `bonus`, `allowances`, `gross_salary`, `tax_deduction`, `insurance_deduction`, `other_deductions`, `net_salary`, `paid_amount`, `payment_status`, `payment_date`, `payment_method`, `bank_name`, `transaction_id`, `notes`, `created_by`, `created_at`, `updated_at`) VALUES
-(20, 1, 'Inoodex', '2026-01', 15000.00, 0.00, 0.00, 0.00, 15000.00, 0.00, 0.00, 0.00, 15000.00, 15000.00, 'paid', NULL, NULL, NULL, NULL, NULL, 4, '2026-02-23 00:25:20', '2026-02-23 00:41:15'),
-(21, 2, 'Marketing', '2026-01', 18000.00, 0.00, 0.00, 0.00, 18000.00, 0.00, 0.00, 0.00, 18000.00, 18000.00, 'paid', '2026-02-23', 'bank_transfer', NULL, NULL, NULL, 4, '2026-02-23 00:25:20', '2026-02-23 00:48:20'),
-(22, 3, 'Consultant', '2026-01', 12000.00, 0.00, 0.00, 0.00, 12000.00, 0.00, 0.00, 0.00, 12000.00, 12000.00, 'paid', '2026-02-23', 'bank_transfer', NULL, NULL, NULL, 4, '2026-02-23 00:25:20', '2026-02-23 00:48:20'),
-(23, 4, 'Accountant', '2026-01', 20000.00, 0.00, 0.00, 0.00, 20000.00, 0.00, 0.00, 0.00, 20000.00, 20000.00, 'paid', '2026-02-23', 'bank_transfer', NULL, NULL, NULL, 4, '2026-02-23 00:25:20', '2026-02-23 00:48:20'),
-(24, 5, 'Editor', '2026-01', 12000.00, 0.00, 0.00, 0.00, 12000.00, 0.00, 0.00, 0.00, 12000.00, 12000.00, 'paid', '2026-02-23', 'bank_transfer', NULL, NULL, NULL, 4, '2026-02-23 00:25:20', '2026-02-23 00:48:20'),
-(25, 6, 'Application', '2026-01', 15000.00, 0.00, 0.00, 0.00, 15000.00, 0.00, 0.00, 0.00, 15000.00, 15000.00, 'paid', '2026-02-23', 'bank_transfer', NULL, NULL, NULL, 4, '2026-02-23 00:25:20', '2026-02-23 00:48:20');
-
 -- --------------------------------------------------------
 
 --
@@ -809,7 +791,7 @@ CREATE TABLE `sessions` (
 --
 
 INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES
-('6I6h7CYFfAO5w8chStlWXbB2ciNwe8GUGzeaBUUN', 1, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:147.0) Gecko/20100101 Firefox/147.0', 'YTo1OntzOjY6Il90b2tlbiI7czo0MDoiMWMyeDNGbnJoM0h4ZkdjV0xwM0I0bVlOQUJpdXpIcVdsWkJqd2JJbyI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czoxMDoidHlyby1sb2dpbiI7YToxOntzOjc6ImNhcHRjaGEiO2E6MDp7fX1zOjk6Il9wcmV2aW91cyI7YToyOntzOjM6InVybCI7czo0MDoiaHR0cDovLzEyNy4wLjAuMTo4MDAwL2Rhc2hib2FyZC9zZXR0aW5ncyI7czo1OiJyb3V0ZSI7czoyMDoiYWRtaW4uc2V0dGluZ3MuaW5kZXgiO31zOjUwOiJsb2dpbl93ZWJfNTliYTM2YWRkYzJiMmY5NDAxNTgwZjAxNGM3ZjU4ZWE0ZTMwOTg5ZCI7aToxO30=', 1771831094);
+('t9Vb75so1nl6TSP8YSIOK4RgnJRc9rdvpdw8jXlo', 4, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:147.0) Gecko/20100101 Firefox/147.0', 'YTo1OntzOjY6Il90b2tlbiI7czo0MDoiRGFKOEJmdGVIZll5emFUZlVFbEpYa1FSQWpzTzYwNnJydllhemtzNiI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czoxMDoidHlyby1sb2dpbiI7YToxOntzOjc6ImNhcHRjaGEiO2E6MDp7fX1zOjk6Il9wcmV2aW91cyI7YToyOntzOjM6InVybCI7czo1MToiaHR0cDovLzEyNy4wLjAuMTo4MDAwL2Rhc2hib2FyZC9vZmZpY2UtdHJhbnNhY3Rpb25zIjtzOjU6InJvdXRlIjtzOjMxOiJhZG1pbi5vZmZpY2UtdHJhbnNhY3Rpb25zLmluZGV4Ijt9czo1MDoibG9naW5fd2ViXzU5YmEzNmFkZGMyYjJmOTQwMTU4MGYwMTRjN2Y1OGVhNGUzMDk4OWQiO2k6NDt9', 1771839923);
 
 -- --------------------------------------------------------
 
@@ -831,9 +813,9 @@ CREATE TABLE `settings` (
 
 INSERT INTO `settings` (`id`, `key`, `value`, `created_at`, `updated_at`) VALUES
 (1, 'app_name', 'Inoodex', '2026-02-16 03:20:28', '2026-02-16 03:20:28'),
-(2, 'contact_email', NULL, '2026-02-16 03:20:28', '2026-02-16 03:20:28'),
-(3, 'contact_phone', NULL, '2026-02-16 03:20:28', '2026-02-16 03:20:28'),
-(4, 'address', NULL, '2026-02-16 03:20:28', '2026-02-16 03:20:28'),
+(2, 'contact_email', 'hello@inoodex.com', '2026-02-16 03:20:28', '2026-02-23 02:49:28'),
+(3, 'contact_phone', '01234567890', '2026-02-16 03:20:28', '2026-02-23 02:49:28'),
+(4, 'address', 'Mirpur, Dhaka', '2026-02-16 03:20:28', '2026-02-23 02:49:28'),
 (5, 'social_facebook', NULL, '2026-02-16 03:20:28', '2026-02-16 03:20:28'),
 (6, 'social_twitter', NULL, '2026-02-16 03:20:28', '2026-02-16 03:20:28'),
 (7, 'social_linkedin', NULL, '2026-02-16 03:20:28', '2026-02-16 03:20:28'),
@@ -1009,7 +991,7 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `name`, `email`, `basic_salary`, `email_verified_at`, `password`, `two_factor_secret`, `two_factor_recovery_codes`, `two_factor_confirmed_at`, `remember_token`, `created_at`, `updated_at`, `suspended_at`, `suspension_reason`, `profile_photo_path`, `use_gravatar`, `account_number`, `bank_name`, `bank_branch`, `routing_number`, `commission_percentage`) VALUES
 (1, 'Inoodex', 'hello@inoodex.com', 15000.00, NULL, '$2y$12$bZ9YAxTXRcahQbLiZ6d8q.cXUkxAbriZ.WtNmnNPrwcOA0PppnPJO', NULL, NULL, NULL, NULL, '2026-02-16 03:09:49', '2026-02-22 04:14:08', NULL, NULL, NULL, 0, '12345678', 'Islami Bank Bangladesh', 'Banani', '1234', NULL),
-(2, 'Marketing', 'marketing@example.com', 18000.00, NULL, '$2y$12$ei9LSrLrIhng1FNUsEZztOnKxDIZ3stVVswIXvKK8Dvphk3pTs5BO', NULL, NULL, NULL, NULL, '2026-02-17 12:46:55', '2026-02-22 11:16:54', NULL, NULL, NULL, 0, '521654651', 'Islami Bank Bangladesh', 'Banani', '57868', 3.00),
+(2, 'Marketing', 'marketing@example.com', 18000.00, NULL, '$2y$12$ei9LSrLrIhng1FNUsEZztOnKxDIZ3stVVswIXvKK8Dvphk3pTs5BO', NULL, NULL, NULL, NULL, '2026-02-17 12:46:55', '2026-02-23 02:49:28', NULL, NULL, NULL, 0, '521654651', 'Islami Bank Bangladesh', 'Banani', '57868', 3.00),
 (3, 'Consultant', 'consultant@example.com', 12000.00, NULL, '$2y$12$m3ZggFrGDw7maLPG1tU8DuKDOTSWUUeSzEFcW1fSfK7xCHJmwJTVW', NULL, NULL, NULL, NULL, '2026-02-17 12:49:33', '2026-02-22 04:14:08', NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL),
 (4, 'Accountant', 'accountant@example.com', 20000.00, NULL, '$2y$12$eF1/DUs.OmbYrUHoLL0Z.uO5HCJSsdaYSknKdu6Sl1tnYF.dhRC.G', NULL, NULL, NULL, NULL, '2026-02-17 23:01:58', '2026-02-22 04:14:08', NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL),
 (5, 'Editor', 'editor@example.com', 12000.00, NULL, '$2y$12$cmDPJgBl7B/V8acxTv3Ej.15/p9DkpiY/G/cSFL9j2iwTkKmbbjXW', NULL, NULL, NULL, NULL, '2026-02-18 02:45:29', '2026-02-23 01:15:26', '2026-02-23 01:15:26', 'test', NULL, 0, NULL, NULL, NULL, NULL, NULL),

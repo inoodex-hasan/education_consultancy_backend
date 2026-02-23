@@ -26,10 +26,8 @@
                         placeholder="Search description, category..." class="form-input ltr:pr-11 rtl:pl-11" />
                     <button type="submit"
                         class="absolute inset-y-0 flex items-center hover:text-primary ltr:right-4 rtl:left-4">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <circle cx="11.5" cy="11.5" r="9.5" stroke="currentColor" stroke-width="1.5"
-                                opacity="0.5" />
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="11.5" cy="11.5" r="9.5" stroke="currentColor" stroke-width="1.5" opacity="0.5" />
                             <path d="M18.5 18.5L22 22" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
                         </svg>
                     </button>
@@ -38,9 +36,16 @@
                     <select name="category" class="form-select w-full md:w-40 pr-10">
                         <option value="">Category</option>
                         @foreach ($categories as $cat)
-                            <option value="{{ $cat }}" {{ request('category') == $cat ? 'selected' : '' }}>
-                                {{ $cat }}</option>
+                            <option value="{{ $cat->name }}" {{ request('category') == $cat->name ? 'selected' : '' }}>
+                                {{ $cat->name }}
+                            </option>
                         @endforeach
+                    </select>
+                    <select name="timeframe" class="form-select w-full md:w-40 pr-10">
+                        <option value="">All</option>
+                        <option value="daily" {{ request('timeframe') == 'daily' ? 'selected' : '' }}>Today</option>
+                        <option value="monthly" {{ request('timeframe') == 'monthly' ? 'selected' : '' }}>This Month</option>
+                        <option value="yearly" {{ request('timeframe') == 'yearly' ? 'selected' : '' }}>This Year</option>
                     </select>
                     <button type="submit" class="btn btn-primary">Filter</button>
                     <a href="{{ route('admin.expenses.index') }}" class="btn btn-outline-danger">Reset</a>
@@ -77,7 +82,7 @@
                                 </td>
                                 <td class="text-center">
                                     <div class="flex items-center justify-center gap-2">
-                                        <a href="{{ route('admin.expenses.download-pdf', $expense->id) }}"
+                                        <a href=" {{ route('admin.expenses.download-pdf', $expense->id) }}"
                                             class="btn btn-sm btn-outline-success">PDF</a>
                                         <a href="{{ route('admin.expenses.edit', $expense->id) }}"
                                             class="btn btn-sm btn-outline-primary">Edit</a>

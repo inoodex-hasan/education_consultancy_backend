@@ -16,12 +16,41 @@ class ExpenseController extends Controller
         $this->middleware('can:*accountant');
     }
 
+    // public function index(Request $request)
+    // {
+    //     $this->authorize('*accountant');
+
+    //     $query = Expense::with(['creator']);
+
+    //     if ($search = $request->get('search')) {
+    //         $query->where(function ($q) use ($search) {
+    //             $q->where('description', 'like', "%{$search}%")
+    //                 ->orWhere('category', 'like', "%{$search}%")
+    //                 ->orWhere('payment_method', 'like', "%{$search}%");
+    //         });
+    //     }
+
+    //     if ($category = $request->get('category')) {
+    //         $query->where('category', $category);
+    //     }
+
+    //     $expenses = $query->latest()->paginate(15)->withQueryString();
+
+    //     // Fetch unique categories for the filter
+    //     $categories = FinanceCategory::where('is_active', true)
+    //         ->whereIn('type', ['expense', 'both'])
+    //         ->get();
+
+    //     return view('admin.expenses.index', compact('expenses', 'categories'));
+    // }
+
     public function index(Request $request)
     {
         $this->authorize('*accountant');
 
         $query = Expense::with(['creator']);
 
+        // Search filter
         if ($search = $request->get('search')) {
             $query->where(function ($q) use ($search) {
                 $q->where('description', 'like', "%{$search}%")
@@ -30,13 +59,32 @@ class ExpenseController extends Controller
             });
         }
 
+        // Category filter
         if ($category = $request->get('category')) {
             $query->where('category', $category);
         }
 
+        // Timeframe filter: daily, monthly, yearly
+        if ($timeframe = $request->get('timeframe')) {
+            switch ($timeframe) {
+                case 'daily':
+                    $query->whereDate('expense_date', today());
+                    break;
+
+                case 'monthly':
+                    $query->whereMonth('expense_date', now()->month)
+                        ->whereYear('expense_date', now()->year);
+                    break;
+
+                case 'yearly':
+                    $query->whereYear('expense_date', now()->year);
+                    break;
+            }
+        }
+
         $expenses = $query->latest()->paginate(15)->withQueryString();
 
-        // Fetch unique categories for the filter
+        // Fetch categories
         $categories = FinanceCategory::where('is_active', true)
             ->whereIn('type', ['expense', 'both'])
             ->get();
@@ -69,7 +117,7 @@ class ExpenseController extends Controller
             if ($salary) {
                 $totalPaid = Expense::where('salary_id', $expense->salary_id)->sum('amount');
                 $salary->paid_amount = $totalPaid;
-                
+
                 if ($totalPaid >= $salary->net_salary) {
                     $salary->payment_status = 'paid';
                 } elseif ($totalPaid > 0) {

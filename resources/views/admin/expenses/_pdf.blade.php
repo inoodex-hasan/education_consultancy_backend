@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Invoice</title>
+    <title>Expense Invoice - #{{ $expense->id }}</title>
     <style>
         body {
             font-family: DejaVu Sans, Arial, sans-serif;
@@ -62,20 +62,34 @@
             clear: both;
         }
 
-        .customer-info {
+        .section {
             width: 100%;
             margin-bottom: 20px;
             overflow: hidden;
         }
 
-        .customer-left {
-            float: left;
-            width: 45%;
+        .section h3 {
+            font-size: 14px;
+            font-weight: bold;
+            background-color: #f2f2f2;
+            padding: 5px 10px;
+            margin: 0 0 10px 0;
         }
 
-        .customer-right {
-            float: right;
-            width: 45%;
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 0;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .detail-label {
+            font-weight: bold;
+            width: 40%;
+        }
+
+        .detail-value {
+            width: 60%;
             text-align: right;
         }
 
@@ -83,7 +97,6 @@
             width: 100%;
             border-collapse: collapse;
             margin-bottom: 20px;
-            page-break-inside: avoid;
         }
 
         .items-table th,
@@ -98,20 +111,9 @@
             font-weight: bold;
         }
 
-        .footer-section {
-            width: 100%;
-            margin-bottom: 20px;
-            overflow: hidden;
-        }
-
-        .terms {
-            float: left;
-            width: 50%;
-        }
-
         .totals {
-            float: right;
-            width: 45%;
+            width: 100%;
+            margin-top: 10px;
         }
 
         .totals table {
@@ -129,17 +131,9 @@
             padding-right: 10px;
         }
 
-        .in-words {
-            margin-bottom: 20px;
-            padding: 10px;
-            background-color: #f9f9f9;
-            border: 1px solid #ddd;
-        }
-
         .signatures {
             width: 100%;
-            margin-bottom: 20px;
-            margin-top: 200px;
+            margin-top: 150px;
             overflow: hidden;
         }
 
@@ -163,7 +157,6 @@
             margin-top: 20px;
         }
 
-        /* Clearfix */
         .clearfix::after {
             content: "";
             clear: both;
@@ -174,6 +167,8 @@
 
 <body>
     <div class="container">
+
+        <!-- Header -->
         <div class="header clearfix">
             <div class="company-info">
                 <div class="company-name">
@@ -183,89 +178,84 @@
                 Email: {{ $settings['contact_email'] ?? '' }}
             </div>
             <div class="invoice-info">
-                Date: {{ date('Y-m-d') }}<br>
+                Date: {{ $expense->expense_date->format('Y-m-d') }}<br>
+                Expense ID: #{{ $expense->id }}<br>
                 Address: {{ $settings['address'] ?? '' }}
             </div>
         </div>
 
-        <div class="invoice-title">INVOICE</div>
+        <div class="invoice-title">EXPENSE DETAILS</div>
 
-        <div class="customer-info clearfix">
-            <div class="customer-left">
-                <strong>Student Name:</strong> {{ $payment->student->first_name }}
-                {{ $payment->student->last_name }}<br>
-                <strong>Phone:</strong> {{ $payment->student->phone }}<br>
-                <strong>Address:</strong> {{ $payment->student->address }}
+        <!-- Basic Information -->
+        <div class="section">
+            <h3>Basic Information</h3>
+            <div class="detail-row">
+                <div class="detail-label">Description:</div>
+                <div class="detail-value">{{ $expense->description }}</div>
             </div>
-            <div class="customer-right">
-                <strong>Invoice No: </strong> {{ $payment->receipt_number }}<br>
-                <strong>Invoice Date: </strong> {{ $payment->created_at->format('Y-m-d') }}
-            </div>
-        </div>
-
-        <table class="items-table">
-            <thead>
-                <tr>
-                    <th>Application Id</th>
-                    <th>Payment Through</th>
-                    <th>Payment Status</th>
-                    <th>Amount</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>{{ $payment->application->application_id }}</td>
-                    <td>{{ $payment->account->account_type ?? 'Cash' }}</td>
-                    <td>{{ $payment->payment_status }}</td>
-                    <td>{{ $payment->amount }}</td>
-                </tr>
-            </tbody>
-        </table>
-
-        <div class="footer-section clearfix">
-
-            <div class="totals">
-                <table>
-                    <tr>
-                        <td>Sub Total:</td>
-                        <td>{{ $payment->amount }} Tk</td>
-                    </tr>
-                    <tr>
-                        <td>Total Amount:</td>
-                        <td>{{ $payment->application->total_fee }} Tk</td>
-                    </tr>
-                    <tr>
-                        <td>Received:</td>
-                        <td>{{ $payment->amount }} Tk</td>
-                    </tr>
-                    @php
-                        $totalFee = $payment->application->total_fee ?? 0;
-                        $paid = $payment->amount ?? 0;
-                        $due = max(0, $totalFee - $paid);
-                    @endphp
-
-                    <tr>
-                        <td>Total Due:</td>
-                        <td>
-                            @if($payment->payment_status === 'completed')
-                                <span style="color: green; font-weight: bold;">Paid</span>
-                            @else
-                                {{ number_format($due, 2) }} Tk
-                            @endif
-                        </td>
-                    </tr>
-                </table>
+            <div class="detail-row">
+                <div class="detail-label">Category:</div>
+                <div class="detail-value">{{ $expense->category ?? 'General' }}</div>
             </div>
         </div>
 
+        <!-- Payment / Account Info -->
+        <div class="section">
+            <h3>Payment Details</h3>
+            <div class="detail-row">
+                <div class="detail-label">Amount:</div>
+                <div class="detail-value">{{ number_format($expense->amount, 2) }} Tk</div>
+            </div>
+            <div class="detail-row">
+                <div class="detail-label">Payment Method:</div>
+                <div class="detail-value">{{ $expense->payment_method ?? 'Cash' }}</div>
+            </div>
+            <div class="detail-row">
+                <div class="detail-label">Account:</div>
+                <div class="detail-value">{{ optional($expense->office_account)->account_name ?? 'Cash' }}</div>
+            </div>
+        </div>
+
+        <!-- Notes -->
+        @if($expense->notes)
+            <div class="section">
+                <h3>Notes</h3>
+                <div class="detail-row">
+                    <div class="detail-value">{{ $expense->notes }}</div>
+                </div>
+            </div>
+        @endif
+
+        <!-- Record Info -->
+        <div class="section">
+            <h3>Record Information</h3>
+            <div class="detail-row">
+                <div class="detail-label">Recorded By:</div>
+                <div class="detail-value">{{ $expense->creator->name ?? 'System' }}</div>
+            </div>
+            <div class="detail-row">
+                <div class="detail-label">Created Date:</div>
+                <div class="detail-value">{{ $expense->created_at->format('Y-m-d') }}</div>
+            </div>
+            @if($expense->updated_at !== $expense->created_at)
+                <div class="detail-row">
+                    <div class="detail-label">Last Updated:</div>
+                    <div class="detail-value">{{ $expense->updated_at->format('Y-m-d') }}</div>
+                </div>
+            @endif
+        </div>
+
+        <!-- Signatures -->
         <div class="signatures clearfix">
-            <div class="signature">Customer Signature</div>
+            <div class="signature">Prepared By</div>
             <div class="signature">Authorized Signature</div>
         </div>
 
+        <!-- Page number -->
         <div class="page-number">
             Page 1/1
         </div>
+
     </div>
 </body>
 
