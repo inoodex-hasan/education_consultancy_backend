@@ -12,6 +12,7 @@ class OfficeAccount extends Model
     protected $fillable = [
         'account_name',
         'account_type',
+        'chart_of_account_id',
         'provider_name',
         'account_number',
         'branch_name',
@@ -44,5 +45,10 @@ class OfficeAccount extends Model
     public function outgoingTransactions()
     {
         return $this->hasMany(OfficeTransaction::class, 'from_account_id');
+    }
+
+    public function chartOfAccount()
+    {
+        return $this->belongsTo(ChartOfAccount::class);
     }
 }

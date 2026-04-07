@@ -28,6 +28,7 @@ class Salary extends Model
         'payment_method',
         'bank_name',
         'transaction_id',
+        'journal_entry_id',
         'notes',
         'created_by',
     ];
@@ -134,5 +135,10 @@ class Salary extends Model
             'pending' => 'Pending',
             default => 'Unknown',
         };
+    }
+
+    public function journalEntry()
+    {
+        return $this->belongsTo(JournalEntry::class);
     }
 }

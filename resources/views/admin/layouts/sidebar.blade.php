@@ -181,6 +181,47 @@
                     </li>
                 @endcanany
 
+                <!-- Digital Marketing -->
+                <h2
+                    class="-mx-4 mb-1 flex items-center bg-white-light/30 px-7 py-3 font-extrabold uppercase dark:bg-dark dark:bg-opacity-[0.08]">
+                    <svg class="hidden h-5 w-4 flex-none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"
+                        fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                    <span>Digital Marketing</span>
+                </h2>
+
+                <li class="menu nav-item">
+                    <button type="button" class="nav-link group" :class="{ 'active': activeDropdown === 'digital-marketing' }"
+                        @click="activeDropdown === 'digital-marketing' ? activeDropdown = null : activeDropdown = 'digital-marketing'">
+                        <div class="flex items-center">
+                            <svg class="shrink-0 group-hover:!text-primary" width="20" height="20" viewBox="0 0 24 24"
+                                fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path opacity="0.5"
+                                    d="M21 16V8C21 6.89543 20.1046 6 19 6H5C3.89543 6 3 6.89543 3 8V16C3 17.1046 3.89543 18 5 18H19C20.1046 18 21 17.1046 21 16Z"
+                                    stroke="currentColor" stroke-width="1.5" />
+                                <path d="M7 11V13M10 10V14M13 11V13M17 12V12.01" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" />
+                            </svg>
+                            <span
+                                class="text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark transition-colors duration-300">Campaigns</span>
+                        </div>
+                        <div class="rtl:rotate-180 transition-transform duration-300"
+                            :class="{ 'rotate-90': activeDropdown === 'digital-marketing' }">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path d="M9 5L15 12L9 19" stroke="currentColor" stroke-width="1.5"
+                                    stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                        </div>
+                    </button>
+                    <ul x-cloak x-show="activeDropdown === 'digital-marketing'" x-collapse class="sub-menu text-gray-500">
+                        <li><a href="#">Campaign List</a></li>
+                        <li><a href="#">Video Assets</a></li>
+                        <li><a href="#">Poster Assets</a></li>
+                    </ul>
+                </li>
+
                 @canany(['view-students', 'create-student', 'update-student', 'delete-student'])
                     <h2
                         class="-mx-4 mb-1 flex items-center bg-white-light/30 px-7 py-3 font-extrabold uppercase dark:bg-dark dark:bg-opacity-[0.08]">
@@ -308,6 +349,53 @@
                         </ul>
                     </li>
                 @endcanany
+
+                <!-- Accounts Section -->
+                <h2
+                    class="-mx-4 mb-1 flex items-center bg-white-light/30 px-7 py-3 font-extrabold uppercase dark:bg-dark dark:bg-opacity-[0.08]">
+                    <svg class="hidden h-5 w-4 flex-none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"
+                        fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                    <span>Accounts</span>
+                </h2>
+
+                <li class="menu nav-item">
+                    <button type="button" class="nav-link group" :class="{ 'active': activeDropdown === 'accounts' }"
+                        @click="activeDropdown === 'accounts' ? activeDropdown = null : activeDropdown = 'accounts'">
+                        <div class="flex items-center">
+                            <svg class="shrink-0 group-hover:!text-primary" width="20" height="20" viewBox="0 0 24 24"
+                                fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path opacity="0.5"
+                                    d="M17 18.5H19C20.1046 18.5 21 17.6046 21 16.5V7.5C21 6.39543 20.1046 5.5 19 5.5H5C3.89543 5.5 3 6.39543 3 7.5V16.5C3 17.6046 3.89543 18.5 5 18.5H7M12 15.5V2.5M12 15.5L9 12.5M12 15.5L15 12.5M9 21.5H15"
+                                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                    stroke-linejoin="round" />
+                            </svg>
+                            <span
+                                class="text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark transition-colors duration-300">Accounts</span>
+                        </div>
+                        <div class="rtl:rotate-180 transition-transform duration-300"
+                            :class="{ 'rotate-90': activeDropdown === 'accounts' }">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path d="M9 5L15 12L9 19" stroke="currentColor" stroke-width="1.5"
+                                    stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                        </div>
+                    </button>
+                    <ul x-cloak x-show="activeDropdown === 'accounts'" x-collapse class="sub-menu text-gray-500">
+                        <li><a href="#">Chart of Accounts</a></li>
+                        <li><a href="#">Journal Entries</a></li>
+                        <li><a href="#">General Ledger</a></li>
+                        <li><a href="#">Invoices</a></li>
+                        <li><a href="#">Expenses</a></li>
+                        <li><a href="#">Office Accounts</a></li>
+                        <li><a href="#">VAT & Tax</a></li>
+                        <li><a href="#">Accounting Periods</a></li>
+                        <li><a href="#">Reports</a></li>
+                        <li><a href="#">Balance Sheet</a></li>
+                    </ul>
+                </li>
 
 
                 <h2

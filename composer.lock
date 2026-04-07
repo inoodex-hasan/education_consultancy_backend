@@ -1608,27 +1608,30 @@
         },
         {
             "name": "hasinhayder/tyro",
-            "version": "v1.3.1",
+            "version": "v1.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/hasinhayder/tyro.git",
-                "reference": "9f406aac7fa62090990a79d3fc5fa8317c3206cc"
+                "reference": "56a0380f923f0ed3fd5fd1e2f5e6124081b0c69e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/hasinhayder/tyro/zipball/9f406aac7fa62090990a79d3fc5fa8317c3206cc",
-                "reference": "9f406aac7fa62090990a79d3fc5fa8317c3206cc",
+                "url": "https://api.github.com/repos/hasinhayder/tyro/zipball/56a0380f923f0ed3fd5fd1e2f5e6124081b0c69e",
+                "reference": "56a0380f923f0ed3fd5fd1e2f5e6124081b0c69e",
                 "shasum": ""
             },
             "require": {
-                "laravel/framework": "^12.0",
-                "laravel/sanctum": "^4.0",
+                "illuminate/auth": "^12.0 || ^13.0",
+                "illuminate/database": "^12.0 || ^13.0",
+                "illuminate/http": "^12.0 || ^13.0",
+                "illuminate/support": "^12.0 || ^13.0",
+                "laravel/sanctum": "^4.0 || ^5.0",
                 "php": "^8.2"
             },
             "require-dev": {
-                "laravel/pint": "^1.25",
-                "nunomaduro/collision": "^8.6",
-                "orchestra/testbench": "^10.0",
+                "laravel/pint": "^1.27",
+                "nunomaduro/collision": "^8.6 || ^9.0",
+                "orchestra/testbench": "^10.0 || ^11.0",
                 "pestphp/pest": "^3.0",
                 "pestphp/pest-plugin-laravel": "^3.0"
             },
@@ -1638,6 +1641,9 @@
                     "providers": [
                         "HasinHayder\\Tyro\\Providers\\TyroServiceProvider"
                     ]
+                },
+                "branch-alias": {
+                    "dev-main": "1.5.x-dev"
                 }
             },
             "autoload": {
@@ -1653,7 +1659,7 @@
             "license": [
                 "MIT"
             ],
-            "description": "Tyro - The ultimate Authentication, Authorization, and Role & Privilege Management solution for Laravel 12",
+            "description": "Tyro - The ultimate Authentication, Authorization, and Role & Privilege Management solution for Laravel 12 & 13",
             "keywords": [
                 "Authentication",
                 "acl",
@@ -1668,37 +1674,41 @@
             ],
             "support": {
                 "issues": "https://github.com/hasinhayder/tyro/issues",
-                "source": "https://github.com/hasinhayder/tyro/tree/v1.3.1"
+                "source": "https://github.com/hasinhayder/tyro/tree/v1.5.0"
             },
-            "time": "2026-02-17T18:04:22+00:00"
+            "time": "2026-03-17T19:48:59+00:00"
         },
         {
             "name": "hasinhayder/tyro-dashboard",
-            "version": "v1.13.0",
+            "version": "v1.15.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/hasinhayder/tyro-dashboard.git",
-                "reference": "ed351603bbc8cb6fae6944a83fed2e7842f27e22"
+                "reference": "2aaa262bc1d5c87e1de10b1e40a8cb4739220d24"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/hasinhayder/tyro-dashboard/zipball/ed351603bbc8cb6fae6944a83fed2e7842f27e22",
-                "reference": "ed351603bbc8cb6fae6944a83fed2e7842f27e22",
+                "url": "https://api.github.com/repos/hasinhayder/tyro-dashboard/zipball/2aaa262bc1d5c87e1de10b1e40a8cb4739220d24",
+                "reference": "2aaa262bc1d5c87e1de10b1e40a8cb4739220d24",
                 "shasum": ""
             },
             "require": {
-                "hasinhayder/tyro": "^1.3",
-                "hasinhayder/tyro-login": "^2.3",
-                "laravel/framework": "^12.0",
-                "mews/purifier": "^3.4",
+                "hasinhayder/tyro": "^1.5",
+                "hasinhayder/tyro-login": "^2.4",
+                "illuminate/routing": "^12.0 || ^13.0",
+                "illuminate/support": "^12.0 || ^13.0",
+                "illuminate/view": "^12.0 || ^13.0",
                 "php": "^8.2"
             },
             "require-dev": {
-                "laravel/pint": "^1.25",
-                "nunomaduro/collision": "^8.6",
-                "orchestra/testbench": "^10.0",
+                "laravel/pint": "^1.27",
+                "nunomaduro/collision": "^8.6 || ^9.0",
+                "orchestra/testbench": "^10.0 || ^11.0",
                 "pestphp/pest": "^3.0",
                 "pestphp/pest-plugin-laravel": "^3.0"
+            },
+            "suggest": {
+                "mews/purifier": "Required for HTML sanitization"
             },
             "type": "library",
             "extra": {
@@ -1731,39 +1741,43 @@
             ],
             "support": {
                 "issues": "https://github.com/hasinhayder/tyro-dashboard/issues",
-                "source": "https://github.com/hasinhayder/tyro-dashboard/tree/v1.13.0"
+                "source": "https://github.com/hasinhayder/tyro-dashboard/tree/v1.15.2"
             },
-            "time": "2026-02-21T04:44:37+00:00"
+            "time": "2026-03-23T18:26:25+00:00"
         },
         {
             "name": "hasinhayder/tyro-login",
-            "version": "v2.3.1",
+            "version": "v2.4.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/hasinhayder/tyro-login.git",
-                "reference": "cc1b9f8c6a34afc6cef4a1de7b861c34a01fcd84"
+                "reference": "7af9ff27231811be93be834815f967c6d10e49f3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/hasinhayder/tyro-login/zipball/cc1b9f8c6a34afc6cef4a1de7b861c34a01fcd84",
-                "reference": "cc1b9f8c6a34afc6cef4a1de7b861c34a01fcd84",
+                "url": "https://api.github.com/repos/hasinhayder/tyro-login/zipball/7af9ff27231811be93be834815f967c6d10e49f3",
+                "reference": "7af9ff27231811be93be834815f967c6d10e49f3",
                 "shasum": ""
             },
             "require": {
                 "bacon/bacon-qr-code": "^3.0",
-                "laravel/framework": "^12.0",
+                "illuminate/auth": "^12.0 || ^13.0",
+                "illuminate/routing": "^12.0 || ^13.0",
+                "illuminate/session": "^12.0 || ^13.0",
+                "illuminate/support": "^12.0 || ^13.0",
+                "illuminate/view": "^12.0 || ^13.0",
                 "php": "^8.2",
                 "pragmarx/google2fa": "^9.0"
             },
             "require-dev": {
-                "laravel/pint": "^1.25",
-                "nunomaduro/collision": "^8.6",
-                "orchestra/testbench": "^10.0",
+                "laravel/pint": "^1.27",
+                "nunomaduro/collision": "^8.6 || ^9.0",
+                "orchestra/testbench": "^10.0 || ^11.0",
                 "pestphp/pest": "^3.0",
                 "pestphp/pest-plugin-laravel": "^3.0"
             },
             "suggest": {
-                "laravel/socialite": "Required for social login functionality (^5.0)"
+                "laravel/socialite": "^5.0 || ^6.0"
             },
             "type": "library",
             "extra": {
@@ -1771,6 +1785,9 @@
                     "providers": [
                         "HasinHayder\\TyroLogin\\Providers\\TyroLoginServiceProvider"
                     ]
+                },
+                "branch-alias": {
+                    "dev-main": "2.4.x-dev"
                 }
             },
             "autoload": {
@@ -1782,7 +1799,7 @@
             "license": [
                 "MIT"
             ],
-            "description": "Tyro Login - Beautiful, customizable authentication views for Laravel 12",
+            "description": "Tyro Login - Beautiful, customizable authentication views for Laravel 12 & 13",
             "keywords": [
                 "Authentication",
                 "auth",
@@ -1796,9 +1813,9 @@
             ],
             "support": {
                 "issues": "https://github.com/hasinhayder/tyro-login/issues",
-                "source": "https://github.com/hasinhayder/tyro-login/tree/v2.3.1"
+                "source": "https://github.com/hasinhayder/tyro-login/tree/v2.4.2"
             },
-            "time": "2026-02-06T04:05:56+00:00"
+            "time": "2026-03-24T06:24:30+00:00"
         },
         {
             "name": "laravel/framework",
@@ -3162,84 +3179,6 @@
                 "source": "https://github.com/Masterminds/html5-php/tree/2.10.0"
             },
             "time": "2025-07-25T09:04:22+00:00"
-        },
-        {
-            "name": "mews/purifier",
-            "version": "3.4.3",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/mewebstudio/Purifier.git",
-                "reference": "acc71bc512dcf9b87144546d0e3055fc76d244ff"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/mewebstudio/Purifier/zipball/acc71bc512dcf9b87144546d0e3055fc76d244ff",
-                "reference": "acc71bc512dcf9b87144546d0e3055fc76d244ff",
-                "shasum": ""
-            },
-            "require": {
-                "ezyang/htmlpurifier": "^4.16.0",
-                "illuminate/config": "^5.8|^6.0|^7.0|^8.0|^9.0|^10.0|^11.0|^12.0",
-                "illuminate/filesystem": "^5.8|^6.0|^7.0|^8.0|^9.0|^10.0|^11.0|^12.0",
-                "illuminate/support": "^5.8|^6.0|^7.0|^8.0|^9.0|^10.0|^11.0|^12.0",
-                "php": "^7.2|^8.0"
-            },
-            "require-dev": {
-                "graham-campbell/testbench": "^3.2|^5.5.1|^6.1",
-                "mockery/mockery": "^1.3.3",
-                "phpunit/phpunit": "^8.0|^9.0|^10.0"
-            },
-            "suggest": {
-                "laravel/framework": "To test the Laravel bindings",
-                "laravel/lumen-framework": "To test the Lumen bindings"
-            },
-            "type": "package",
-            "extra": {
-                "laravel": {
-                    "aliases": {
-                        "Purifier": "Mews\\Purifier\\Facades\\Purifier"
-                    },
-                    "providers": [
-                        "Mews\\Purifier\\PurifierServiceProvider"
-                    ]
-                }
-            },
-            "autoload": {
-                "files": [
-                    "src/helpers.php"
-                ],
-                "psr-4": {
-                    "Mews\\Purifier\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Muharrem ERİN",
-                    "email": "me@mewebstudio.com",
-                    "homepage": "https://github.com/mewebstudio",
-                    "role": "Developer"
-                }
-            ],
-            "description": "Laravel 5/6/7/8/9/10 HtmlPurifier Package",
-            "homepage": "https://github.com/mewebstudio/purifier",
-            "keywords": [
-                "Laravel Purifier",
-                "Laravel Security",
-                "Purifier",
-                "htmlpurifier",
-                "laravel HtmlPurifier",
-                "security",
-                "xss"
-            ],
-            "support": {
-                "issues": "https://github.com/mewebstudio/Purifier/issues",
-                "source": "https://github.com/mewebstudio/Purifier/tree/3.4.3"
-            },
-            "time": "2025-02-24T16:00:29+00:00"
         },
         {
             "name": "monolog/monolog",

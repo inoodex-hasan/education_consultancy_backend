@@ -16,6 +16,7 @@ class Commission extends Model
         'amount',
         'percentage',
         'status',
+        'journal_entry_id',
     ];
 
     protected $casts = [
@@ -31,5 +32,10 @@ class Commission extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function journalEntry()
+    {
+        return $this->belongsTo(JournalEntry::class);
     }
 }

@@ -12,6 +12,7 @@ class Payment extends Model
     protected $fillable = [
         'student_id',
         'application_id',
+        'invoice_id',
         'amount',
         'payment_type',
         'payment_date',
@@ -19,6 +20,7 @@ class Payment extends Model
         'receipt_number',
         'payment_status',
         'office_account_id',
+        'journal_entry_id',
         'notes',
     ];
 
@@ -62,5 +64,15 @@ class Payment extends Model
     public function account()
     {
         return $this->belongsTo(OfficeAccount::class, 'office_account_id');
+    }
+
+    public function invoice()
+    {
+        return $this->belongsTo(Invoice::class);
+    }
+
+    public function journalEntry()
+    {
+        return $this->belongsTo(JournalEntry::class);
     }
 }

@@ -10,6 +10,7 @@ class Expense extends Model
     use HasFactory;
 
     protected $fillable = [
+        'chart_of_account_id',
         'description',
         'amount',
         'expense_date',
@@ -17,6 +18,7 @@ class Expense extends Model
         'payment_method',
         'office_account_id',
         'salary_id',
+        'journal_entry_id',
         'created_by',
         'notes',
     ];
@@ -51,5 +53,15 @@ class Expense extends Model
     public function salary()
     {
         return $this->belongsTo(Salary::class);
+    }
+
+    public function chartOfAccount()
+    {
+        return $this->belongsTo(ChartOfAccount::class);
+    }
+
+    public function journalEntry()
+    {
+        return $this->belongsTo(JournalEntry::class);
     }
 }

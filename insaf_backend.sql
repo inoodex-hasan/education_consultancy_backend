@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Feb 23, 2026 at 09:45 AM
+-- Generation Time: Apr 07, 2026 at 11:31 AM
 -- Server version: 8.4.3
 -- PHP Version: 8.3.26
 
@@ -18,8 +18,25 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `vristo`
+-- Database: `insaf_backend`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `accounting_periods`
+--
+
+CREATE TABLE `accounting_periods` (
+  `id` bigint UNSIGNED NOT NULL,
+  `year` year NOT NULL,
+  `month` tinyint UNSIGNED NOT NULL,
+  `is_closed` tinyint(1) NOT NULL DEFAULT '0',
+  `closed_at` timestamp NULL DEFAULT NULL,
+  `closed_by` bigint UNSIGNED DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -50,6 +67,46 @@ CREATE TABLE `applications` (
 
 INSERT INTO `applications` (`id`, `application_id`, `student_id`, `university_id`, `course_id`, `course_intake_id`, `tuition_fee`, `currency`, `total_fee`, `status`, `notes`, `created_by`, `created_at`, `updated_at`) VALUES
 (10, 'APP-2026-00001', 6, 2, 2, 2, 1200.00, 'AUD', 100000.00, 'pending', NULL, 3, '2026-02-22 11:22:42', '2026-02-22 11:22:42');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `bank_reconciliations`
+--
+
+CREATE TABLE `bank_reconciliations` (
+  `id` bigint UNSIGNED NOT NULL,
+  `account_id` bigint UNSIGNED NOT NULL,
+  `currency_id` bigint UNSIGNED NOT NULL,
+  `statement_date` date NOT NULL,
+  `statement_balance` decimal(15,2) NOT NULL,
+  `system_balance` decimal(15,2) NOT NULL,
+  `difference` decimal(15,2) NOT NULL DEFAULT '0.00',
+  `status` enum('draft','closed') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'draft',
+  `closed_at` timestamp NULL DEFAULT NULL,
+  `closed_by` bigint UNSIGNED DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `bank_reconciliation_items`
+--
+
+CREATE TABLE `bank_reconciliation_items` (
+  `id` bigint UNSIGNED NOT NULL,
+  `reconciliation_id` bigint UNSIGNED NOT NULL,
+  `journal_entry_id` bigint UNSIGNED DEFAULT NULL,
+  `bank_statement_ref` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `amount` decimal(15,2) NOT NULL,
+  `type` enum('matched','unmatched','adjustment') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'unmatched',
+  `matched_at` timestamp NULL DEFAULT NULL,
+  `matched_by` bigint UNSIGNED DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -94,13 +151,12 @@ CREATE TABLE `cache` (
 --
 
 INSERT INTO `cache` (`key`, `value`, `expiration`) VALUES
-('admin-dashboard-cache-tyro:user-1:roles', 'a:1:{i:0;s:5:\"admin\";}', 1771836838),
-('admin-dashboard-cache-tyro:user-4:privileges', 'a:1:{i:0;s:11:\"*accountant\";}', 1771840008),
-('admin-dashboard-cache-tyro:user-4:roles', 'a:1:{i:0;s:10:\"accountant\";}', 1771840008),
-('admin-dashboard-cache-tyro:user-5:privileges', 'a:1:{i:0;s:7:\"*editor\";}', 1771831245),
-('admin-dashboard-cache-tyro:user-5:roles', 'a:1:{i:0;s:6:\"editor\";}', 1771831245),
-('admin-dashboard-cache-tyro:user-6:privileges', 'a:1:{i:0;s:12:\"*application\";}', 1771831053),
-('admin-dashboard-cache-tyro:user-6:roles', 'a:1:{i:0;s:11:\"application\";}', 1771831053);
+('admin-dashboard-cache-tyro:user-3:privileges', 'a:1:{i:0;s:11:\"*consultant\";}', 1775538887),
+('admin-dashboard-cache-tyro:user-3:roles', 'a:1:{i:0;s:10:\"consultant\";}', 1775538886),
+('admin-dashboard-cache-tyro:user-4:privileges', 'a:1:{i:0;s:11:\"*accountant\";}', 1774937553),
+('admin-dashboard-cache-tyro:user-4:roles', 'a:1:{i:0;s:10:\"accountant\";}', 1774937553),
+('admin-dashboard-cache-tyro:user-6:privileges', 'a:1:{i:0;s:12:\"*application\";}', 1775538843),
+('admin-dashboard-cache-tyro:user-6:roles', 'a:1:{i:0;s:11:\"application\";}', 1775538843);
 
 -- --------------------------------------------------------
 
@@ -117,6 +173,24 @@ CREATE TABLE `cache_locks` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `chart_of_accounts`
+--
+
+CREATE TABLE `chart_of_accounts` (
+  `id` bigint UNSIGNED NOT NULL,
+  `parent_id` bigint UNSIGNED DEFAULT NULL,
+  `code` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `type` enum('asset','liability','equity','revenue','expense') COLLATE utf8mb4_unicode_ci NOT NULL,
+  `is_active` tinyint(1) NOT NULL DEFAULT '1',
+  `is_default` tinyint(1) NOT NULL DEFAULT '0',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `commissions`
 --
 
@@ -128,6 +202,7 @@ CREATE TABLE `commissions` (
   `amount` decimal(15,2) NOT NULL,
   `percentage` decimal(5,2) NOT NULL,
   `status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'pending',
+  `journal_entry_id` bigint UNSIGNED DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -136,9 +211,9 @@ CREATE TABLE `commissions` (
 -- Dumping data for table `commissions`
 --
 
-INSERT INTO `commissions` (`id`, `payment_id`, `user_id`, `role`, `amount`, `percentage`, `status`, `created_at`, `updated_at`) VALUES
-(7, 19, 2, 'marketing', 1500.00, 3.00, 'pending', '2026-02-22 11:28:46', '2026-02-22 11:30:28'),
-(8, 20, 2, 'marketing', 1500.00, 3.00, 'pending', '2026-02-22 23:14:32', '2026-02-22 23:14:32');
+INSERT INTO `commissions` (`id`, `payment_id`, `user_id`, `role`, `amount`, `percentage`, `status`, `journal_entry_id`, `created_at`, `updated_at`) VALUES
+(7, 19, 2, 'marketing', 1500.00, 3.00, 'pending', NULL, '2026-02-22 11:28:46', '2026-02-22 11:30:28'),
+(8, 20, 2, 'marketing', 1500.00, 3.00, 'pending', NULL, '2026-02-22 23:14:32', '2026-02-22 23:14:32');
 
 -- --------------------------------------------------------
 
@@ -254,6 +329,7 @@ INSERT INTO `currencies` (`id`, `code`, `symbol`, `exchange_rate`, `last_updated
 
 CREATE TABLE `expenses` (
   `id` bigint UNSIGNED NOT NULL,
+  `chart_of_account_id` bigint UNSIGNED DEFAULT NULL,
   `description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `amount` decimal(10,2) NOT NULL,
   `expense_date` date NOT NULL,
@@ -264,22 +340,23 @@ CREATE TABLE `expenses` (
   `notes` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
-  `salary_id` bigint UNSIGNED DEFAULT NULL
+  `salary_id` bigint UNSIGNED DEFAULT NULL,
+  `journal_entry_id` bigint UNSIGNED DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `expenses`
 --
 
-INSERT INTO `expenses` (`id`, `description`, `amount`, `expense_date`, `category`, `payment_method`, `office_account_id`, `created_by`, `notes`, `created_at`, `updated_at`, `salary_id`) VALUES
-(6, 'Office Rent', 15000.00, '2026-02-22', 'Rent', 'bank_transfer', 2, 4, NULL, '2026-02-22 11:26:59', '2026-02-22 11:26:59', NULL),
-(7, 'Marketing', 5000.00, '2026-02-22', 'Marketing', 'mobile_banking', 1, 4, NULL, '2026-02-22 11:28:20', '2026-02-22 11:28:20', NULL),
-(8, 'Inoodex - Salary Payment', 15000.00, '2026-02-23', 'Salaries', 'bank_transfer', 2, 4, NULL, '2026-02-23 00:41:15', '2026-02-23 00:41:15', NULL),
-(9, 'Salary Payment - Marketing (2026-01)', 18000.00, '2026-02-23', 'Salaries', 'bank_transfer', 1, 4, NULL, '2026-02-23 00:48:20', '2026-02-23 00:48:20', NULL),
-(10, 'Salary Payment - Consultant (2026-01)', 12000.00, '2026-02-23', 'Salaries', 'bank_transfer', 1, 4, NULL, '2026-02-23 00:48:20', '2026-02-23 00:48:20', NULL),
-(11, 'Salary Payment - Accountant (2026-01)', 20000.00, '2026-02-23', 'Salaries', 'bank_transfer', 1, 4, NULL, '2026-02-23 00:48:20', '2026-02-23 00:48:20', NULL),
-(12, 'Salary Payment - Editor (2026-01)', 12000.00, '2026-02-23', 'Salaries', 'bank_transfer', 1, 4, NULL, '2026-02-23 00:48:20', '2026-02-23 00:48:20', NULL),
-(13, 'Salary Payment - Application (2026-01)', 15000.00, '2026-02-23', 'Salaries', 'bank_transfer', 1, 4, NULL, '2026-02-23 00:48:20', '2026-02-23 00:48:20', NULL);
+INSERT INTO `expenses` (`id`, `chart_of_account_id`, `description`, `amount`, `expense_date`, `category`, `payment_method`, `office_account_id`, `created_by`, `notes`, `created_at`, `updated_at`, `salary_id`, `journal_entry_id`) VALUES
+(6, NULL, 'Office Rent', 15000.00, '2026-02-22', 'Rent', 'bank_transfer', 2, 4, NULL, '2026-02-22 11:26:59', '2026-02-22 11:26:59', NULL, NULL),
+(7, NULL, 'Marketing', 5000.00, '2026-02-22', 'Marketing', 'mobile_banking', 1, 4, NULL, '2026-02-22 11:28:20', '2026-02-22 11:28:20', NULL, NULL),
+(8, NULL, 'Inoodex - Salary Payment', 15000.00, '2026-02-23', 'Salaries', 'bank_transfer', 2, 4, NULL, '2026-02-23 00:41:15', '2026-02-23 00:41:15', NULL, NULL),
+(9, NULL, 'Salary Payment - Marketing (2026-01)', 18000.00, '2026-02-23', 'Salaries', 'bank_transfer', 1, 4, NULL, '2026-02-23 00:48:20', '2026-02-23 00:48:20', NULL, NULL),
+(10, NULL, 'Salary Payment - Consultant (2026-01)', 12000.00, '2026-02-23', 'Salaries', 'bank_transfer', 1, 4, NULL, '2026-02-23 00:48:20', '2026-02-23 00:48:20', NULL, NULL),
+(11, NULL, 'Salary Payment - Accountant (2026-01)', 20000.00, '2026-02-23', 'Salaries', 'bank_transfer', 1, 4, NULL, '2026-02-23 00:48:20', '2026-02-23 00:48:20', NULL, NULL),
+(12, NULL, 'Salary Payment - Editor (2026-01)', 12000.00, '2026-02-23', 'Salaries', 'bank_transfer', 1, 4, NULL, '2026-02-23 00:48:20', '2026-02-23 00:48:20', NULL, NULL),
+(13, NULL, 'Salary Payment - Application (2026-01)', 15000.00, '2026-02-23', 'Salaries', 'bank_transfer', 1, 4, NULL, '2026-02-23 00:48:20', '2026-02-23 00:48:20', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -355,6 +432,47 @@ CREATE TABLE `invitation_referrals` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `invoices`
+--
+
+CREATE TABLE `invoices` (
+  `id` bigint UNSIGNED NOT NULL,
+  `student_id` bigint UNSIGNED DEFAULT NULL,
+  `university_id` bigint UNSIGNED DEFAULT NULL,
+  `invoice_number` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `date` date NOT NULL,
+  `due_date` date DEFAULT NULL,
+  `currency_id` bigint UNSIGNED NOT NULL,
+  `total_amount` decimal(15,2) NOT NULL,
+  `status` enum('draft','sent','paid','partially_paid','void') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'draft',
+  `notes` text COLLATE utf8mb4_unicode_ci,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `invoice_items`
+--
+
+CREATE TABLE `invoice_items` (
+  `id` bigint UNSIGNED NOT NULL,
+  `invoice_id` bigint UNSIGNED NOT NULL,
+  `chart_of_account_id` bigint UNSIGNED NOT NULL,
+  `description` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `quantity` decimal(15,2) NOT NULL DEFAULT '1.00',
+  `unit_price` decimal(15,2) NOT NULL,
+  `subtotal` decimal(15,2) NOT NULL,
+  `tax_amount` decimal(15,2) NOT NULL DEFAULT '0.00',
+  `total` decimal(15,2) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `jobs`
 --
 
@@ -390,6 +508,45 @@ CREATE TABLE `job_batches` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `journal_entries`
+--
+
+CREATE TABLE `journal_entries` (
+  `id` bigint UNSIGNED NOT NULL,
+  `currency_id` bigint UNSIGNED NOT NULL,
+  `period_id` bigint UNSIGNED NOT NULL,
+  `date` date NOT NULL,
+  `reference_number` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `note` text COLLATE utf8mb4_unicode_ci,
+  `status` enum('draft','posted','void') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'draft',
+  `created_by` bigint UNSIGNED DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `journal_entry_items`
+--
+
+CREATE TABLE `journal_entry_items` (
+  `id` bigint UNSIGNED NOT NULL,
+  `journal_entry_id` bigint UNSIGNED NOT NULL,
+  `chart_of_account_id` bigint UNSIGNED NOT NULL,
+  `currency_id` bigint UNSIGNED NOT NULL,
+  `exchange_rate_at_posting` decimal(15,6) NOT NULL DEFAULT '1.000000',
+  `base_currency_amount` decimal(15,2) NOT NULL,
+  `debit` decimal(15,2) NOT NULL DEFAULT '0.00',
+  `credit` decimal(15,2) NOT NULL DEFAULT '0.00',
+  `description` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `leads`
 --
 
@@ -419,6 +576,52 @@ CREATE TABLE `leads` (
 INSERT INTO `leads` (`id`, `student_name`, `email`, `phone`, `current_education`, `preferred_country`, `preferred_course`, `source`, `status`, `notes`, `last_contacted_at`, `next_follow_up_at`, `created_by`, `consultant_id`, `created_at`, `updated_at`) VALUES
 (5, 'Rahim', 'rahim@example.com', '01234567890', 'HSC', '2', '2', 'Phone', 'pending', NULL, NULL, '2026-02-24 18:00:00', 2, NULL, '2026-02-21 22:53:14', '2026-02-21 22:53:14'),
 (6, 'Hasan', 'hasan@example.com', '0120320020', 'JSC', '1', '1', 'Phone', 'pending', NULL, NULL, '2026-02-24 18:00:00', 2, NULL, '2026-02-22 03:55:24', '2026-02-22 03:55:24');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `marketing_campaigns`
+--
+
+CREATE TABLE `marketing_campaigns` (
+  `id` bigint UNSIGNED NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `boosting_status` enum('on','off') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'off',
+  `created_by` bigint UNSIGNED DEFAULT NULL,
+  `notes` text COLLATE utf8mb4_unicode_ci,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `marketing_posters`
+--
+
+CREATE TABLE `marketing_posters` (
+  `id` bigint UNSIGNED NOT NULL,
+  `campaign_id` bigint UNSIGNED NOT NULL,
+  `poster_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `status` enum('ready','not_ready','uploaded') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'not_ready',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `marketing_videos`
+--
+
+CREATE TABLE `marketing_videos` (
+  `id` bigint UNSIGNED NOT NULL,
+  `campaign_id` bigint UNSIGNED NOT NULL,
+  `video_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `status` enum('edited','upload','not_edited','ready') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'not_edited',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -486,7 +689,20 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (47, '2026_02_22_102330_add_balance_to_office_accounts_table', 22),
 (48, '2026_02_23_045430_add_notes_to_payments_table', 23),
 (49, '2026_02_23_100000_add_salary_id_to_expenses', 24),
-(50, '2026_02_23_110000_add_opening_balance_to_office_accounts', 25);
+(50, '2026_02_23_110000_add_opening_balance_to_office_accounts', 25),
+(51, '2026_04_07_000001_create_accounting_periods_table', 26),
+(52, '2026_04_07_000002_create_chart_of_accounts_table', 26),
+(53, '2026_04_07_000003_create_journal_entries_table', 26),
+(54, '2026_04_07_000004_create_journal_entry_items_table', 26),
+(55, '2026_04_07_000005_create_taxes_table', 26),
+(56, '2026_04_07_000006_create_invoices_table', 26),
+(57, '2026_04_07_000007_create_invoice_items_table', 26),
+(58, '2026_04_07_000008_create_bank_reconciliations_table', 26),
+(59, '2026_04_07_000009_create_bank_reconciliation_items_table', 26),
+(60, '2026_04_07_000010_add_ledger_links_to_finance_tables', 27),
+(61, '2026_04_07_000011_create_marketing_campaigns_table', 28),
+(62, '2026_04_07_000012_create_marketing_videos_table', 28),
+(63, '2026_04_07_000013_create_marketing_posters_table', 28);
 
 -- --------------------------------------------------------
 
@@ -536,6 +752,7 @@ CREATE TABLE `office_accounts` (
   `account_type` enum('bank','mfs','cash') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `provider_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `account_number` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `chart_of_account_id` bigint UNSIGNED DEFAULT NULL,
   `opening_balance` decimal(15,2) NOT NULL DEFAULT '0.00',
   `branch_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `status` enum('active','inactive') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'active',
@@ -550,10 +767,10 @@ CREATE TABLE `office_accounts` (
 -- Dumping data for table `office_accounts`
 --
 
-INSERT INTO `office_accounts` (`id`, `account_name`, `account_type`, `provider_name`, `account_number`, `opening_balance`, `branch_name`, `status`, `remaining_balance`, `created_by`, `notes`, `created_at`, `updated_at`) VALUES
-(1, 'Inoodex', 'mfs', 'bKash', '01234567890', 0.00, NULL, 'active', -14000.00, 4, NULL, '2026-02-18 00:48:45', '2026-02-23 03:44:33'),
-(2, 'Inoodex', 'bank', 'Dutch Banla Bank', '0123456789', 0.00, 'Banani', 'active', 70000.00, 4, NULL, '2026-02-18 00:55:47', '2026-02-23 00:41:15'),
-(3, 'Office Cash', 'cash', NULL, '1', 100000.00, NULL, 'active', 100000.00, 4, NULL, '2026-02-23 01:07:07', '2026-02-23 01:07:07');
+INSERT INTO `office_accounts` (`id`, `account_name`, `account_type`, `provider_name`, `account_number`, `chart_of_account_id`, `opening_balance`, `branch_name`, `status`, `remaining_balance`, `created_by`, `notes`, `created_at`, `updated_at`) VALUES
+(1, 'Inoodex', 'mfs', 'bKash', '01234567890', NULL, 0.00, NULL, 'active', -14000.00, 4, NULL, '2026-02-18 00:48:45', '2026-02-23 03:44:33'),
+(2, 'Inoodex', 'bank', 'Dutch Banla Bank', '0123456789', NULL, 0.00, 'Banani', 'active', 70000.00, 4, NULL, '2026-02-18 00:55:47', '2026-02-23 00:41:15'),
+(3, 'Office Cash', 'cash', NULL, '1', NULL, 100000.00, NULL, 'active', 100000.00, 4, NULL, '2026-02-23 01:07:07', '2026-02-23 01:07:07');
 
 -- --------------------------------------------------------
 
@@ -608,6 +825,7 @@ CREATE TABLE `payments` (
   `id` bigint UNSIGNED NOT NULL,
   `student_id` bigint UNSIGNED NOT NULL,
   `application_id` bigint UNSIGNED DEFAULT NULL,
+  `invoice_id` bigint UNSIGNED DEFAULT NULL,
   `amount` decimal(10,2) NOT NULL,
   `payment_type` enum('advance','partial','final') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `payment_date` datetime NOT NULL,
@@ -615,6 +833,7 @@ CREATE TABLE `payments` (
   `receipt_number` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `payment_status` enum('pending','completed') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'pending',
   `office_account_id` bigint UNSIGNED DEFAULT NULL,
+  `journal_entry_id` bigint UNSIGNED DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `notes` text COLLATE utf8mb4_unicode_ci
@@ -624,9 +843,9 @@ CREATE TABLE `payments` (
 -- Dumping data for table `payments`
 --
 
-INSERT INTO `payments` (`id`, `student_id`, `application_id`, `amount`, `payment_type`, `payment_date`, `collected_by`, `receipt_number`, `payment_status`, `office_account_id`, `created_at`, `updated_at`, `notes`) VALUES
-(19, 6, 10, 50000.00, 'partial', '2026-02-22 00:00:00', 4, 'REC-20260222-0002', 'pending', 1, '2026-02-22 11:28:46', '2026-02-22 23:13:49', 'test'),
-(20, 6, 10, 50000.00, 'final', '2026-02-23 00:00:00', 4, 'REC-20260223-0001', 'completed', 2, '2026-02-22 23:14:32', '2026-02-22 23:14:32', 'payment done');
+INSERT INTO `payments` (`id`, `student_id`, `application_id`, `invoice_id`, `amount`, `payment_type`, `payment_date`, `collected_by`, `receipt_number`, `payment_status`, `office_account_id`, `journal_entry_id`, `created_at`, `updated_at`, `notes`) VALUES
+(19, 6, 10, NULL, 50000.00, 'partial', '2026-02-22 00:00:00', 4, 'REC-20260222-0002', 'pending', 1, NULL, '2026-02-22 11:28:46', '2026-02-22 23:13:49', 'test'),
+(20, 6, 10, NULL, 50000.00, 'final', '2026-02-23 00:00:00', 4, 'REC-20260223-0001', 'completed', 2, NULL, '2026-02-22 23:14:32', '2026-02-22 23:14:32', 'payment done');
 
 -- --------------------------------------------------------
 
@@ -765,6 +984,7 @@ CREATE TABLE `salaries` (
   `payment_method` enum('cash','bank_transfer','mobile_banking','cheque') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `bank_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `transaction_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `journal_entry_id` bigint UNSIGNED DEFAULT NULL,
   `notes` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   `created_by` bigint UNSIGNED DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
@@ -791,7 +1011,9 @@ CREATE TABLE `sessions` (
 --
 
 INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES
-('t9Vb75so1nl6TSP8YSIOK4RgnJRc9rdvpdw8jXlo', 4, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:147.0) Gecko/20100101 Firefox/147.0', 'YTo1OntzOjY6Il90b2tlbiI7czo0MDoiRGFKOEJmdGVIZll5emFUZlVFbEpYa1FSQWpzTzYwNnJydllhemtzNiI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czoxMDoidHlyby1sb2dpbiI7YToxOntzOjc6ImNhcHRjaGEiO2E6MDp7fX1zOjk6Il9wcmV2aW91cyI7YToyOntzOjM6InVybCI7czo1MToiaHR0cDovLzEyNy4wLjAuMTo4MDAwL2Rhc2hib2FyZC9vZmZpY2UtdHJhbnNhY3Rpb25zIjtzOjU6InJvdXRlIjtzOjMxOiJhZG1pbi5vZmZpY2UtdHJhbnNhY3Rpb25zLmluZGV4Ijt9czo1MDoibG9naW5fd2ViXzU5YmEzNmFkZGMyYjJmOTQwMTU4MGYwMTRjN2Y1OGVhNGUzMDk4OWQiO2k6NDt9', 1771839923);
+('AXypOPINWDWvydFhRCcEekLzzv0vqatz115rcACZ', 1, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36', 'YTo1OntzOjY6Il90b2tlbiI7czo0MDoidFlkbFZLV2oyWksxek51YVBmWGJrYnZ3aGRTUWRGclRqRnVoVFhrYiI7czo5OiJfcHJldmlvdXMiO2E6Mjp7czozOiJ1cmwiO3M6MzE6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9kYXNoYm9hcmQiO3M6NToicm91dGUiO3M6MjA6InR5cm8tZGFzaGJvYXJkLmluZGV4Ijt9czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czoxMDoidHlyby1sb2dpbiI7YToxOntzOjc6ImNhcHRjaGEiO2E6MDp7fX1zOjUwOiJsb2dpbl93ZWJfNTliYTM2YWRkYzJiMmY5NDAxNTgwZjAxNGM3ZjU4ZWE0ZTMwOTg5ZCI7aToxO30=', 1774936438),
+('HfiNcr2anhLnzlLtNKIOIaVggp4NoozTrXrlTSnK', 4, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:149.0) Gecko/20100101 Firefox/149.0', 'YTo1OntzOjY6Il90b2tlbiI7czo0MDoiRUN2ekFMeWJmWHBzeHRoSXBSSnpzTHZ0Y0hPa1ZNSUx6QzNld3RITSI7czo5OiJfcHJldmlvdXMiO2E6Mjp7czozOiJ1cmwiO3M6MzE6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9kYXNoYm9hcmQiO3M6NToicm91dGUiO3M6MjA6InR5cm8tZGFzaGJvYXJkLmluZGV4Ijt9czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czoxMDoidHlyby1sb2dpbiI7YToxOntzOjc6ImNhcHRjaGEiO2E6MDp7fX1zOjUwOiJsb2dpbl93ZWJfNTliYTM2YWRkYzJiMmY5NDAxNTgwZjAxNGM3ZjU4ZWE0ZTMwOTg5ZCI7aTo0O30=', 1774937268),
+('WDWwlfVVBX4U6ZS76QQSRmdkXqYSRLofR4EUpCup', 3, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:149.0) Gecko/20100101 Firefox/149.0', 'YTo1OntzOjY6Il90b2tlbiI7czo0MDoiYWczUXdKZ1NCb3ZFY1VMODZmYkhqWGRFMHlWMnJHRHFPQnVseEllWiI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czoxMDoidHlyby1sb2dpbiI7YToxOntzOjc6ImNhcHRjaGEiO2E6MDp7fX1zOjk6Il9wcmV2aW91cyI7YToyOntzOjM6InVybCI7czozMToiaHR0cDovLzEyNy4wLjAuMTo4MDAwL2Rhc2hib2FyZCI7czo1OiJyb3V0ZSI7czoyMDoidHlyby1kYXNoYm9hcmQuaW5kZXgiO31zOjUwOiJsb2dpbl93ZWJfNTliYTM2YWRkYzJiMmY5NDAxNTgwZjAxNGM3ZjU4ZWE0ZTMwOTg5ZCI7aTozO30=', 1775538587);
 
 -- --------------------------------------------------------
 
@@ -895,6 +1117,22 @@ CREATE TABLE `students` (
 
 INSERT INTO `students` (`id`, `first_name`, `last_name`, `father_name`, `mothers_name`, `passport_number`, `email`, `phone`, `address`, `dob`, `ssc_result`, `hsc_result`, `ielts_score`, `subject`, `country_id`, `university_id`, `course_id`, `course_intake_id`, `current_stage`, `current_status`, `assigned_marketing_id`, `assigned_consultant_id`, `assigned_application_id`, `created_by`, `documents`, `created_at`, `updated_at`) VALUES
 (6, 'Md', 'Hasan', 'Moniruzzaman', 'Monira Begum', '123456789', 'test1@example.com', '01200000000', 'Dhaka', '2005-01-01', '4.00', '3.75', '5.5', NULL, 2, 2, 2, 2, NULL, NULL, 2, NULL, NULL, 3, '[{\"name\": \"file-sample_150kB.pdf\", \"path\": \"documents/students/J7A1jQi8fSmhlRDyTcnPVpb4qiMKD0YGqkZHT54J.pdf\"}]', '2026-02-22 11:21:20', '2026-02-22 11:21:20');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `taxes`
+--
+
+CREATE TABLE `taxes` (
+  `id` bigint UNSIGNED NOT NULL,
+  `chart_of_account_id` bigint UNSIGNED NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `rate` decimal(5,2) NOT NULL,
+  `is_active` tinyint(1) NOT NULL DEFAULT '1',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -1028,6 +1266,14 @@ INSERT INTO `user_roles` (`id`, `user_id`, `role_id`, `created_at`, `updated_at`
 --
 
 --
+-- Indexes for table `accounting_periods`
+--
+ALTER TABLE `accounting_periods`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `accounting_periods_year_month_unique` (`year`,`month`),
+  ADD KEY `accounting_periods_closed_by_foreign` (`closed_by`);
+
+--
 -- Indexes for table `applications`
 --
 ALTER TABLE `applications`
@@ -1038,6 +1284,24 @@ ALTER TABLE `applications`
   ADD KEY `applications_course_id_foreign` (`course_id`),
   ADD KEY `applications_course_intake_id_foreign` (`course_intake_id`),
   ADD KEY `applications_created_by_foreign` (`created_by`);
+
+--
+-- Indexes for table `bank_reconciliations`
+--
+ALTER TABLE `bank_reconciliations`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `bank_reconciliations_account_id_foreign` (`account_id`),
+  ADD KEY `bank_reconciliations_currency_id_foreign` (`currency_id`),
+  ADD KEY `bank_reconciliations_closed_by_foreign` (`closed_by`);
+
+--
+-- Indexes for table `bank_reconciliation_items`
+--
+ALTER TABLE `bank_reconciliation_items`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `bank_reconciliation_items_reconciliation_id_foreign` (`reconciliation_id`),
+  ADD KEY `bank_reconciliation_items_journal_entry_id_foreign` (`journal_entry_id`),
+  ADD KEY `bank_reconciliation_items_matched_by_foreign` (`matched_by`);
 
 --
 -- Indexes for table `budgets`
@@ -1061,12 +1325,21 @@ ALTER TABLE `cache_locks`
   ADD KEY `cache_locks_expiration_index` (`expiration`);
 
 --
+-- Indexes for table `chart_of_accounts`
+--
+ALTER TABLE `chart_of_accounts`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `chart_of_accounts_code_unique` (`code`),
+  ADD KEY `chart_of_accounts_parent_id_foreign` (`parent_id`);
+
+--
 -- Indexes for table `commissions`
 --
 ALTER TABLE `commissions`
   ADD PRIMARY KEY (`id`),
   ADD KEY `commissions_payment_id_foreign` (`payment_id`),
-  ADD KEY `commissions_user_id_foreign` (`user_id`);
+  ADD KEY `commissions_user_id_foreign` (`user_id`),
+  ADD KEY `commissions_journal_entry_id_foreign` (`journal_entry_id`);
 
 --
 -- Indexes for table `countries`
@@ -1102,7 +1375,9 @@ ALTER TABLE `expenses`
   ADD PRIMARY KEY (`id`),
   ADD KEY `expenses_created_by_foreign` (`created_by`),
   ADD KEY `expenses_office_account_id_foreign` (`office_account_id`),
-  ADD KEY `expenses_salary_id_foreign` (`salary_id`);
+  ADD KEY `expenses_salary_id_foreign` (`salary_id`),
+  ADD KEY `expenses_chart_of_account_id_foreign` (`chart_of_account_id`),
+  ADD KEY `expenses_journal_entry_id_foreign` (`journal_entry_id`);
 
 --
 -- Indexes for table `failed_jobs`
@@ -1135,6 +1410,24 @@ ALTER TABLE `invitation_referrals`
   ADD KEY `invitation_referrals_referred_user_id_index` (`referred_user_id`);
 
 --
+-- Indexes for table `invoices`
+--
+ALTER TABLE `invoices`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `invoices_invoice_number_unique` (`invoice_number`),
+  ADD KEY `invoices_student_id_foreign` (`student_id`),
+  ADD KEY `invoices_university_id_foreign` (`university_id`),
+  ADD KEY `invoices_currency_id_foreign` (`currency_id`);
+
+--
+-- Indexes for table `invoice_items`
+--
+ALTER TABLE `invoice_items`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `invoice_items_invoice_id_foreign` (`invoice_id`),
+  ADD KEY `invoice_items_chart_of_account_id_foreign` (`chart_of_account_id`);
+
+--
 -- Indexes for table `jobs`
 --
 ALTER TABLE `jobs`
@@ -1148,12 +1441,52 @@ ALTER TABLE `job_batches`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `journal_entries`
+--
+ALTER TABLE `journal_entries`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `journal_entries_reference_number_unique` (`reference_number`),
+  ADD KEY `journal_entries_currency_id_foreign` (`currency_id`),
+  ADD KEY `journal_entries_period_id_foreign` (`period_id`),
+  ADD KEY `journal_entries_created_by_foreign` (`created_by`);
+
+--
+-- Indexes for table `journal_entry_items`
+--
+ALTER TABLE `journal_entry_items`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `journal_entry_items_journal_entry_id_foreign` (`journal_entry_id`),
+  ADD KEY `journal_entry_items_chart_of_account_id_foreign` (`chart_of_account_id`),
+  ADD KEY `journal_entry_items_currency_id_foreign` (`currency_id`);
+
+--
 -- Indexes for table `leads`
 --
 ALTER TABLE `leads`
   ADD PRIMARY KEY (`id`),
   ADD KEY `leads_created_by_foreign` (`created_by`),
   ADD KEY `leads_consultant_id_foreign` (`consultant_id`);
+
+--
+-- Indexes for table `marketing_campaigns`
+--
+ALTER TABLE `marketing_campaigns`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `marketing_campaigns_created_by_foreign` (`created_by`);
+
+--
+-- Indexes for table `marketing_posters`
+--
+ALTER TABLE `marketing_posters`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `marketing_posters_campaign_id_foreign` (`campaign_id`);
+
+--
+-- Indexes for table `marketing_videos`
+--
+ALTER TABLE `marketing_videos`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `marketing_videos_campaign_id_foreign` (`campaign_id`);
 
 --
 -- Indexes for table `migrations`
@@ -1173,7 +1506,8 @@ ALTER TABLE `notifications`
 --
 ALTER TABLE `office_accounts`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `office_accounts_created_by_foreign` (`created_by`);
+  ADD KEY `office_accounts_created_by_foreign` (`created_by`),
+  ADD KEY `office_accounts_chart_of_account_id_foreign` (`chart_of_account_id`);
 
 --
 -- Indexes for table `office_transactions`
@@ -1198,7 +1532,9 @@ ALTER TABLE `payments`
   ADD KEY `payments_collected_by_foreign` (`collected_by`),
   ADD KEY `payments_student_id_payment_type_payment_status_index` (`student_id`,`payment_type`,`payment_status`),
   ADD KEY `payments_application_id_foreign` (`application_id`),
-  ADD KEY `payments_office_account_id_foreign` (`office_account_id`);
+  ADD KEY `payments_office_account_id_foreign` (`office_account_id`),
+  ADD KEY `payments_invoice_id_foreign` (`invoice_id`),
+  ADD KEY `payments_journal_entry_id_foreign` (`journal_entry_id`);
 
 --
 -- Indexes for table `personal_access_tokens`
@@ -1238,7 +1574,8 @@ ALTER TABLE `salaries`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `salaries_user_id_month_unique` (`user_id`,`month`),
   ADD KEY `salaries_created_by_foreign` (`created_by`),
-  ADD KEY `salaries_payment_status_month_index` (`payment_status`,`month`);
+  ADD KEY `salaries_payment_status_month_index` (`payment_status`,`month`),
+  ADD KEY `salaries_journal_entry_id_foreign` (`journal_entry_id`);
 
 --
 -- Indexes for table `sessions`
@@ -1280,6 +1617,13 @@ ALTER TABLE `students`
   ADD KEY `students_assignment_idx` (`assigned_marketing_id`,`assigned_consultant_id`,`assigned_application_id`,`created_by`);
 
 --
+-- Indexes for table `taxes`
+--
+ALTER TABLE `taxes`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `taxes_chart_of_account_id_foreign` (`chart_of_account_id`);
+
+--
 -- Indexes for table `tyro_audit_logs`
 --
 ALTER TABLE `tyro_audit_logs`
@@ -1315,16 +1659,40 @@ ALTER TABLE `user_roles`
 --
 
 --
+-- AUTO_INCREMENT for table `accounting_periods`
+--
+ALTER TABLE `accounting_periods`
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `applications`
 --
 ALTER TABLE `applications`
   MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
+-- AUTO_INCREMENT for table `bank_reconciliations`
+--
+ALTER TABLE `bank_reconciliations`
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `bank_reconciliation_items`
+--
+ALTER TABLE `bank_reconciliation_items`
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `budgets`
 --
 ALTER TABLE `budgets`
   MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `chart_of_accounts`
+--
+ALTER TABLE `chart_of_accounts`
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `commissions`
@@ -1387,9 +1755,33 @@ ALTER TABLE `invitation_referrals`
   MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `invoices`
+--
+ALTER TABLE `invoices`
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `invoice_items`
+--
+ALTER TABLE `invoice_items`
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `jobs`
 --
 ALTER TABLE `jobs`
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `journal_entries`
+--
+ALTER TABLE `journal_entries`
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `journal_entry_items`
+--
+ALTER TABLE `journal_entry_items`
   MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
@@ -1399,10 +1791,28 @@ ALTER TABLE `leads`
   MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
+-- AUTO_INCREMENT for table `marketing_campaigns`
+--
+ALTER TABLE `marketing_campaigns`
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `marketing_posters`
+--
+ALTER TABLE `marketing_posters`
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `marketing_videos`
+--
+ALTER TABLE `marketing_videos`
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
+  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=64;
 
 --
 -- AUTO_INCREMENT for table `office_accounts`
@@ -1471,6 +1881,12 @@ ALTER TABLE `students`
   MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
+-- AUTO_INCREMENT for table `taxes`
+--
+ALTER TABLE `taxes`
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `tyro_audit_logs`
 --
 ALTER TABLE `tyro_audit_logs`
@@ -1499,6 +1915,12 @@ ALTER TABLE `user_roles`
 --
 
 --
+-- Constraints for table `accounting_periods`
+--
+ALTER TABLE `accounting_periods`
+  ADD CONSTRAINT `accounting_periods_closed_by_foreign` FOREIGN KEY (`closed_by`) REFERENCES `users` (`id`);
+
+--
 -- Constraints for table `applications`
 --
 ALTER TABLE `applications`
@@ -1509,15 +1931,38 @@ ALTER TABLE `applications`
   ADD CONSTRAINT `applications_university_id_foreign` FOREIGN KEY (`university_id`) REFERENCES `universities` (`id`);
 
 --
+-- Constraints for table `bank_reconciliations`
+--
+ALTER TABLE `bank_reconciliations`
+  ADD CONSTRAINT `bank_reconciliations_account_id_foreign` FOREIGN KEY (`account_id`) REFERENCES `office_accounts` (`id`),
+  ADD CONSTRAINT `bank_reconciliations_closed_by_foreign` FOREIGN KEY (`closed_by`) REFERENCES `users` (`id`),
+  ADD CONSTRAINT `bank_reconciliations_currency_id_foreign` FOREIGN KEY (`currency_id`) REFERENCES `currencies` (`id`);
+
+--
+-- Constraints for table `bank_reconciliation_items`
+--
+ALTER TABLE `bank_reconciliation_items`
+  ADD CONSTRAINT `bank_reconciliation_items_journal_entry_id_foreign` FOREIGN KEY (`journal_entry_id`) REFERENCES `journal_entries` (`id`),
+  ADD CONSTRAINT `bank_reconciliation_items_matched_by_foreign` FOREIGN KEY (`matched_by`) REFERENCES `users` (`id`),
+  ADD CONSTRAINT `bank_reconciliation_items_reconciliation_id_foreign` FOREIGN KEY (`reconciliation_id`) REFERENCES `bank_reconciliations` (`id`) ON DELETE CASCADE;
+
+--
 -- Constraints for table `budgets`
 --
 ALTER TABLE `budgets`
   ADD CONSTRAINT `budgets_created_by_foreign` FOREIGN KEY (`created_by`) REFERENCES `users` (`id`) ON DELETE SET NULL;
 
 --
+-- Constraints for table `chart_of_accounts`
+--
+ALTER TABLE `chart_of_accounts`
+  ADD CONSTRAINT `chart_of_accounts_parent_id_foreign` FOREIGN KEY (`parent_id`) REFERENCES `chart_of_accounts` (`id`) ON DELETE CASCADE;
+
+--
 -- Constraints for table `commissions`
 --
 ALTER TABLE `commissions`
+  ADD CONSTRAINT `commissions_journal_entry_id_foreign` FOREIGN KEY (`journal_entry_id`) REFERENCES `journal_entries` (`id`),
   ADD CONSTRAINT `commissions_payment_id_foreign` FOREIGN KEY (`payment_id`) REFERENCES `payments` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `commissions_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
 
@@ -1537,7 +1982,9 @@ ALTER TABLE `course_intakes`
 -- Constraints for table `expenses`
 --
 ALTER TABLE `expenses`
+  ADD CONSTRAINT `expenses_chart_of_account_id_foreign` FOREIGN KEY (`chart_of_account_id`) REFERENCES `chart_of_accounts` (`id`),
   ADD CONSTRAINT `expenses_created_by_foreign` FOREIGN KEY (`created_by`) REFERENCES `users` (`id`) ON DELETE SET NULL,
+  ADD CONSTRAINT `expenses_journal_entry_id_foreign` FOREIGN KEY (`journal_entry_id`) REFERENCES `journal_entries` (`id`),
   ADD CONSTRAINT `expenses_office_account_id_foreign` FOREIGN KEY (`office_account_id`) REFERENCES `office_accounts` (`id`) ON DELETE SET NULL,
   ADD CONSTRAINT `expenses_salary_id_foreign` FOREIGN KEY (`salary_id`) REFERENCES `salaries` (`id`) ON DELETE SET NULL;
 
@@ -1548,6 +1995,37 @@ ALTER TABLE `invitation_referrals`
   ADD CONSTRAINT `invitation_referrals_invitation_link_id_foreign` FOREIGN KEY (`invitation_link_id`) REFERENCES `invitation_links` (`id`) ON DELETE CASCADE;
 
 --
+-- Constraints for table `invoices`
+--
+ALTER TABLE `invoices`
+  ADD CONSTRAINT `invoices_currency_id_foreign` FOREIGN KEY (`currency_id`) REFERENCES `currencies` (`id`),
+  ADD CONSTRAINT `invoices_student_id_foreign` FOREIGN KEY (`student_id`) REFERENCES `students` (`id`),
+  ADD CONSTRAINT `invoices_university_id_foreign` FOREIGN KEY (`university_id`) REFERENCES `universities` (`id`);
+
+--
+-- Constraints for table `invoice_items`
+--
+ALTER TABLE `invoice_items`
+  ADD CONSTRAINT `invoice_items_chart_of_account_id_foreign` FOREIGN KEY (`chart_of_account_id`) REFERENCES `chart_of_accounts` (`id`),
+  ADD CONSTRAINT `invoice_items_invoice_id_foreign` FOREIGN KEY (`invoice_id`) REFERENCES `invoices` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `journal_entries`
+--
+ALTER TABLE `journal_entries`
+  ADD CONSTRAINT `journal_entries_created_by_foreign` FOREIGN KEY (`created_by`) REFERENCES `users` (`id`),
+  ADD CONSTRAINT `journal_entries_currency_id_foreign` FOREIGN KEY (`currency_id`) REFERENCES `currencies` (`id`),
+  ADD CONSTRAINT `journal_entries_period_id_foreign` FOREIGN KEY (`period_id`) REFERENCES `accounting_periods` (`id`);
+
+--
+-- Constraints for table `journal_entry_items`
+--
+ALTER TABLE `journal_entry_items`
+  ADD CONSTRAINT `journal_entry_items_chart_of_account_id_foreign` FOREIGN KEY (`chart_of_account_id`) REFERENCES `chart_of_accounts` (`id`),
+  ADD CONSTRAINT `journal_entry_items_currency_id_foreign` FOREIGN KEY (`currency_id`) REFERENCES `currencies` (`id`),
+  ADD CONSTRAINT `journal_entry_items_journal_entry_id_foreign` FOREIGN KEY (`journal_entry_id`) REFERENCES `journal_entries` (`id`) ON DELETE CASCADE;
+
+--
 -- Constraints for table `leads`
 --
 ALTER TABLE `leads`
@@ -1555,9 +2033,28 @@ ALTER TABLE `leads`
   ADD CONSTRAINT `leads_created_by_foreign` FOREIGN KEY (`created_by`) REFERENCES `users` (`id`);
 
 --
+-- Constraints for table `marketing_campaigns`
+--
+ALTER TABLE `marketing_campaigns`
+  ADD CONSTRAINT `marketing_campaigns_created_by_foreign` FOREIGN KEY (`created_by`) REFERENCES `users` (`id`) ON DELETE SET NULL;
+
+--
+-- Constraints for table `marketing_posters`
+--
+ALTER TABLE `marketing_posters`
+  ADD CONSTRAINT `marketing_posters_campaign_id_foreign` FOREIGN KEY (`campaign_id`) REFERENCES `marketing_campaigns` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `marketing_videos`
+--
+ALTER TABLE `marketing_videos`
+  ADD CONSTRAINT `marketing_videos_campaign_id_foreign` FOREIGN KEY (`campaign_id`) REFERENCES `marketing_campaigns` (`id`) ON DELETE CASCADE;
+
+--
 -- Constraints for table `office_accounts`
 --
 ALTER TABLE `office_accounts`
+  ADD CONSTRAINT `office_accounts_chart_of_account_id_foreign` FOREIGN KEY (`chart_of_account_id`) REFERENCES `chart_of_accounts` (`id`),
   ADD CONSTRAINT `office_accounts_created_by_foreign` FOREIGN KEY (`created_by`) REFERENCES `users` (`id`) ON DELETE SET NULL;
 
 --
@@ -1574,6 +2071,8 @@ ALTER TABLE `office_transactions`
 ALTER TABLE `payments`
   ADD CONSTRAINT `payments_application_id_foreign` FOREIGN KEY (`application_id`) REFERENCES `applications` (`id`) ON DELETE SET NULL,
   ADD CONSTRAINT `payments_collected_by_foreign` FOREIGN KEY (`collected_by`) REFERENCES `users` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `payments_invoice_id_foreign` FOREIGN KEY (`invoice_id`) REFERENCES `invoices` (`id`),
+  ADD CONSTRAINT `payments_journal_entry_id_foreign` FOREIGN KEY (`journal_entry_id`) REFERENCES `journal_entries` (`id`),
   ADD CONSTRAINT `payments_office_account_id_foreign` FOREIGN KEY (`office_account_id`) REFERENCES `office_accounts` (`id`) ON DELETE SET NULL,
   ADD CONSTRAINT `payments_student_id_foreign` FOREIGN KEY (`student_id`) REFERENCES `students` (`id`) ON DELETE CASCADE;
 
@@ -1589,6 +2088,7 @@ ALTER TABLE `privilege_role`
 --
 ALTER TABLE `salaries`
   ADD CONSTRAINT `salaries_created_by_foreign` FOREIGN KEY (`created_by`) REFERENCES `users` (`id`) ON DELETE SET NULL,
+  ADD CONSTRAINT `salaries_journal_entry_id_foreign` FOREIGN KEY (`journal_entry_id`) REFERENCES `journal_entries` (`id`),
   ADD CONSTRAINT `salaries_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE SET NULL;
 
 --
@@ -1609,6 +2109,12 @@ ALTER TABLE `students`
   ADD CONSTRAINT `students_course_intake_id_foreign` FOREIGN KEY (`course_intake_id`) REFERENCES `course_intakes` (`id`) ON DELETE SET NULL,
   ADD CONSTRAINT `students_created_by_foreign` FOREIGN KEY (`created_by`) REFERENCES `users` (`id`) ON DELETE SET NULL,
   ADD CONSTRAINT `students_university_id_foreign` FOREIGN KEY (`university_id`) REFERENCES `universities` (`id`) ON DELETE SET NULL;
+
+--
+-- Constraints for table `taxes`
+--
+ALTER TABLE `taxes`
+  ADD CONSTRAINT `taxes_chart_of_account_id_foreign` FOREIGN KEY (`chart_of_account_id`) REFERENCES `chart_of_accounts` (`id`);
 
 --
 -- Constraints for table `universities`
