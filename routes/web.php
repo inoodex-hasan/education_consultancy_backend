@@ -64,8 +64,8 @@ Route::prefix('dashboard/course-intakes')->name('admin.course-intakes.')->middle
 // Student Management
 Route::prefix('dashboard/students')->name('admin.students.')->group(function () {
     Route::get('/', [StudentController::class, 'index'])->name('index')->middleware('can:*consultant|*application');
-    Route::get('/create', [StudentController::class, 'create'])->name('create')->middleware('can:*consultant');
-    Route::post('/', [StudentController::class, 'store'])->name('store')->middleware('can:*consultant');
+    Route::get('/create', [StudentController::class, 'create'])->name('create')->middleware('can:*consultant|*marketing');
+    Route::post('/', [StudentController::class, 'store'])->name('store')->middleware('can:*consultant|*marketing');
     Route::get('{student}', [StudentController::class, 'show'])->name('show')->middleware('can:*consultant|*application');
     Route::get('{student}/edit', [StudentController::class, 'edit'])->name('edit')->middleware('can:*consultant');
     Route::put('{student}', [StudentController::class, 'update'])->name('update')->middleware('can:*consultant');

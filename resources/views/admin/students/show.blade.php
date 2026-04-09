@@ -45,7 +45,7 @@
                     </div>
                     <div>
                         <label class="text-white-dark mb-1">Mother's Name</label>
-                        <p class="font-semibold">{{ $student->mothers_name ?? '-' }}</p>
+                        <p class="font-semibold">{{ $student->mother_name ?? '-' }}</p>
                     </div>
                     <div>
                         <label class="text-white-dark mb-1">Email</label>
@@ -56,42 +56,29 @@
                         <p class="font-semibold">{{ $student->passport_number ?? '-' }}</p>
                     </div>
                     <div>
+                        <label class="text-white-dark mb-1">Passport Validity</label>
+                        <p class="font-semibold">
+                            {{ $student->passport_validity ? \Carbon\Carbon::parse($student->passport_validity)->format('M d, Y') : '-' }}
+                        </p>
+                    </div>
+                    <div>
                         <label class="text-white-dark mb-1">Phone</label>
                         <p class="font-semibold">{{ $student->phone }}</p>
                     </div>
                     <div>
+                        <label class="text-white-dark mb-1">Sponsor Phone</label>
+                        <p class="font-semibold">{{ $student->sponsor_phone ?? '-' }}</p>
+                    </div>
+                    <div>
                         <label class="text-white-dark mb-1">Date of Birth</label>
                         <p class="font-semibold">
-                            {{ $student->dob ? \Carbon\Carbon::parse($student->dob)->format('M d, Y') : '-' }}</p>
+                            {{ $student->dob ? \Carbon\Carbon::parse($student->dob)->format('M d, Y') : '-' }}
+                        </p>
                     </div>
                     <div class="md:col-span-2">
                         <label class="text-white-dark mb-1">Address</label>
                         <p class="font-semibold whitespace-pre-line">{{ $student->address ?? '-' }}</p>
                     </div>
-                </div>
-            </div>
-
-            <div class="panel">
-                <div class="flex items-center justify-between mb-5">
-                    <h5 class="font-semibold text-lg dark:text-white-light text-primary uppercase">Academic Background</h5>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label class="text-white-dark mb-1">SSC Result</label>
-                        <p class="font-semibold">{{ $student->ssc_result ?? '-' }}</p>
-                    </div>
-                    <div>
-                        <label class="text-white-dark mb-1">HSC Result</label>
-                        <p class="font-semibold">{{ $student->hsc_result ?? '-' }}</p>
-                    </div>
-                    <div>
-                        <label class="text-white-dark mb-1">IELTS Score</label>
-                        <p class="font-semibold">{{ $student->ielts_score ?? '-' }}</p>
-                    </div>
-                    <!-- <div>
-                            <label class="text-white-dark mb-1">Desired Subject</label>
-                            <p class="font-semibold">{{ $student->subject ?? '-' }}</p>
-                        </div> -->
                 </div>
             </div>
 
@@ -125,21 +112,21 @@
                     <h5 class="font-semibold text-lg dark:text-white-light text-primary uppercase">Documents</h5>
                 </div>
                 @if ($student->documents && count($student->documents) > 0)
-                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                        @foreach ($student->documents as $doc)
-                            <div class="flex items-center gap-3 p-3 border rounded-lg bg-gray-50 dark:bg-black/20">
-                                <div class="flex-1 overflow-hidden">
-                                    <p class="text-sm font-medium truncate" title="{{ $doc['name'] }}">
-                                        {{ $doc['name'] }}
-                                    </p>
-                                    <a href="{{ \Illuminate\Support\Facades\Storage::url($doc['path']) }}" target="_blank"
-                                        class="text-xs text-primary hover:underline font-semibold">Download</a>
-                                </div>
-                            </div>
-                        @endforeach
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                    @foreach ($student->documents as $doc)
+                    <div class="flex items-center gap-3 p-3 border rounded-lg bg-gray-50 dark:bg-black/20">
+                        <div class="flex-1 overflow-hidden">
+                            <p class="text-sm font-medium truncate" title="{{ $doc['name'] }}">
+                                {{ $doc['name'] }}
+                            </p>
+                            <a href="{{ \Illuminate\Support\Facades\Storage::url($doc['path']) }}" target="_blank"
+                                class="text-xs text-primary hover:underline font-semibold">Download</a>
+                        </div>
                     </div>
+                    @endforeach
+                </div>
                 @else
-                    <p class="text-white-dark italic text-sm">No documents uploaded.</p>
+                <p class="text-white-dark italic text-sm">No documents uploaded.</p>
                 @endif
             </div> --}}
 
@@ -220,6 +207,7 @@
                 </div>
                 @if ($student->documents && count($student->documents) > 0)
                     <div class="space-y-3">
+                        <p class="text-xs font-bold text-white-dark uppercase">General Documents</p>
                         @foreach ($student->documents as $doc)
                             <div
                                 class="flex items-center justify-between p-3 border rounded-lg bg-gray-50 dark:bg-black/20 hover:bg-gray-100 dark:hover:bg-black/30 transition">
@@ -233,7 +221,27 @@
                             </div>
                         @endforeach
                     </div>
-                @else
+                @endif
+
+                @if ($student->translation_documents && count($student->translation_documents) > 0)
+                    <div class="space-y-3 mt-4">
+                        <p class="text-xs font-bold text-white-dark uppercase">Translation Documents</p>
+                        @foreach ($student->translation_documents as $doc)
+                            <div
+                                class="flex items-center justify-between p-3 border rounded-lg bg-gray-50 dark:bg-black/20 hover:bg-gray-100 dark:hover:bg-black/30 transition">
+                                <div class="flex-1 min-w-0">
+                                    <p class="text-sm font-medium break-words" title="{{ $doc['name'] }}">
+                                        {{ $doc['name'] }}
+                                    </p>
+                                </div>
+                                <a href="{{ \Illuminate\Support\Facades\Storage::url($doc['path']) }}" target="_blank"
+                                    class="text-xs text-secondary hover:underline font-semibold ml-3 whitespace-nowrap">Download</a>
+                            </div>
+                        @endforeach
+                    </div>
+                @endif
+
+                @if((!$student->documents || count($student->documents) == 0) && (!$student->translation_documents || count($student->translation_documents) == 0))
                     <p class="text-white-dark italic text-sm">No documents uploaded.</p>
                 @endif
             </div>
@@ -258,15 +266,15 @@
                     <div>
                         <label class="text-white-dark mb-1">Current Stage</label>
                         <div>
-                            <span
-                                class="badge badge-outline-primary capitalize text-base">{{ $student->current_stage }}</span>
+                            <span class="badge badge-outline-primary capitalize text-base">{{ $student->current_stage
+                                }}</span>
                         </div>
                     </div>
                     <div>
                         <label class="text-white-dark mb-1">Application Status</label>
                         <div>
-                            <span
-                                class="badge badge-outline-primary capitalize text-base">{{ str_replace('_', ' ', $student->current_status) }}</span>
+                            <span class="badge badge-outline-primary capitalize text-base">{{ str_replace('_', ' ',
+                                $student->current_status) }}</span>
                         </div>
                     </div>
                     <hr class="border-white-light dark:border-[#1b2e4b] my-4">

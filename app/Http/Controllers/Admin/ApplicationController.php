@@ -114,8 +114,7 @@ class ApplicationController extends Controller
         $courses = [];
         if ($universityId) {
             $courses = Course::where('university_id', $universityId)
-                ->leftJoin('currencies', 'courses.currency', '=', 'currencies.code')
-                ->get(['courses.id', 'courses.name', 'courses.tuition_fee', 'courses.currency', 'currencies.exchange_rate']);
+                ->get(['courses.id', 'courses.name', 'courses.tuition_fee']);
         }
 
         $intakes = [];
@@ -158,7 +157,6 @@ class ApplicationController extends Controller
             'course_id' => 'required|exists:courses,id',
             'course_intake_id' => 'required|exists:course_intakes,id',
             'tuition_fee' => 'required|numeric|min:0',
-            'currency' => 'required|string|max:10',
             'total_fee' => 'required|numeric|min:0',
             'status' => 'required|string',
             'notes' => 'nullable|string',
@@ -222,10 +220,14 @@ class ApplicationController extends Controller
 
     public function getCourses(Request $request)
     {
-        $courses = Course::where('university_id', $request->university_id)
-            ->leftJoin('currencies', 'courses.currency', '=', 'currencies.code')
-            ->orderBy('courses.name')
-            ->get(['courses.id', 'courses.name', 'courses.tuition_fee', 'courses.currency', 'currencies.exchange_rate']);
+        $query = Course::query();
+
+        if ($request->has('university_id') && $request->university_id) {
+            $query->where('university_id', $request->university_id);
+        }
+
+        $courses = $query->orderBy('courses.name')
+            ->get(['courses.id', 'courses.name', 'courses.tuition_fee']);
         return response()->json($courses);
     }
 

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Carbon;
 
 class Lead extends Model
 {
@@ -21,6 +22,7 @@ class Lead extends Model
         'notes',
         'last_contacted_at',
         'next_follow_up_at',
+        'follow_up_history',
         'created_by',
         'consultant_id',
     ];
@@ -28,7 +30,24 @@ class Lead extends Model
     protected $casts = [
         'last_contacted_at' => 'datetime',
         'next_follow_up_at' => 'datetime',
+        'follow_up_history' => 'array',
     ];
+
+    public function getFollowUpDateHistoryAttribute(): array
+    {
+        $history = collect($this->follow_up_history ?? []);
+        $currentFollowUpDate = $this->next_follow_up_at?->toDateString();
+
+        if ($currentFollowUpDate !== null && $history->last() !== $currentFollowUpDate) {
+            $history->push($currentFollowUpDate);
+        }
+
+        return $history
+            ->filter(fn ($date) => filled($date))
+            ->map(fn ($date) => $date instanceof Carbon ? $date : Carbon::parse($date))
+            ->values()
+            ->all();
+    }
 
     public function creator()
     {

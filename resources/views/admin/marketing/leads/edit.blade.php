@@ -145,7 +145,7 @@
                 <div class="form-group">
                     <label for="next_follow_up_at">Next Follow-up Date</label>
                     <input type="date" name="next_follow_up_at" id="next_follow_up_at" class="form-input"
-                        value="{{ old('next_follow_up_at', $lead->next_follow_up_at) }}" />
+                        value="{{ old('next_follow_up_at', optional($lead->next_follow_up_at)->format('Y-m-d')) }}" />
                 </div>
             </div>
 

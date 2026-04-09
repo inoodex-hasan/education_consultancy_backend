@@ -128,12 +128,12 @@
                 <td class="value">{{ $application->intake->intake_name ?? 'N/A' }}</td>
             </tr>
             <tr>
-                <td class="value">{{ $application->getCurrencyCode() }}
-                    {{ number_format($application->tuition_fee, 2) }}</td>
+                <td class="label">Tuition Fee:</td>
+                <td class="value">{{ number_format($application->tuition_fee, 2) }}</td>
             </tr>
             <tr>
                 <td class="label">Total Fee:</td>
-                <td class="value">{{ $application->getCurrencyCode() }} {{ number_format($application->total_fee, 2) }}
+                <td class="value">{{ number_format($application->total_fee, 2) }}
                 </td>
             </tr>
         </table>

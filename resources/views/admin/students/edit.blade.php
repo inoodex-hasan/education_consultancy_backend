@@ -39,10 +39,10 @@
                     @error('father_name') <span class="text-danger text-sm">{{ $message }}</span> @enderror
                 </div>
                 <div class="form-group">
-                    <label for="mothers_name">Mother's Name</label>
-                    <input type="text" name="mothers_name" id="mothers_name" class="form-input"
-                        value="{{ old('mothers_name', $student->mothers_name) }}" />
-                    @error('mothers_name') <span class="text-danger text-sm">{{ $message }}</span> @enderror
+                    <label for="mother_name">Mother's Name</label>
+                    <input type="text" name="mother_name" id="mother_name" class="form-input"
+                        value="{{ old('mother_name', $student->mother_name) }}" />
+                    @error('mother_name') <span class="text-danger text-sm">{{ $message }}</span> @enderror
                 </div>
                 <div class="form-group">
                     <label for="phone">Phone <span class="text-danger">*</span></label>
@@ -51,16 +51,33 @@
                     @error('phone') <span class="text-danger text-sm">{{ $message }}</span> @enderror
                 </div>
                 <div class="form-group">
+                    <label for="sponsor_phone">Sponsor Phone</label>
+                    <input type="text" name="sponsor_phone" id="sponsor_phone" class="form-input"
+                        value="{{ old('sponsor_phone', $student->sponsor_phone) }}" />
+                    @error('sponsor_phone') <span class="text-danger text-sm">{{ $message }}</span> @enderror
+                </div>
+                <div class="form-group">
                     <label for="passport_number">Passport Number</label>
                     <input type="text" name="passport_number" id="passport_number" class="form-input"
                         value="{{ old('passport_number', $student->passport_number) }}" />
                     @error('passport_number') <span class="text-danger text-sm">{{ $message }}</span> @enderror
                 </div>
                 <div class="form-group">
+                    <label for="passport_validity">Passport Validity</label>
+                    <input type="date" name="passport_validity" id="passport_validity" class="form-input"
+                        value="{{ old('passport_validity', optional($student->passport_validity)->format('Y-m-d')) }}" />
+                    @error('passport_validity') <span class="text-danger text-sm">{{ $message }}</span> @enderror
+                </div>
+                <div class="form-group">
                     <label for="email">Email <span class="text-danger">*</span></label>
                     <input type="email" name="email" id="email" class="form-input"
                         value="{{ old('email', $student->email) }}" />
                     @error('email') <span class="text-danger text-sm">{{ $message }}</span> @enderror
+                </div>
+                <div class="form-group">
+                    <label for="password">Change Portal Password</label>
+                    <input type="password" name="password" id="password" class="form-input" placeholder="Leave blank to keep current" />
+                    @error('password') <span class="text-danger text-sm">{{ $message }}</span> @enderror
                 </div>
                 <div class="form-group md:col-span-2">
                     <label for="address">Address</label>
@@ -92,7 +109,7 @@
                     <select name="university_id" id="university_id" class="form-select">
                         <option value="">Select University</option>
                         @foreach ($universities as $university)
-                            <option value="{{ $university->id }}"
+                            <option value="{{ $university->id }}" data-country-id="{{ $university->country_id }}"
                                 {{ old('university_id', $student->university_id) == $university->id ? 'selected' : '' }}>
                                 {{ $university->name }}
                             </option>
@@ -128,7 +145,7 @@
                     </select>
                     @error('course_intake_id') <span class="text-danger text-sm">{{ $message }}</span> @enderror
                 </div>
-                <div class="form-group">
+                <!-- <div class="form-group">
                     <label for="ssc_result">SSC Result</label>
                     <input type="text" name="ssc_result" id="ssc_result" class="form-input"
                         value="{{ old('ssc_result', $student->ssc_result) }}" />
@@ -145,7 +162,7 @@
                     <input type="text" name="ielts_score" id="ielts_score" class="form-input"
                         value="{{ old('ielts_score', $student->ielts_score) }}" />
                     @error('ielts_score') <span class="text-danger text-sm">{{ $message }}</span> @enderror
-                </div>
+                </div> -->
                 <div class="form-group">
                     <label for="subject">Subject</label>
                     <input type="text" name="subject" id="subject" class="form-input"
@@ -244,6 +261,35 @@
                     <span class="text-xs text-white-dark">Multiple documents can be uploaded (PDF, DOC, JPG, PNG). Max 5MB per file.</span>
                     @error('documents.*') <span class="text-danger text-sm">{{ $message }}</span> @enderror
                 </div>
+
+                @if($student->translation_documents && count($student->translation_documents) > 0)
+                    <div class="form-group md:col-span-2 mt-4">
+                        <label>Existing Translation Documents</label>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                            @foreach($student->translation_documents as $index => $doc)
+                                <div class="flex items-center gap-3 p-3 border rounded-lg bg-gray-50 dark:bg-black/20">
+                                    <div class="flex-1 overflow-hidden">
+                                        <p class="text-sm font-medium truncate" title="{{ $doc['name'] }}">
+                                            {{ $doc['name'] }}
+                                        </p>
+                                        <a href="{{ \Illuminate\Support\Facades\Storage::url($doc['path']) }}" target="_blank" class="text-xs text-secondary hover:underline">Download</a>
+                                    </div>
+                                    <div class="flex items-center gap-2">
+                                        <input type="checkbox" name="delete_translation_documents[]" value="{{ $index }}" id="del_t_{{ $index }}" class="form-checkbox text-danger" />
+                                        <label for="del_t_{{ $index }}" class="text-xs text-danger cursor-pointer">Delete</label>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                @endif
+
+                <div class="form-group md:col-span-2">
+                    <label for="translation_documents">Upload New Translation Documents</label>
+                    <input type="file" name="translation_documents[]" id="translation_documents" class="form-input" multiple />
+                    <span class="text-xs text-white-dark">Multiple translation documents can be uploaded (PDF, DOC, JPG, PNG). Max 5MB per file.</span>
+                    @error('translation_documents.*') <span class="text-danger text-sm">{{ $message }}</span> @enderror
+                </div>
             </div>
 
             <div class="mt-8 flex justify-end gap-4">
@@ -256,69 +302,96 @@
 @endsection
 
 @push('scripts')
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const countrySelect = document.getElementById('country_id');
-        const universitySelect = document.getElementById('university_id');
-        const courseSelect = document.getElementById('course_id');
-        const intakeSelect = document.getElementById('course_intake_id');
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const countrySelect = document.getElementById('country_id');
+            const universitySelect = document.getElementById('university_id');
+            const courseSelect = document.getElementById('course_id');
+            const intakeSelect = document.getElementById('course_intake_id');
 
-        countrySelect.addEventListener('change', function () {
-            const countryId = this.value;
-            universitySelect.innerHTML = '<option value="">Select University</option>';
-            courseSelect.innerHTML = '<option value="">Select Course</option>';
-            intakeSelect.innerHTML = '<option value="">Select Intake</option>';
+            // Handle University selection
+            universitySelect.addEventListener('change', function() {
+                const universityId = this.value;
+                const selectedOption = this.options[this.selectedIndex];
+                const countryId = selectedOption ? selectedOption.getAttribute('data-country-id') : null;
 
-            if (countryId) {
-                fetch(`{{ route('admin.applications.get-universities') }}?country_id=${countryId}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        data.forEach(university => {
-                            const option = document.createElement('option');
-                            option.value = university.id;
-                            option.textContent = university.name;
-                            universitySelect.appendChild(option);
-                        });
-                    });
-            }
+                // Auto-select Country
+                if (countryId) {
+                    countrySelect.value = countryId;
+                }
+
+                // Reset and Load Courses
+                courseSelect.innerHTML = '<option value="">Select Course</option>';
+                intakeSelect.innerHTML = '<option value="">Select Intake</option>';
+
+                if (universityId) {
+                    fetch(`{{ route('admin.applications.get-courses') }}?university_id=${universityId}`)
+                        .then(response => {
+                            if (!response.ok) throw new Error('Network response was not ok');
+                            return response.json();
+                        })
+                        .then(data => {
+                            if (data.length === 0) {
+                                const option = document.createElement('option');
+                                option.value = '';
+                                option.textContent = 'No courses available';
+                                option.disabled = true;
+                                courseSelect.appendChild(option);
+                                return;
+                            }
+                            data.forEach(course => {
+                                const option = document.createElement('option');
+                                option.value = course.id;
+                                option.textContent = course.name;
+                                courseSelect.appendChild(option);
+                            });
+                        })
+                        .catch(error => console.error('Error loading courses:', error));
+                }
+            });
+
+            // Handle Course selection
+            courseSelect.addEventListener('change', function() {
+                const courseId = this.value;
+                intakeSelect.innerHTML = '<option value="">Select Intake</option>';
+
+                if (courseId) {
+                    fetch(`{{ route('admin.applications.get-intakes') }}?course_id=${courseId}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            data.forEach(intake => {
+                                const option = document.createElement('option');
+                                option.value = intake.id;
+                                option.textContent = intake.intake_name;
+                                intakeSelect.appendChild(option);
+                            });
+                        })
+                        .catch(error => console.error('Error loading intakes:', error));
+                }
+            });
+
+            // Handle Country selection (optional filter for Universities)
+            countrySelect.addEventListener('change', function() {
+                const countryId = this.value;
+                universitySelect.innerHTML = '<option value="">Select University</option>';
+                courseSelect.innerHTML = '<option value="">Select Course</option>';
+                intakeSelect.innerHTML = '<option value="">Select Intake</option>';
+
+                if (countryId) {
+                    fetch(`{{ route('admin.applications.get-universities') }}?country_id=${countryId}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            data.forEach(university => {
+                                const option = document.createElement('option');
+                                option.value = university.id;
+                                option.textContent = university.name;
+                                option.setAttribute('data-country-id', countryId);
+                                universitySelect.appendChild(option);
+                            });
+                        })
+                        .catch(error => console.error('Error loading universities:', error));
+                }
+            });
         });
-
-        universitySelect.addEventListener('change', function () {
-            const universityId = this.value;
-            courseSelect.innerHTML = '<option value="">Select Course</option>';
-            intakeSelect.innerHTML = '<option value="">Select Intake</option>';
-
-            if (universityId) {
-                fetch(`{{ route('admin.applications.get-courses') }}?university_id=${universityId}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        data.forEach(course => {
-                            const option = document.createElement('option');
-                            option.value = course.id;
-                            option.textContent = course.name;
-                            courseSelect.appendChild(option);
-                        });
-                    });
-            }
-        });
-
-        courseSelect.addEventListener('change', function () {
-            const courseId = this.value;
-            intakeSelect.innerHTML = '<option value="">Select Intake</option>';
-
-            if (courseId) {
-                fetch(`{{ route('admin.applications.get-intakes') }}?course_id=${courseId}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        data.forEach(intake => {
-                            const option = document.createElement('option');
-                            option.value = intake.id;
-                            option.textContent = intake.intake_name;
-                            intakeSelect.appendChild(option);
-                        });
-                    });
-            }
-        });
-    });
-</script>
+    </script>
 @endpush

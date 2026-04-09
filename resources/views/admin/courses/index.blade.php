@@ -64,7 +64,7 @@
                         <td>{{ $course->name ?? 'N/A' }}</td>
                         <td>{{ $course->degree_level ?? 'N/A' }}</td>
                         <td>{{ $course->duration ?? 'N/A' }}</td>
-                        <td>{{ $course->tuition_fee ? $course->currency . ' ' . number_format($course->tuition_fee, 2) : 'N/A' }}</td>
+                        <td>{{ $course->tuition_fee ? number_format($course->tuition_fee, 2) : 'N/A' }}</td>
                         <td>
                             <span class="badge {{ $course->status ? 'bg-success' : 'bg-danger' }}">
                                 {{ $course->status ? 'Active' : 'Inactive' }}

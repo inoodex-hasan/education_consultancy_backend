@@ -12,6 +12,8 @@ use App\Notifications\NewLeadSubmitted;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Schema;
 
 class LeadController extends Controller
 {
@@ -75,6 +77,10 @@ class LeadController extends Controller
         $validated['created_by'] = Auth::id();
         $validated['status'] = 'pending';
 
+        if (Schema::hasColumn('leads', 'follow_up_history')) {
+            $validated['follow_up_history'] = $this->buildFollowUpHistory(null, $validated['next_follow_up_at'] ?? null);
+        }
+
         $lead = Lead::create($validated);
 
         // Notify Consultants
@@ -105,14 +111,14 @@ class LeadController extends Controller
     {
         $countries = Country::where('status', '1')->get();
         // pre-fetch universities if country is selected
-        $universities = [];
+        $universities = collect();
         if ($lead->preferred_country) {
             $universities = University::where('country_id', $lead->preferred_country)->where('status', '1')->get();
         }
 
         // pre-fetch courses if university is selected (or we can derive it from course)
-        $courses = [];
-        // Ideally we should have university_id on lead, but we don't. 
+        $courses = collect();
+        // Ideally we should have university_id on lead, but we don't.
         // We can try to get it from the course if preferred_course is set.
         $selectedUniversityId = null;
         if ($lead->preferred_course) {
@@ -121,8 +127,6 @@ class LeadController extends Controller
                 $selectedUniversityId = $course->university_id;
                 $courses = Course::where('university_id', $selectedUniversityId)->where('status', '1')->get();
             }
-        } elseif ($universities->isNotEmpty()) {
-            // Fallback or just empty
         }
 
         return view('admin.marketing.leads.edit', compact('lead', 'countries', 'universities', 'courses', 'selectedUniversityId'));
@@ -145,6 +149,10 @@ class LeadController extends Controller
             'next_follow_up_at' => 'nullable|date',
             'notes' => 'nullable|string',
         ]);
+
+        if (Schema::hasColumn('leads', 'follow_up_history')) {
+            $validated['follow_up_history'] = $this->buildFollowUpHistory($lead, $validated['next_follow_up_at'] ?? null);
+        }
 
         $lead->update($validated);
 
@@ -176,5 +184,30 @@ class LeadController extends Controller
             ->where('status', '1')
             ->get(['id', 'name']);
         return response()->json($courses);
+    }
+
+    private function buildFollowUpHistory(?Lead $lead, ?string $nextFollowUpAt): ?array
+    {
+        $history = collect($lead?->follow_up_history ?? []);
+        $existingFollowUpDate = $lead?->next_follow_up_at?->toDateString();
+
+        if ($existingFollowUpDate !== null && $history->last() !== $existingFollowUpDate) {
+            $history->push($existingFollowUpDate);
+        }
+
+        if (filled($nextFollowUpAt)) {
+            $normalizedNextFollowUpAt = Carbon::parse($nextFollowUpAt)->toDateString();
+
+            if ($history->last() !== $normalizedNextFollowUpAt) {
+                $history->push($normalizedNextFollowUpAt);
+            }
+        }
+
+        $history = $history
+            ->filter(fn ($date) => filled($date))
+            ->values()
+            ->all();
+
+        return empty($history) ? null : $history;
     }
 }

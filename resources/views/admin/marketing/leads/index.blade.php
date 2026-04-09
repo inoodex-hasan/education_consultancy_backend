@@ -80,10 +80,22 @@
                                     <span class="badge badge-outline-primary">{{ $lead->source }}</span>
                                 </td>
                                 <td>
-                                    @if($lead->next_follow_up_at)
-                                        <div class="{{ $lead->next_follow_up_at->isPast() ? 'text-danger font-bold' : '' }}">
-                                            {{ $lead->next_follow_up_at->format('M d, Y') }}
+                                    @php($followUpHistory = collect($lead->follow_up_date_history))
+                                    @if($followUpHistory->isNotEmpty())
+                                        @php($currentFollowUpDate = $followUpHistory->last())
+                                        <div class="{{ $currentFollowUpDate->isPast() ? 'text-danger font-bold' : 'font-semibold' }}">
+                                            {{ $currentFollowUpDate->format('M d, Y') }}
                                         </div>
+
+                                        @if($followUpHistory->count() > 1)
+                                            <div class="mt-2 flex flex-wrap gap-1">
+                                                @foreach($followUpHistory->slice(0, -1)->reverse() as $historyDate)
+                                                    <span class="rounded-full bg-black/5 px-2 py-0.5 text-[10px] font-medium text-white-dark dark:bg-white/[0.08]">
+                                                        {{ $historyDate->format('M d, Y') }}
+                                                    </span>
+                                                @endforeach
+                                            </div>
+                                        @endif
                                     @else
                                         -
                                     @endif

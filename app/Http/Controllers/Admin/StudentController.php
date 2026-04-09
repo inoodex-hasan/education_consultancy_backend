@@ -5,8 +5,9 @@ namespace App\Http\Controllers\Admin;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Controller;
-use App\Models\{Country, Course, CourseIntake, Student, University, User};
+use App\Models\{Country, Course, CourseIntake, Lead, Student, University, User};
 
 class StudentController extends Controller
 {
@@ -45,14 +46,14 @@ class StudentController extends Controller
 
     public function create(Request $request)
     {
-        $this->authorize('*consultant');
+        $this->authorize('*consultant|*marketing');
 
         $users = User::whereHas('roles', function ($q) {
             $q->where('name', 'marketing');
         })->orderBy('name')->get(['id', 'name']);
         $countries = Country::orderBy('name')->get(['id', 'name']);
-        $universities = University::where('status', '1')->orderBy('name')->get(['id', 'name']);
-        
+        $universities = University::where('status', '1')->orderBy('name')->get(['id', 'name', 'country_id']);
+
         // Auto-assign marketing from lead's created_by if lead_id is provided
         $assignedMarketingId = null;
         if ($request->has('lead_id')) {
@@ -67,7 +68,7 @@ class StudentController extends Controller
 
     public function store(Request $request)
     {
-        $this->authorize('*consultant');
+        $this->authorize('*consultant|*marketing');
 
         $validated = $this->validateStudent($request);
         $validated['created_by'] = auth()->id();
@@ -82,6 +83,22 @@ class StudentController extends Controller
                 ];
             }
             $validated['documents'] = $documents;
+        }
+
+        if ($request->hasFile('translation_documents')) {
+            $tDocuments = [];
+            foreach ($request->file('translation_documents') as $file) {
+                $path = $file->store('documents/students/translations', 'public');
+                $tDocuments[] = [
+                    'name' => $file->getClientOriginalName(),
+                    'path' => $path,
+                ];
+            }
+            $validated['translation_documents'] = $tDocuments;
+        }
+
+        if (!empty($validated['password'])) {
+            $validated['password'] = Hash::make($validated['password']);
         }
 
         Student::create($validated);
@@ -102,13 +119,13 @@ class StudentController extends Controller
 
     public function edit(Student $student)
     {
-        $this->authorize('*consultant');
+        $this->authorize('*consultant|*marketing');
 
         $users = User::whereHas('roles', function ($q) {
             $q->where('name', 'marketing');
         })->orderBy('name')->get(['id', 'name']);
         $countries = Country::orderBy('name')->get(['id', 'name']);
-        $universities = $student->country_id ? University::where('country_id', $student->country_id)->where('status', '1')->orderBy('name')->get(['id', 'name']) : [];
+        $universities = University::where('status', '1')->orderBy('name')->get(['id', 'name', 'country_id']);
         $courses = $student->university_id ? Course::where('university_id', $student->university_id)->get(['id', 'name']) : [];
         $intakes = $student->course_id ? CourseIntake::where('course_id', $student->course_id)->get(['id', 'intake_name']) : [];
 
@@ -117,7 +134,7 @@ class StudentController extends Controller
 
     public function update(Request $request, Student $student)
     {
-        $this->authorize('*consultant');
+        $this->authorize('*consultant|*marketing');
 
         $validated = $this->validateStudent($request);
 
@@ -147,6 +164,35 @@ class StudentController extends Controller
 
         $validated['documents'] = $documents;
 
+        $tDocuments = $student->translation_documents ?? [];
+        // Handle translation deletions
+        if ($request->has('delete_translation_documents')) {
+            foreach ($request->delete_translation_documents as $index) {
+                if (isset($tDocuments[$index])) {
+                    Storage::disk('public')->delete($tDocuments[$index]['path']);
+                    unset($tDocuments[$index]);
+                }
+            }
+            $tDocuments = array_values($tDocuments);
+        }
+        // Handle new translation uploads
+        if ($request->hasFile('translation_documents')) {
+            foreach ($request->file('translation_documents') as $file) {
+                $path = $file->store('documents/students/translations', 'public');
+                $tDocuments[] = [
+                    'name' => $file->getClientOriginalName(),
+                    'path' => $path,
+                ];
+            }
+        }
+        $validated['translation_documents'] = $tDocuments;
+
+        if (!empty($validated['password'])) {
+            $validated['password'] = Hash::make($validated['password']);
+        } else {
+            unset($validated['password']);
+        }
+
         $student->update($validated);
 
         return redirect()
@@ -156,7 +202,7 @@ class StudentController extends Controller
 
     public function destroy(Student $student)
     {
-        $this->authorize('*consultant');
+        $this->authorize('*consultant|*marketing');
 
         $student->delete();
 
@@ -187,7 +233,7 @@ class StudentController extends Controller
             'assigned_marketing_id' => ['nullable', 'exists:users,id'],
             // 'assigned_consultant_id' => ['nullable', 'exists:users,id'],
             // 'assigned_application_id' => ['nullable', 'exists:users,id'],
-            'mothers_name' => ['nullable', 'string', 'max:255'],
+            'mother_name' => ['nullable', 'string', 'max:255'],
             'address' => ['nullable', 'string'],
             'ssc_result' => ['nullable', 'string', 'max:255'],
             'hsc_result' => ['nullable', 'string', 'max:255'],
@@ -196,8 +242,37 @@ class StudentController extends Controller
             'university_id' => ['nullable', 'exists:universities,id'],
             'course_id' => ['nullable', 'exists:courses,id'],
             'course_intake_id' => ['nullable', 'exists:course_intakes,id'],
+            'password' => ['nullable', 'string', 'min:8'],
+            'sponsor_phone' => ['nullable', 'string', 'max:50'],
+            'passport_validity' => ['nullable', 'date'],
             'documents' => ['nullable', 'array'],
             'documents.*' => ['nullable', 'file', 'mimes:pdf,doc,docx,jpg,jpeg,png', 'max:5120'], // 5MB limit
+            'translation_documents' => ['nullable', 'array'],
+            'translation_documents.*' => ['nullable', 'file', 'mimes:pdf,doc,docx,jpg,jpeg,png', 'max:5120'],
         ]);
+    }
+
+    public function getUniversities($country_id)
+    {
+        return University::where('country_id', $country_id)
+            ->where('status', 1)
+            ->orderBy('name')
+            ->get(['id', 'name']);
+    }
+
+    public function getCourses($university_id)
+    {
+        return Course::where('university_id', $university_id)
+            ->where('status', 1)
+            ->orderBy('name')
+            ->get(['id', 'name']);
+    }
+
+    public function getIntakes($course_id)
+    {
+        return CourseIntake::where('course_id', $course_id)
+            ->where('status', 1)
+            ->orderBy('intake_name')
+            ->get(['id', 'intake_name']);
     }
 }

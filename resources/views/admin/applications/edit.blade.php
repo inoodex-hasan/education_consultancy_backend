@@ -115,7 +115,7 @@
                         @enderror
                     </div>
 
-                    <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
+                    <div class="grid grid-cols-1 gap-4 sm:grid-cols-1">
                         <div class="form-group">
                             <label for="tuition_fee">Tuition Fee</label>
                             <input type="number" name="tuition_fee" id="tuition_fee"
@@ -130,25 +130,9 @@
                                 <span class="text-danger text-sm">{{ $message }}</span>
                             @enderror
                         </div>
-
-                        <div class="form-group">
-                            <label for="currency">Currency</label>
-                            <input type="text" name="currency" id="currency"
-                                class="form-input bg-[#f1f2f3] dark:bg-[#1b2e4b]"
-                                value="{{ old('currency', $application->currency) }}" readonly>
-                            @error('currency')
-                                <span class="text-danger text-sm">{{ $message }}</span>
-                            @enderror
-                        </div>
-
-                        <div class="form-group">
-                            <label for="bdt_amount">Equivalent (BDT)</label>
-                            <input type="text" id="bdt_amount" class="form-input bg-[#f1f2f3] dark:bg-[#1b2e4b]"
-                                value="0.00" readonly>
-                        </div>
                     </div>
 
-                    <div class="form-group">
+                    <!-- <div class="form-group">
                         <label for="total_fee">Total Fee <span class="text-danger">*</span></label>
                         <input type="number" name="total_fee" id="total_fee" step="0.01"
                             class="form-input {{ !$canEdit ? 'bg-gray-100 dark:bg-black/20' : '' }}"
@@ -160,7 +144,7 @@
                         @error('total_fee')
                             <span class="text-danger text-sm">{{ $message }}</span>
                         @enderror
-                    </div>
+                    </div> -->
 
                     <div class="form-group">
                         <label for="status">Application Status</label>
@@ -278,15 +262,7 @@
                 }
 
                 function calculateBDT() {
-                    const selectedOption = courseSelect.options[courseSelect.selectedIndex];
-                    if (selectedOption && selectedOption.dataset.tuitionFee) {
-                        if (selectedOption.dataset.exchangeRate && selectedOption.dataset.exchangeRate > 0) {
-                            const bdtAmount = selectedOption.dataset.tuitionFee / selectedOption.dataset.exchangeRate;
-                            bdtAmountInput.value = bdtAmount.toFixed(2);
-                        }
-                    } else {
-                        bdtAmountInput.value = '0.00';
-                    }
+                    // No longer needed
                 }
 
                 countrySelect.addEventListener('change', function() {
@@ -323,8 +299,6 @@
                                     option.value = course.id;
                                     option.textContent = course.name;
                                     option.dataset.tuitionFee = course.tuition_fee;
-                                    option.dataset.currency = course.currency;
-                                    option.dataset.exchangeRate = course.exchange_rate;
                                     courseSelect.appendChild(option);
                                 });
                             });
@@ -340,15 +314,7 @@
                     const selectedOption = this.options[this.selectedIndex];
                     if (selectedOption && selectedOption.dataset.tuitionFee) {
                         tuitionFeeInput.value = selectedOption.dataset.tuitionFee;
-                        if (selectedOption.dataset.exchangeRate && selectedOption.dataset.exchangeRate > 0) {
-                            const bdtAmount = selectedOption.dataset.tuitionFee / selectedOption.dataset
-                                .exchangeRate;
-                            bdtAmountInput.value = bdtAmount.toFixed(2);
-                            totalFeeInput.value = bdtAmount.toFixed(2);
-                        }
-                    }
-                    if (selectedOption && selectedOption.dataset.currency) {
-                        currencyInput.value = selectedOption.dataset.currency;
+                        totalFeeInput.value = selectedOption.dataset.tuitionFee;
                     }
 
                     if (courseId) {
@@ -366,7 +332,7 @@
                 });
 
                 // Initial calculation
-                calculateBDT();
+                // calculateBDT();  // Removed
             });
         </script>
     @endpush

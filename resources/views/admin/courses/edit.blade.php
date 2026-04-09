@@ -48,16 +48,7 @@
 
                 <div class="form-group">
                     <label>Tuition Fee <span class="text-danger">*</span></label>
-                    <div class="flex">
-                        <select name="currency" class="form-select border-r-0 rounded-r-none w-24" required>
-                            @foreach($currencies as $currency)
-                                <option value="{{ $currency->code }}" {{ old('currency', $course->currency) == $currency->code ? 'selected' : '' }}>
-                                    {{ $currency->code }}
-                                </option>
-                            @endforeach
-                        </select>
-                        <input type="number" name="tuition_fee" class="form-input rounded-l-none" value="{{ old('tuition_fee', $course->tuition_fee) }}" required>
-                    </div>
+                    <input type="number" name="tuition_fee" class="form-input" value="{{ old('tuition_fee', $course->tuition_fee) }}" required>
                 </div>
 
                 <div class="form-group">

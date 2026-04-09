@@ -14,15 +14,19 @@ class Student extends Model
         'last_name',
         'father_name',
         'passport_number',
+        'passport_validity',
         'email',
         'phone',
         'dob',
+        'password',
+        'sponsor_phone',
+        'translation_documents',
         // 'current_stage',
         // 'current_status',
         'assigned_marketing_id',
         'assigned_consultant_id',
         'assigned_application_id',
-        'mothers_name',
+        'mother_name',
         'address',
         'ssc_result',
         'hsc_result',
@@ -38,7 +42,9 @@ class Student extends Model
 
     protected $casts = [
         'dob' => 'date',
+        'passport_validity' => 'date',
         'documents' => 'array',
+        'translation_documents' => 'array',
     ];
 
     public function country()
@@ -58,27 +64,27 @@ class Student extends Model
 
     public function intake()
     {
-        return $this->belongsTo(CourseIntake::class , 'course_intake_id');
+        return $this->belongsTo(CourseIntake::class, 'course_intake_id');
     }
 
     public function creator()
     {
-        return $this->belongsTo(User::class , 'created_by');
+        return $this->belongsTo(User::class, 'created_by');
     }
 
     public function marketingAssignee()
     {
-        return $this->belongsTo(User::class , 'assigned_marketing_id');
+        return $this->belongsTo(User::class, 'assigned_marketing_id');
     }
 
     public function consultantAssignee()
     {
-        return $this->belongsTo(User::class , 'assigned_consultant_id');
+        return $this->belongsTo(User::class, 'assigned_consultant_id');
     }
 
     public function applicationAssignee()
     {
-        return $this->belongsTo(User::class , 'assigned_application_id');
+        return $this->belongsTo(User::class, 'assigned_application_id');
     }
 
     public function payments()
