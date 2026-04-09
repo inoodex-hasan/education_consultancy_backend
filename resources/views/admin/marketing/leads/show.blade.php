@@ -65,10 +65,28 @@
                         </div>
                         <div>
                             <label class="text-white-dark mb-1">Follow-up Date</label>
-                            <p
-                                class="font-semibold {{ $lead->next_follow_up_at && $lead->next_follow_up_at->isPast() ? 'text-danger' : 'text-gray-light' }}">
-                                {{ $lead->next_follow_up_at ? $lead->next_follow_up_at->format('M d, Y') : 'N/A' }}
-                            </p>
+                            @php($followUpHistory = collect($lead->follow_up_date_history))
+                            @if($followUpHistory->isNotEmpty())
+                                @php($currentFollowUpDate = $followUpHistory->last())
+                                <p class="font-semibold {{ $currentFollowUpDate->isPast() ? 'text-danger' : 'text-gray-light' }}">
+                                    {{ $currentFollowUpDate->format('M d, Y') }}
+                                </p>
+
+                                @if($followUpHistory->count() > 1)
+                                    <div class="mt-2">
+                                        <label class="text-white-dark mb-2 block text-xs">Follow-up History</label>
+                                        <div class="flex flex-wrap gap-2">
+                                            @foreach($followUpHistory->slice(0, -1)->reverse() as $historyDate)
+                                                <span class="rounded-full bg-black/5 px-2.5 py-1 text-[11px] font-medium text-white-dark dark:bg-white/[0.08]">
+                                                    {{ $historyDate->format('M d, Y') }}
+                                                </span>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                @endif
+                            @else
+                                <p class="font-semibold text-gray-light">N/A</p>
+                            @endif
                         </div>
                     </div>
                 </div>

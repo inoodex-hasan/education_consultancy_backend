@@ -74,14 +74,7 @@ class LeadController extends Controller
             'notes' => 'nullable|string',
         ]);
 
-        $validated['created_by'] = Auth::id();
-        $validated['status'] = 'pending';
-
-        if (Schema::hasColumn('leads', 'follow_up_history')) {
-            $validated['follow_up_history'] = $this->buildFollowUpHistory(null, $validated['next_follow_up_at'] ?? null);
-        }
-
-        $lead = Lead::create($validated);
+        $lead = Lead::create($this->prepareLeadPayload($validated));
 
         // Notify Consultants
         $consultants = User::whereHas('roles', function ($q) {
@@ -145,16 +138,12 @@ class LeadController extends Controller
             'preferred_country' => 'nullable|string|exists:countries,id',
             'preferred_course' => 'nullable|string|exists:courses,id',
             'source' => 'nullable|string|max:255',
-            'status' => 'required|string',
+            'status' => 'nullable|string',
             'next_follow_up_at' => 'nullable|date',
             'notes' => 'nullable|string',
         ]);
 
-        if (Schema::hasColumn('leads', 'follow_up_history')) {
-            $validated['follow_up_history'] = $this->buildFollowUpHistory($lead, $validated['next_follow_up_at'] ?? null);
-        }
-
-        $lead->update($validated);
+        $lead->update($this->prepareLeadPayload($validated, $lead));
 
         return redirect()->route('admin.marketing.leads.index')->with('success', 'Lead updated successfully.');
     }
@@ -209,5 +198,21 @@ class LeadController extends Controller
             ->all();
 
         return empty($history) ? null : $history;
+    }
+
+    private function prepareLeadPayload(array $validated, ?Lead $lead = null): array
+    {
+        if ($lead === null) {
+            $validated['created_by'] = Auth::id();
+            $validated['status'] = $validated['status'] ?? 'pending';
+        } else {
+            $validated['status'] = $validated['status'] ?? $lead->status;
+        }
+
+        if (Schema::hasColumn('leads', 'follow_up_history')) {
+            $validated['follow_up_history'] = $this->buildFollowUpHistory($lead, $validated['next_follow_up_at'] ?? null);
+        }
+
+        return $validated;
     }
 }
