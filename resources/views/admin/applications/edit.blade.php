@@ -176,6 +176,196 @@
                     </div>
                 </div>
 
+                {{-- Application Tracking Section --}}
+                <div class="mt-8">
+                    <h5 class="text-lg font-semibold dark:text-white-light uppercase mb-4">Application Tracking</h5>
+                    <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+                        {{-- Checkboxes in 1 line --}}
+                        <div class="form-group md:col-span-2">
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <div>
+                                    <label class="flex items-center gap-2 cursor-pointer">
+                                        <input type="hidden" name="offer_letter_received" value="0">
+                                        <input type="checkbox" name="offer_letter_received" value="1" id="offer_letter_received"
+                                            class="form-checkbox w-5 h-5 text-primary rounded"
+                                            {{ old('offer_letter_received', $application->offer_letter_received) ? 'checked' : '' }}>
+                                        <span class="text-sm font-medium">Offer Letter Received</span>
+                                    </label>
+                                    <input type="date" name="offer_letter_received_date" id="offer_letter_received_date"
+                                        class="form-input mt-2 {{ !$canEdit ? 'bg-gray-100 dark:bg-black/20' : '' }}"
+                                        value="{{ old('offer_letter_received_date', $application->offer_letter_received_date?->format('Y-m-d')) }}"
+                                        {{ !$canEdit ? 'disabled' : '' }}>
+                                </div>
+
+                                <div>
+                                    <label class="flex items-center gap-2 cursor-pointer">
+                                        <input type="hidden" name="vfs_appointment" value="0">
+                                        <input type="checkbox" name="vfs_appointment" value="1" id="vfs_appointment"
+                                            class="form-checkbox w-5 h-5 text-primary rounded"
+                                            {{ old('vfs_appointment', $application->vfs_appointment) ? 'checked' : '' }}>
+                                        <span class="text-sm font-medium">VFS Appointment</span>
+                                    </label>
+                                    <input type="date" name="vfs_appointment_date" id="vfs_appointment_date"
+                                        class="form-input mt-2 {{ !$canEdit ? 'bg-gray-100 dark:bg-black/20' : '' }}"
+                                        value="{{ old('vfs_appointment_date', $application->vfs_appointment_date?->format('Y-m-d')) }}"
+                                        {{ !$canEdit ? 'disabled' : '' }}>
+                                </div>
+
+                                <div>
+                                    <label class="flex items-center gap-2 cursor-pointer">
+                                        <input type="hidden" name="file_submission" value="0">
+                                        <input type="checkbox" name="file_submission" value="1" id="file_submission"
+                                            class="form-checkbox w-5 h-5 text-primary rounded"
+                                            {{ old('file_submission', $application->file_submission) ? 'checked' : '' }}>
+                                        <span class="text-sm font-medium">File Submission</span>
+                                    </label>
+                                    <input type="date" name="file_submission_date" id="file_submission_date"
+                                        class="form-input mt-2 {{ !$canEdit ? 'bg-gray-100 dark:bg-black/20' : '' }}"
+                                        value="{{ old('file_submission_date', $application->file_submission_date?->format('Y-m-d')) }}"
+                                        {{ !$canEdit ? 'disabled' : '' }}>
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- Visa Status --}}
+                        <div class="form-group">
+                            <label for="visa_status">Visa Status</label>
+                            <select name="visa_status" id="visa_status"
+                                class="form-select {{ !$canEdit ? 'bg-gray-100 dark:bg-black/20' : '' }}"
+                                {{ !$canEdit ? 'disabled' : '' }}>
+                                @foreach (['not_applied', 'pending', 'approved', 'rejected'] as $status)
+                                    <option value="{{ $status }}"
+                                        {{ old('visa_status', $application->visa_status) == $status ? 'selected' : '' }}>
+                                        {{ ucfirst(str_replace('_', ' ', $status)) }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        {{-- Visa Decision Date --}}
+                        <div class="form-group">
+                            <label for="visa_decision_date">Visa Decision Date</label>
+                            <input type="date" name="visa_decision_date" id="visa_decision_date"
+                                class="form-input {{ !$canEdit ? 'bg-gray-100 dark:bg-black/20' : '' }}"
+                                value="{{ old('visa_decision_date', $application->visa_decision_date?->format('Y-m-d')) }}"
+                                {{ !$canEdit ? 'disabled' : '' }}>
+                        </div>
+
+                        {{-- Tuition Fee Status --}}
+                        <div class="form-group">
+                            <label for="tuition_fee_status">Tuition Fee Status</label>
+                            <select name="tuition_fee_status" id="tuition_fee_status"
+                                class="form-select {{ !$canEdit ? 'bg-gray-100 dark:bg-black/20' : '' }}"
+                                {{ !$canEdit ? 'disabled' : '' }}>
+                                @foreach (['pending', 'paid', 'partial'] as $status)
+                                    <option value="{{ $status }}"
+                                        {{ old('tuition_fee_status', $application->tuition_fee_status) == $status ? 'selected' : '' }}>
+                                        {{ ucfirst($status) }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        {{-- Service Charge Status --}}
+                        <div class="form-group">
+                            <label for="service_charge_status">Service Charge Status</label>
+                            <select name="service_charge_status" id="service_charge_status"
+                                class="form-select {{ !$canEdit ? 'bg-gray-100 dark:bg-black/20' : '' }}"
+                                {{ !$canEdit ? 'disabled' : '' }}>
+                                @foreach (['pending', 'paid', 'partial'] as $status)
+                                    <option value="{{ $status }}"
+                                        {{ old('service_charge_status', $application->service_charge_status) == $status ? 'selected' : '' }}>
+                                        {{ ucfirst($status) }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        {{-- Application Priority --}}
+                        <div class="form-group">
+                            <label for="application_priority">Application Priority</label>
+                            <select name="application_priority" id="application_priority"
+                                class="form-select {{ !$canEdit ? 'bg-gray-100 dark:bg-black/20' : '' }}"
+                                {{ !$canEdit ? 'disabled' : '' }}>
+                                @foreach (['normal', 'priority', 'vip'] as $priority)
+                                    <option value="{{ $priority }}"
+                                        {{ old('application_priority', $application->application_priority) == $priority ? 'selected' : '' }}>
+                                        {{ ucfirst($priority) }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        {{-- Final Status --}}
+                        <div class="form-group">
+                            <label for="final_status">Final Status</label>
+                            <select name="final_status" id="final_status"
+                                class="form-select {{ !$canEdit ? 'bg-gray-100 dark:bg-black/20' : '' }}"
+                                {{ !$canEdit ? 'disabled' : '' }}>
+                                @foreach (['pending', 'in_progress', 'completed', 'cancelled'] as $status)
+                                    <option value="{{ $status }}"
+                                        {{ old('final_status', $application->final_status) == $status ? 'selected' : '' }}>
+                                        {{ ucfirst(str_replace('_', ' ', $status)) }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        {{-- Payment Status Checkboxes --}}
+                        <div class="form-group md:col-span-2">
+                            <h6 class="text-md font-semibold dark:text-white-light mb-3">Payment Tracking</h6>
+                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+                                <label class="flex items-center gap-2 cursor-pointer">
+                                    <input type="hidden" name="security_deposit_status" value="0">
+                                    <input type="checkbox" name="security_deposit_status" value="1" id="security_deposit_status"
+                                        class="form-checkbox w-5 h-5 text-primary rounded"
+                                        {{ old('security_deposit_status', $application->security_deposit_status) ? 'checked' : '' }}>
+                                    <span class="text-sm font-medium">Security Deposit</span>
+                                </label>
+
+                                <label class="flex items-center gap-2 cursor-pointer">
+                                    <input type="hidden" name="cvu_fee_status" value="0">
+                                    <input type="checkbox" name="cvu_fee_status" value="1" id="cvu_fee_status"
+                                        class="form-checkbox w-5 h-5 text-primary rounded"
+                                        {{ old('cvu_fee_status', $application->cvu_fee_status) ? 'checked' : '' }}>
+                                    <span class="text-sm font-medium">CVU Fee</span>
+                                </label>
+
+                                <label class="flex items-center gap-2 cursor-pointer">
+                                    <input type="hidden" name="admission_fee_status" value="0">
+                                    <input type="checkbox" name="admission_fee_status" value="1" id="admission_fee_status"
+                                        class="form-checkbox w-5 h-5 text-primary rounded"
+                                        {{ old('admission_fee_status', $application->admission_fee_status) ? 'checked' : '' }}>
+                                    <span class="text-sm font-medium">Admission Fee</span>
+                                </label>
+
+                                <label class="flex items-center gap-2 cursor-pointer">
+                                    <input type="hidden" name="final_payment_status" value="0">
+                                    <input type="checkbox" name="final_payment_status" value="1" id="final_payment_status"
+                                        class="form-checkbox w-5 h-5 text-primary rounded"
+                                        {{ old('final_payment_status', $application->final_payment_status) ? 'checked' : '' }}>
+                                    <span class="text-sm font-medium">Final Payment</span>
+                                </label>
+
+                                <label class="flex items-center gap-2 cursor-pointer">
+                                    <input type="hidden" name="emgs_payment_status" value="0">
+                                    <input type="checkbox" name="emgs_payment_status" value="1" id="emgs_payment_status"
+                                        class="form-checkbox w-5 h-5 text-primary rounded"
+                                        {{ old('emgs_payment_status', $application->emgs_payment_status) ? 'checked' : '' }}>
+                                    <span class="text-sm font-medium">EMGS Payment</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        {{-- Internal Notes --}}
+                        <div class="form-group md:col-span-2">
+                            <label for="internal_notes">Internal Notes</label>
+                            <textarea name="internal_notes" id="internal_notes" class="form-input {{ !$canEdit ? 'bg-gray-100 dark:bg-black/20' : '' }}"
+                                rows="3" placeholder="Staff-only notes..." {{ !$canEdit ? 'disabled' : '' }}>{{ old('internal_notes', $application->internal_notes) }}</textarea>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="mt-8 flex justify-end gap-4">
                     <a href="{{ route('admin.applications.index') }}" class="btn btn-outline-danger">Cancel</a>
                     @if ($canEdit || $canEditStatus)
@@ -231,6 +421,48 @@
     @push('scripts')
         <script>
             document.addEventListener('DOMContentLoaded', function() {
+                // Auto-fill dates when checkboxes are ticked
+                function setupAutoDate(checkboxId, dateInputId) {
+                    const checkbox = document.getElementById(checkboxId);
+                    const dateInput = document.getElementById(dateInputId);
+
+                    if (checkbox && dateInput) {
+                        checkbox.addEventListener('change', function() {
+                            if (this.checked) {
+                                const today = new Date();
+                                const yyyy = today.getFullYear();
+                                const mm = String(today.getMonth() + 1).padStart(2, '0');
+                                const dd = String(today.getDate()).padStart(2, '0');
+                                dateInput.value = `${yyyy}-${mm}-${dd}`;
+                            } else {
+                                dateInput.value = '';
+                            }
+                        });
+                    }
+                }
+
+                setupAutoDate('offer_letter_received', 'offer_letter_received_date');
+                setupAutoDate('vfs_appointment', 'vfs_appointment_date');
+                setupAutoDate('file_submission', 'file_submission_date');
+
+                // Auto-fill visa decision date when status changes to approved/rejected
+                const visaStatusSelect = document.getElementById('visa_status');
+                const visaDecisionDateInput = document.getElementById('visa_decision_date');
+
+                if (visaStatusSelect && visaDecisionDateInput) {
+                    visaStatusSelect.addEventListener('change', function() {
+                        if (this.value === 'approved' || this.value === 'rejected') {
+                            const today = new Date();
+                            const yyyy = today.getFullYear();
+                            const mm = String(today.getMonth() + 1).padStart(2, '0');
+                            const dd = String(today.getDate()).padStart(2, '0');
+                            visaDecisionDateInput.value = `${yyyy}-${mm}-${dd}`;
+                        } else {
+                            visaDecisionDateInput.value = '';
+                        }
+                    });
+                }
+
                 const countrySelect = document.getElementById('country_id');
                 const universitySelect = document.getElementById('university_id');
                 const courseSelect = document.getElementById('course_id');

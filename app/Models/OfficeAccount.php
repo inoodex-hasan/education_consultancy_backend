@@ -17,11 +17,33 @@ class OfficeAccount extends Model
         'account_number',
         'branch_name',
         'opening_balance',
-        'remaining_balance',
         'status',
         'created_by',
         'notes',
     ];
+
+    /**
+     * Computed attribute: remaining_balance calculated from journal entries
+     */
+    public function getRemainingBalanceAttribute(): float
+    {
+        $totalCredit = $this->journalEntryItems()->sum('credit');
+        $totalDebit = $this->journalEntryItems()->sum('debit');
+        return ($this->opening_balance ?? 0) + $totalCredit - $totalDebit;
+    }
+
+    /**
+     * Journal entry items linked to this account
+     */
+    public function journalEntryItems()
+    {
+        return $this->hasManyThrough(
+            JournalEntryItem::class,
+            ChartOfAccount::class,
+            'id',
+            'chart_of_account_id'
+        )->where('chart_of_accounts.office_account_id', $this->id);
+    }
 
     protected static function booted()
     {

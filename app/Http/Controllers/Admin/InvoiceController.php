@@ -8,6 +8,7 @@ use App\Models\InvoiceItem;
 use App\Models\Student;
 use App\Models\University;
 use App\Models\ChartOfAccount;
+use App\Models\Application;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -15,7 +16,7 @@ class InvoiceController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('can:*accountant');
+        $this->middleware('can:*accountant')->only(['destroy']);
     }
 
     /**
@@ -34,13 +35,18 @@ class InvoiceController extends Controller
     /**
      * Show the form for creating a new invoice.
      */
-    public function create()
+    public function create(Request $request)
     {
         $students = Student::orderBy('first_name')->get();
-        $universities = University::orderBy('name')->get();
         $accounts = ChartOfAccount::where('is_active', true)->orderBy('code')->get();
+        $applications = Application::with(['student', 'university', 'course', 'intake'])->orderBy('id', 'desc')->get();
 
-        return view('admin.accounts.invoices.create', compact('students', 'universities', 'accounts'));
+        $selectedApplication = null;
+        if ($request->has('application_id')) {
+            $selectedApplication = $applications->firstWhere('id', $request->application_id);
+        }
+
+        return view('admin.accounts.invoices.create', compact('students', 'accounts', 'applications', 'selectedApplication'));
     }
 
     /**
@@ -49,9 +55,7 @@ class InvoiceController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'student_id' => 'required|exists:students,id',
-            'application_id' => 'nullable|exists:applications,id',
-            'university_id' => 'nullable|exists:universities,id',
+            'application_id' => 'required|exists:applications,id',
             'date' => 'required|date',
             'due_date' => 'required|date|after_or_equal:date',
             'invoice_number' => 'nullable|string|max:50|unique:invoices,invoice_number',
@@ -66,12 +70,14 @@ class InvoiceController extends Controller
         try {
             DB::beginTransaction();
 
+            $application = \App\Models\Application::find($request->application_id);
+
             $totalAmount = collect($request->items)->sum(fn($i) => (float) $i['quantity'] * (float) $i['unit_price']);
 
             $invoice = Invoice::create([
-                'student_id' => $request->student_id,
+                'student_id' => $application->student_id,
                 'application_id' => $request->application_id,
-                'university_id' => $request->university_id,
+                'university_id' => $application->university_id,
                 'invoice_number' => $request->invoice_number ?? 'INV-' . date('Ymd') . '-' . strtoupper(bin2hex(random_bytes(2))),
                 'date' => $request->date,
                 'due_date' => $request->due_date,

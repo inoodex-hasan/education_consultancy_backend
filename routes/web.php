@@ -195,10 +195,10 @@ Route::prefix('dashboard/journal-entries')->name('admin.journal-entries.')->grou
 
 // Invoices
 Route::prefix('dashboard/invoices')->name('admin.invoices.')->group(function () {
-    Route::get('/', [App\Http\Controllers\Admin\InvoiceController::class, 'index'])->name('index')->middleware('can:*accountant');
-    Route::get('/create', [App\Http\Controllers\Admin\InvoiceController::class, 'create'])->name('create')->middleware('can:*accountant');
-    Route::post('/', [App\Http\Controllers\Admin\InvoiceController::class, 'store'])->name('store')->middleware('can:*accountant');
-    Route::get('{invoice}', [App\Http\Controllers\Admin\InvoiceController::class, 'show'])->name('show')->middleware('can:*accountant');
+    Route::get('/', [App\Http\Controllers\Admin\InvoiceController::class, 'index'])->name('index')->middleware('can:*consultant|*application|*accountant');
+    Route::get('/create', [App\Http\Controllers\Admin\InvoiceController::class, 'create'])->name('create')->middleware('can:*consultant|*application|*accountant');
+    Route::post('/', [App\Http\Controllers\Admin\InvoiceController::class, 'store'])->name('store')->middleware('can:*consultant|*application|*accountant');
+    Route::get('{invoice}', [App\Http\Controllers\Admin\InvoiceController::class, 'show'])->name('show')->middleware('can:*consultant|*application|*accountant');
     Route::delete('{invoice}', [App\Http\Controllers\Admin\InvoiceController::class, 'destroy'])->name('destroy')->middleware('can:*accountant');
 });
 
@@ -239,6 +239,9 @@ Route::prefix('dashboard/applications')->name('admin.applications.')->group(func
     Route::get('/get-courses', [ApplicationController::class, 'getCourses'])->name('get-courses');
     Route::get('/get-intakes', [ApplicationController::class, 'getIntakes'])->name('get-intakes');
     Route::get('/{application}/download-pdf', [ApplicationController::class, 'downloadPdf'])->name('download-pdf')->middleware('can:*consultant|*application');
+    Route::get('/{application}/invoice-data', [ApplicationController::class, 'invoiceData'])->name('invoice-data');
+    // Route::get('/{application}/invoice', [ApplicationController::class, 'invoice'])->name('invoice')->middleware('can:*consultant|*application');
+    // Route::get('/invoices', [ApplicationController::class, 'invoiceIndex'])->name('invoice-index')->middleware('can:*consultant|*application');
     Route::get('/', [ApplicationController::class, 'index'])->name('index')->middleware('can:*consultant|*application');
     Route::get('/create', [ApplicationController::class, 'create'])->name('create')->middleware('can:*consultant');
     Route::post('/', [ApplicationController::class, 'store'])->name('store')->middleware('can:*consultant');
@@ -246,9 +249,6 @@ Route::prefix('dashboard/applications')->name('admin.applications.')->group(func
     Route::put('{application}', [ApplicationController::class, 'update'])->name('update')->middleware('can:*consultant|*application');
     Route::delete('{application}', [ApplicationController::class, 'destroy'])->name('destroy')->middleware('can:*consultant');
 
-    // Route::get('/', [ApplicationController::class , 'index2'])->name('index2')->middleware('can:*application');
-    //  Route::get('{application}/edit', [ApplicationController::class , 'edit2'])->name('edit2')->middleware('can:*application');
-    // Route::put('{application}', [ApplicationController::class , 'update2'])->name('update2')->middleware('can:*application');
 });
 
 // Storage file serving route - handled through Laravel route to ensure proper access control

@@ -62,9 +62,13 @@
                         <th>Application ID</th>
                         <th>Student</th>
                         <th>University & Course</th>
-                        <th>Intake</th>
-                        <!-- <th>Total Fee</th> -->
+                        <!-- <th>Intake</th> -->
                         <th>Status</th>
+                        <!-- <th>Offer Letter</th>
+                        <th>VFS</th>
+                        <th>File Submit</th>
+                        <th>Visa Status</th>  -->
+                        <th>Priority</th>
                         <th>Created By</th>
                         <th class="text-center">Action</th>
                     </tr>
@@ -87,12 +91,43 @@
                             <div class="font-semibold">{{ $app->university->name ?? 'N/A' }}</div>
                             <div class="text-xs text-white-dark">{{ $app->course->name ?? 'N/A' }}</div>
                         </td>
-                        <td>{{ $app->intake->intake_name ?? 'N/A' }}</td>
-                        <!-- <td class="font-bold">{{ number_format($app->total_fee, 2) }}
+                        <!-- <td>{{ $app->intake->intake_name ?? 'N/A' }}</td> -->
+                        <!-- <td>
+                            <span
+                                class="badge badge-outline-primary capitalize">{{ str_replace('_', ' ', $app->status) }}</span>
+                        </td> -->
+                        <!-- <td class="text-center">
+                            @if ($app->offer_letter_received)
+                                <span class="badge badge-outline-success">Yes</span>
+                            @else
+                                <span class="badge badge-outline-danger">No</span>
+                            @endif
+                        </td>
+                        <td class="text-center">
+                            @if ($app->vfs_appointment)
+                                <span class="badge badge-outline-success">Yes</span>
+                            @else
+                                <span class="badge badge-outline-danger">No</span>
+                            @endif
+                        </td>
+                        <td class="text-center">
+                            @if ($app->file_submission)
+                                <span class="badge badge-outline-success">Yes</span>
+                            @else
+                                <span class="badge badge-outline-danger">No</span>
+                            @endif
                         </td> -->
                         <td>
                             <span
-                                class="badge badge-outline-primary capitalize">{{ str_replace('_', ' ', $app->status) }}</span>
+                                class="badge badge-outline-{{ $app->visa_status === 'approved' ? 'success' : ($app->visa_status === 'rejected' ? 'danger' : 'warning') }}">
+                                {{ ucfirst(str_replace('_', ' ', $app->visa_status)) }}
+                            </span>
+                        </td>
+                        <td>
+                            <span
+                                class="badge badge-outline-{{ $app->application_priority === 'vip' ? 'danger' : ($app->application_priority === 'priority' ? 'warning' : 'info') }}">
+                                {{ ucfirst($app->application_priority) }}
+                            </span>
                         </td>
                         <td>
                             <div class="text-xs">
@@ -123,7 +158,7 @@
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="7" class="text-center">No applications found.</td>
+                        <td colspan="12" class="text-center">No applications found.</td>
                     </tr>
                     @endforelse
                 </tbody>

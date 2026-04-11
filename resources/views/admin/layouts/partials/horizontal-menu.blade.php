@@ -193,16 +193,16 @@
                         stroke="currentColor" class="w-6 h-6">
                         <path stroke-linecap="round" stroke-linejoin="round"
                             d="M10.325 4.317c.426-1.756 2.924-1.756
-                                                                                                                                            3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94
-                                                                                                                                            3.31.826 2.37 2.37a1.724 1.724 0 001.065
-                                                                                                                                            2.572c1.756.426 1.756 2.924 0 3.35a1.724
-                                                                                                                                            1.724 0 00-1.066 2.573c.94 1.543-.826
-                                                                                                                                            3.31-2.37 2.37a1.724 1.724 0 00-2.572
-                                                                                                                                            1.065c-.426 1.756-2.924 1.756-3.35
-                                                                                                                                            0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724
-                                                                                                                                            1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924
-                                                                                                                                            0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31
-                                                                                                                                            2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                                                                                                                                                                                                                                                                                                                3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94
+                                                                                                                                                                                                                                                                                                                3.31.826 2.37 2.37a1.724 1.724 0 001.065
+                                                                                                                                                                                                                                                                                                                2.572c1.756.426 1.756 2.924 0 3.35a1.724
+                                                                                                                                                                                                                                                                                                                1.724 0 00-1.066 2.573c.94 1.543-.826
+                                                                                                                                                                                                                                                                                                                3.31-2.37 2.37a1.724 1.724 0 00-2.572
+                                                                                                                                                                                                                                                                                                                1.065c-.426 1.756-2.924 1.756-3.35
+                                                                                                                                                                                                                                                                                                                0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724
+                                                                                                                                                                                                                                                                                                                1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924
+                                                                                                                                                                                                                                                                                                                0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31
+                                                                                                                                                                                                                                                                                                                2.37-2.37.996.608 2.296.07 2.572-1.065z" />
                         <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                     </svg>
                     <span class="px-1">Settings</span>
@@ -326,43 +326,69 @@
     @endif
 
     @if (auth()->check() && (auth()->user()->hasRole('consultant') || auth()->user()->hasRole('application')))
-    <!-- Application -->
-    @canany(['*consultant', '*application'])
-    <li class="menu nav-item relative">
-        <a href="javascript:;" class="nav-link">
-            <div class="flex items-center">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
-                    class="shrink-0">
-                    <path d="M12 22C17.5 22 22 17.5 22 12C22 6.5 17.5 2 12 2C6.5 2 2 6.5 2 12C2 17.5 6.5 22 12 22Z"
-                        stroke="currentColor" stroke-width="2" />
-                    <path d="M12 12V16" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-                    <path d="M12 8H12.01" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-                </svg>
-                <span class="px-1">Application</span>
-            </div>
-            <div class="right_arrow">
-                <svg class="h-4 w-4 rotate-90" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                    xmlns="http://www.w3.org/2000/svg">
-                    <path d="M9 5L15 12L9 19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                        stroke-linejoin="round" />
-                </svg>
-            </div>
-        </a>
-        <ul class="sub-menu">
-            @can('*consultant')
-                <li><a href="{{ route('admin.applications.create') }}">Add Application</a></li>
-            @endcan
-            @canany(['*consultant', '*application'])
+        <!-- Application -->
+        @canany(['*consultant', '*application'])
+            <li class="menu nav-item relative">
+                <a href="javascript:;" class="nav-link">
+                    <div class="flex items-center">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+                            class="shrink-0">
+                            <path d="M12 22C17.5 22 22 17.5 22 12C22 6.5 17.5 2 12 2C6.5 2 2 6.5 2 12C2 17.5 6.5 22 12 22Z"
+                                stroke="currentColor" stroke-width="2" />
+                            <path d="M12 12V16" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                            <path d="M12 8H12.01" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                        </svg>
+                        <span class="px-1">Application</span>
+                    </div>
+                    <div class="right_arrow">
+                        <svg class="h-4 w-4 rotate-90" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path d="M9 5L15 12L9 19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                stroke-linejoin="round" />
+                        </svg>
+                    </div>
+                </a>
+                <ul class="sub-menu">
+                    @can('*consultant')
+                        <li><a href="{{ route('admin.applications.create') }}">Add Application</a></li>
+                    @endcan
+                    @canany(['*consultant', '*application'])
                         <li><a href="{{ route('admin.applications.index') }}">Application List</a></li>
-                        {{-- <li><a href="{{ route('admin.currencies.index') }}">Manage Currencies</a></li> --}}
-
-                        @endcan
-                        {{-- @can(['*application'])
-                        <li><a href="{{ route('admin.applications.index2') }}">Application List</a></li>
-                        @endcan --}}
-                    </ul>
-                </li>
-            @endcanany
+                        <li><a href="{{ route('admin.invoices.index') }}">Invoice List</a></li>
+                    @endcanany
+                </ul>
+            </li>
+            <li class="menu nav-item relative">
+                <a href="javascript:;" class="nav-link">
+                    <div class="flex items-center">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+                            class="shrink-0">
+                            <path
+                                d="M14 2H6C4.89543 2 4 2.89543 4 4V20C4 21.1046 4.89543 22 6 22H18C19.1046 22 20 21.1046 20 20V8L14 2Z"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                            <path d="M14 2V8H20" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" />
+                            <path d="M8 13H16" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                            <path d="M8 17H16" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                            <path d="M8 9H10" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                        </svg>
+                        <span class="px-1">Invoice</span>
+                    </div>
+                    <div class="right_arrow">
+                        <svg class="h-4 w-4 rotate-90" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path d="M9 5L15 12L9 19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                stroke-linejoin="round" />
+                        </svg>
+                    </div>
+                </a>
+                <ul class="sub-menu">
+                    @canany(['*consultant', '*application'])
+                        <li><a href="{{ route('admin.invoices.create') }}">Generate Invoice</a></li>
+                    @endcanany
+                </ul>
+            </li>
+        @endcanany
     @endif
 
     @if (auth()->check() && auth()->user()->hasRole('accountant'))

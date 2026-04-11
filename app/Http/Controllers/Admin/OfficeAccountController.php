@@ -51,9 +51,6 @@ class OfficeAccountController extends Controller
 
         $validated = $this->validateAccount($request);
 
-        // Set remaining_balance to opening_balance
-        $validated['remaining_balance'] = $validated['opening_balance'] ?? 0;
-
         OfficeAccount::create($validated);
 
         return redirect()
@@ -98,7 +95,9 @@ class OfficeAccountController extends Controller
             'account_type' => ['required', Rule::in(['bank', 'mfs', 'cash'])],
             'provider_name' => ['nullable', 'string', 'max:100'],
             'account_number' => ['required', 'string', 'max:100'],
-            'branch_name' => ['nullable', 'string', 'max:255'],            'opening_balance' => ['nullable', 'numeric', 'min:0'],            'status' => ['required', Rule::in(['active', 'inactive'])],
+            'branch_name' => ['nullable', 'string', 'max:255'],
+            'opening_balance' => ['nullable', 'numeric', 'min:0'],
+            'status' => ['required', Rule::in(['active', 'inactive'])],
             'notes' => ['nullable', 'string'],
         ]);
     }

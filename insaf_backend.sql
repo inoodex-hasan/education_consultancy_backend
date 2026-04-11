@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Apr 09, 2026 at 12:48 PM
+-- Generation Time: Apr 11, 2026 at 12:07 PM
 -- Server version: 8.4.3
 -- PHP Version: 8.3.26
 
@@ -58,8 +58,28 @@ CREATE TABLE `applications` (
   `course_id` bigint UNSIGNED NOT NULL,
   `course_intake_id` bigint UNSIGNED NOT NULL,
   `tuition_fee` decimal(12,2) DEFAULT NULL,
+  `tuition_fee_status` enum('pending','paid','partial') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'pending',
+  `service_charge_status` enum('pending','paid','partial') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'pending',
+  `application_priority` enum('normal','priority','vip') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'normal',
+  `internal_notes` text COLLATE utf8mb4_unicode_ci,
+  `documents_checklist` json DEFAULT NULL,
+  `final_status` enum('pending','in_progress','completed','cancelled') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'pending',
+  `security_deposit_status` tinyint(1) NOT NULL DEFAULT '0',
+  `cvu_fee_status` tinyint(1) NOT NULL DEFAULT '0',
+  `admission_fee_status` tinyint(1) NOT NULL DEFAULT '0',
+  `final_payment_status` tinyint(1) NOT NULL DEFAULT '0',
+  `emgs_payment_status` tinyint(1) NOT NULL DEFAULT '0',
   `total_fee` decimal(10,2) NOT NULL DEFAULT '0.00',
   `status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'pending',
+  `offer_letter_received` tinyint(1) NOT NULL DEFAULT '0',
+  `offer_letter_received_date` date DEFAULT NULL,
+  `vfs_appointment` tinyint(1) NOT NULL DEFAULT '0',
+  `vfs_appointment_date` date DEFAULT NULL,
+  `file_submission` tinyint(1) NOT NULL DEFAULT '0',
+  `file_submission_date` date DEFAULT NULL,
+  `visa_status` enum('not_applied','pending','approved','rejected') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'not_applied',
+  `visa_decision_date` date DEFAULT NULL,
+  `visa_approval_date` date DEFAULT NULL,
   `notes` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   `created_by` bigint UNSIGNED DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
@@ -70,8 +90,8 @@ CREATE TABLE `applications` (
 -- Dumping data for table `applications`
 --
 
-INSERT INTO `applications` (`id`, `application_id`, `student_id`, `university_id`, `course_id`, `course_intake_id`, `tuition_fee`, `total_fee`, `status`, `notes`, `created_by`, `created_at`, `updated_at`) VALUES
-(10, 'APP-2026-00001', 6, 2, 2, 2, 1200.00, 100000.00, 'pending', NULL, 3, '2026-02-22 11:22:42', '2026-02-22 11:22:42');
+INSERT INTO `applications` (`id`, `application_id`, `student_id`, `university_id`, `course_id`, `course_intake_id`, `tuition_fee`, `tuition_fee_status`, `service_charge_status`, `application_priority`, `internal_notes`, `documents_checklist`, `final_status`, `security_deposit_status`, `cvu_fee_status`, `admission_fee_status`, `final_payment_status`, `emgs_payment_status`, `total_fee`, `status`, `offer_letter_received`, `offer_letter_received_date`, `vfs_appointment`, `vfs_appointment_date`, `file_submission`, `file_submission_date`, `visa_status`, `visa_decision_date`, `visa_approval_date`, `notes`, `created_by`, `created_at`, `updated_at`) VALUES
+(10, 'APP-2026-00001', 6, 2, 2, 2, 1200.00, 'pending', 'pending', 'normal', NULL, NULL, 'pending', 0, 0, 0, 0, 0, 100000.00, 'pending', 0, NULL, 0, NULL, 0, NULL, 'not_applied', NULL, NULL, NULL, 3, '2026-02-22 11:22:42', '2026-02-22 11:22:42');
 
 -- --------------------------------------------------------
 
@@ -155,10 +175,11 @@ CREATE TABLE `cache` (
 --
 
 INSERT INTO `cache` (`key`, `value`, `expiration`) VALUES
-('admin-dashboard-cache-tyro:user-2:privileges', 'a:1:{i:0;s:10:\"*marketing\";}', 1775737779),
-('admin-dashboard-cache-tyro:user-2:roles', 'a:1:{i:0;s:9:\"marketing\";}', 1775737778),
-('admin-dashboard-cache-tyro:user-3:privileges', 'a:1:{i:0;s:11:\"*consultant\";}', 1775735684),
-('admin-dashboard-cache-tyro:user-3:roles', 'a:1:{i:0;s:10:\"consultant\";}', 1775735684);
+('admin-dashboard-cache-tyro:user-1:roles', 'a:1:{i:0;s:5:\"admin\";}', 1775903423),
+('admin-dashboard-cache-tyro:user-2:privileges', 'a:1:{i:0;s:10:\"*marketing\";}', 1775741173),
+('admin-dashboard-cache-tyro:user-2:roles', 'a:1:{i:0;s:9:\"marketing\";}', 1775741173),
+('admin-dashboard-cache-tyro:user-6:privileges', 'a:1:{i:0;s:12:\"*application\";}', 1775909511),
+('admin-dashboard-cache-tyro:user-6:roles', 'a:1:{i:0;s:11:\"application\";}', 1775909511);
 
 -- --------------------------------------------------------
 
@@ -527,7 +548,7 @@ CREATE TABLE `leads` (
 
 INSERT INTO `leads` (`id`, `student_name`, `email`, `phone`, `current_education`, `preferred_country`, `preferred_course`, `source`, `status`, `notes`, `last_contacted_at`, `next_follow_up_at`, `follow_up_history`, `created_by`, `consultant_id`, `created_at`, `updated_at`) VALUES
 (5, 'Rahim', 'rahim@example.com', '01234567890', 'HSC', NULL, NULL, 'Phone', 'pending', NULL, NULL, '2026-02-24 18:00:00', NULL, 2, NULL, '2026-02-21 22:53:14', '2026-02-21 22:53:14'),
-(6, 'Hasan', 'hasan@example.com', '0120320020', 'JSC', NULL, NULL, 'Phone', 'pending', NULL, NULL, '2026-02-24 18:00:00', NULL, 2, NULL, '2026-02-22 03:55:24', '2026-02-22 03:55:24');
+(6, 'Hasan', 'hasan@example.com', '0120320020', 'JSC', NULL, NULL, 'Phone', 'pending', NULL, NULL, '2026-04-09 18:00:00', '[\"2026-02-25\", \"2026-04-10\"]', 2, NULL, '2026-02-22 03:55:24', '2026-04-09 07:15:51');
 
 -- --------------------------------------------------------
 
@@ -667,7 +688,10 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (76, '2026_04_08_100005_fix_expenses_payment_method_to_enum', 37),
 (78, '2026_04_08_100006_fix_remaining_foreign_key_constraints', 38),
 (79, '2026_04_08_100007_add_student_portal_fields_to_students', 38),
-(80, '2026_04_09_090000_add_follow_up_history_to_leads_table', 39);
+(80, '2026_04_09_090000_add_follow_up_history_to_leads_table', 39),
+(82, '2026_04_11_000000_add_application_tracking_fields_to_applications_table', 40),
+(83, '2026_04_11_045646_add_payment_status_fields_to_applications_table', 41),
+(84, '2026_04_11_050000_fix_journal_entries_and_office_accounts', 42);
 
 -- --------------------------------------------------------
 
@@ -692,16 +716,16 @@ CREATE TABLE `notifications` (
 
 INSERT INTO `notifications` (`id`, `type`, `notifiable_type`, `notifiable_id`, `data`, `read_at`, `created_at`, `updated_at`) VALUES
 ('1b8dac70-217e-4509-a24a-e341a5650b5b', 'App\\Notifications\\NewApplicationNotification', 'App\\Models\\User', 6, '{\"application_id\":4,\"application_number\":\"APP-2026-00001\",\"student_name\":\"Md Rahim\",\"created_by\":\"Consultant\",\"message\":\"New application APP-2026-00001 created by Consultant\",\"link\":\"http:\\/\\/127.0.0.1:8000\\/dashboard\\/applications\\/4\\/edit\"}', '2026-02-21 23:09:23', '2026-02-21 23:04:30', '2026-02-21 23:09:23'),
-('272cfc76-a9c4-42ed-a739-6e6fc772464d', 'App\\Notifications\\NewApplicationNotification', 'App\\Models\\User', 6, '{\"application_id\":8,\"application_number\":\"APP-2026-00001\",\"student_name\":\"Md Hasan\",\"created_by\":\"Consultant\",\"message\":\"New application APP-2026-00001 created by Consultant\",\"link\":\"http:\\/\\/127.0.0.1:8000\\/dashboard\\/applications\\/8\\/edit\"}', NULL, '2026-02-22 10:56:38', '2026-02-22 10:56:38'),
+('272cfc76-a9c4-42ed-a739-6e6fc772464d', 'App\\Notifications\\NewApplicationNotification', 'App\\Models\\User', 6, '{\"application_id\":8,\"application_number\":\"APP-2026-00001\",\"student_name\":\"Md Hasan\",\"created_by\":\"Consultant\",\"message\":\"New application APP-2026-00001 created by Consultant\",\"link\":\"http:\\/\\/127.0.0.1:8000\\/dashboard\\/applications\\/8\\/edit\"}', '2026-04-10 23:13:06', '2026-02-22 10:56:38', '2026-04-10 23:13:06'),
 ('3b9c3a71-77f6-42b1-a0c1-3fa6e9da4486', 'App\\Notifications\\NewLeadSubmitted', 'App\\Models\\User', 3, '{\"lead_id\":6,\"student_name\":\"Hasan\",\"phone\":\"0120320020\",\"created_by\":\"Marketing\",\"message\":\"New lead submitted by Marketing\",\"link\":\"http:\\/\\/127.0.0.1:8000\\/dashboard\\/marketing\\/leads\\/6\"}', '2026-02-22 10:56:19', '2026-02-22 03:55:24', '2026-02-22 10:56:19'),
 ('4919412a-a1be-4937-b3e5-477292752eaa', 'App\\Notifications\\NewLeadSubmitted', 'App\\Models\\User', 3, '{\"lead_id\":4,\"student_name\":\"Ashraful Islam\",\"phone\":\"01195674368\",\"created_by\":\"Marketing\",\"message\":\"New lead submitted by Marketing\",\"link\":\"http:\\/\\/127.0.0.1:8000\\/dashboard\\/marketing\\/leads\\/4\"}', '2026-02-18 05:00:58', '2026-02-18 05:00:49', '2026-02-18 05:00:58'),
-('4aeba9c4-3e3a-4d9d-bbcd-83bb23f1bb8f', 'App\\Notifications\\NewApplicationNotification', 'App\\Models\\User', 6, '{\"application_id\":10,\"application_number\":\"APP-2026-00001\",\"student_name\":\"Md Hasan\",\"created_by\":\"Consultant\",\"message\":\"New application APP-2026-00001 created by Consultant\",\"link\":\"http:\\/\\/127.0.0.1:8000\\/dashboard\\/applications\\/10\\/edit\"}', NULL, '2026-02-22 11:22:42', '2026-02-22 11:22:42'),
+('4aeba9c4-3e3a-4d9d-bbcd-83bb23f1bb8f', 'App\\Notifications\\NewApplicationNotification', 'App\\Models\\User', 6, '{\"application_id\":10,\"application_number\":\"APP-2026-00001\",\"student_name\":\"Md Hasan\",\"created_by\":\"Consultant\",\"message\":\"New application APP-2026-00001 created by Consultant\",\"link\":\"http:\\/\\/127.0.0.1:8000\\/dashboard\\/applications\\/10\\/edit\"}', '2026-04-10 23:13:06', '2026-02-22 11:22:42', '2026-04-10 23:13:06'),
 ('50ac2d91-74ed-455f-9787-95c679ac268a', 'App\\Notifications\\NewApplicationNotification', 'App\\Models\\User', 6, '{\"application_id\":5,\"application_number\":\"APP-2026-00001\",\"student_name\":\"Md Hasan\",\"created_by\":\"Consultant\",\"message\":\"New application APP-2026-00001 created by Consultant\",\"link\":\"http:\\/\\/127.0.0.1:8000\\/dashboard\\/applications\\/5\\/edit\"}', '2026-02-22 02:55:59', '2026-02-22 00:03:14', '2026-02-22 02:55:59'),
 ('6fb35d96-f99f-4ed8-b59b-d43c56c2bb05', 'App\\Notifications\\NewApplicationNotification', 'App\\Models\\User', 6, '{\"application_id\":3,\"application_number\":\"APP-2026-00002\",\"student_name\":\"Abra Klein\",\"created_by\":\"Consultant\",\"message\":\"New application APP-2026-00002 created by Consultant\",\"link\":\"http:\\/\\/127.0.0.1:8000\\/dashboard\\/applications\\/3\\/edit\"}', '2026-02-19 00:07:28', '2026-02-19 00:07:17', '2026-02-19 00:07:28'),
 ('a8e631fb-ec13-4392-868a-ff5d95ab97b4', 'App\\Notifications\\NewLeadSubmitted', 'App\\Models\\User', 3, '{\"lead_id\":2,\"student_name\":\"fsgh\",\"phone\":\"0187452963\",\"created_by\":\"Marketing\",\"message\":\"New lead submitted by Marketing\",\"link\":\"http:\\/\\/127.0.0.1:8000\\/dashboard\\/marketing\\/leads\\/2\"}', '2026-02-17 13:09:41', '2026-02-17 13:09:17', '2026-02-17 13:09:41'),
-('ac808b50-3412-4c91-b0bd-50ad2380f2e0', 'App\\Notifications\\NewApplicationNotification', 'App\\Models\\User', 6, '{\"application_id\":7,\"application_number\":\"APP-2026-00003\",\"student_name\":\"Md Rakib\",\"created_by\":\"Consultant\",\"message\":\"New application APP-2026-00003 created by Consultant\",\"link\":\"http:\\/\\/127.0.0.1:8000\\/dashboard\\/applications\\/7\\/edit\"}', NULL, '2026-02-22 04:00:03', '2026-02-22 04:00:03'),
-('cf7c7ea3-4775-4be3-bbaa-7df4b4e3162e', 'App\\Notifications\\NewApplicationNotification', 'App\\Models\\User', 6, '{\"application_id\":9,\"application_number\":\"APP-2026-00002\",\"student_name\":\"Md Rakib\",\"created_by\":\"Consultant\",\"message\":\"New application APP-2026-00002 created by Consultant\",\"link\":\"http:\\/\\/127.0.0.1:8000\\/dashboard\\/applications\\/9\\/edit\"}', NULL, '2026-02-22 10:56:57', '2026-02-22 10:56:57'),
-('e7e77362-16c9-47f6-b9f7-1e5972367bdb', 'App\\Notifications\\NewApplicationNotification', 'App\\Models\\User', 6, '{\"application_id\":6,\"application_number\":\"APP-2026-00002\",\"student_name\":\"Md Rakib\",\"created_by\":\"Consultant\",\"message\":\"New application APP-2026-00002 created by Consultant\",\"link\":\"http:\\/\\/127.0.0.1:8000\\/dashboard\\/applications\\/6\\/edit\"}', NULL, '2026-02-22 03:58:53', '2026-02-22 03:58:53'),
+('ac808b50-3412-4c91-b0bd-50ad2380f2e0', 'App\\Notifications\\NewApplicationNotification', 'App\\Models\\User', 6, '{\"application_id\":7,\"application_number\":\"APP-2026-00003\",\"student_name\":\"Md Rakib\",\"created_by\":\"Consultant\",\"message\":\"New application APP-2026-00003 created by Consultant\",\"link\":\"http:\\/\\/127.0.0.1:8000\\/dashboard\\/applications\\/7\\/edit\"}', '2026-04-10 23:13:06', '2026-02-22 04:00:03', '2026-04-10 23:13:06'),
+('cf7c7ea3-4775-4be3-bbaa-7df4b4e3162e', 'App\\Notifications\\NewApplicationNotification', 'App\\Models\\User', 6, '{\"application_id\":9,\"application_number\":\"APP-2026-00002\",\"student_name\":\"Md Rakib\",\"created_by\":\"Consultant\",\"message\":\"New application APP-2026-00002 created by Consultant\",\"link\":\"http:\\/\\/127.0.0.1:8000\\/dashboard\\/applications\\/9\\/edit\"}', '2026-04-10 23:13:06', '2026-02-22 10:56:57', '2026-04-10 23:13:06'),
+('e7e77362-16c9-47f6-b9f7-1e5972367bdb', 'App\\Notifications\\NewApplicationNotification', 'App\\Models\\User', 6, '{\"application_id\":6,\"application_number\":\"APP-2026-00002\",\"student_name\":\"Md Rakib\",\"created_by\":\"Consultant\",\"message\":\"New application APP-2026-00002 created by Consultant\",\"link\":\"http:\\/\\/127.0.0.1:8000\\/dashboard\\/applications\\/6\\/edit\"}', '2026-04-10 23:13:06', '2026-02-22 03:58:53', '2026-04-10 23:13:06'),
 ('ebe6636b-5a5f-4e95-b12b-02211b342c2e', 'App\\Notifications\\NewLeadSubmitted', 'App\\Models\\User', 3, '{\"lead_id\":5,\"student_name\":\"Rahim\",\"phone\":\"01234567890\",\"created_by\":\"Marketing\",\"message\":\"New lead submitted by Marketing\",\"link\":\"http:\\/\\/127.0.0.1:8000\\/dashboard\\/marketing\\/leads\\/5\"}', '2026-02-21 22:54:19', '2026-02-21 22:53:16', '2026-02-21 22:54:19'),
 ('f331d0ec-990f-4465-b30e-12f38e376fd1', 'App\\Notifications\\NewLeadSubmitted', 'App\\Models\\User', 3, '{\"lead_id\":3,\"student_name\":\"Hasan\",\"phone\":\"0101010101010\",\"created_by\":\"Marketing\",\"message\":\"New lead submitted by Marketing\",\"link\":\"http:\\/\\/127.0.0.1:8000\\/dashboard\\/marketing\\/leads\\/3\"}', '2026-02-18 04:24:14', '2026-02-18 04:22:05', '2026-02-18 04:24:14');
 
@@ -721,7 +745,6 @@ CREATE TABLE `office_accounts` (
   `opening_balance` decimal(15,2) NOT NULL DEFAULT '0.00',
   `branch_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `status` enum('active','inactive') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'active',
-  `remaining_balance` decimal(15,2) NOT NULL DEFAULT '0.00',
   `created_by` bigint UNSIGNED DEFAULT NULL,
   `notes` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   `created_at` timestamp NULL DEFAULT NULL,
@@ -732,10 +755,10 @@ CREATE TABLE `office_accounts` (
 -- Dumping data for table `office_accounts`
 --
 
-INSERT INTO `office_accounts` (`id`, `account_name`, `account_type`, `provider_name`, `account_number`, `chart_of_account_id`, `opening_balance`, `branch_name`, `status`, `remaining_balance`, `created_by`, `notes`, `created_at`, `updated_at`) VALUES
-(1, 'Inoodex', 'mfs', 'bKash', '01234567890', NULL, 0.00, NULL, 'active', -14000.00, 4, NULL, '2026-02-18 00:48:45', '2026-02-23 03:44:33'),
-(2, 'Inoodex', 'bank', 'Dutch Banla Bank', '0123456789', NULL, 0.00, 'Banani', 'active', 70000.00, 4, NULL, '2026-02-18 00:55:47', '2026-02-23 00:41:15'),
-(3, 'Office Cash', 'cash', NULL, '1', NULL, 100000.00, NULL, 'active', 100000.00, 4, NULL, '2026-02-23 01:07:07', '2026-02-23 01:07:07');
+INSERT INTO `office_accounts` (`id`, `account_name`, `account_type`, `provider_name`, `account_number`, `chart_of_account_id`, `opening_balance`, `branch_name`, `status`, `created_by`, `notes`, `created_at`, `updated_at`) VALUES
+(1, 'Inoodex', 'mfs', 'bKash', '01234567890', NULL, 0.00, NULL, 'active', 4, NULL, '2026-02-18 00:48:45', '2026-02-23 03:44:33'),
+(2, 'Inoodex', 'bank', 'Dutch Banla Bank', '0123456789', NULL, 0.00, 'Banani', 'active', 4, NULL, '2026-02-18 00:55:47', '2026-02-23 00:41:15'),
+(3, 'Office Cash', 'cash', NULL, '1', NULL, 100000.00, NULL, 'active', 4, NULL, '2026-02-23 01:07:07', '2026-02-23 01:07:07');
 
 -- --------------------------------------------------------
 
@@ -831,7 +854,8 @@ INSERT INTO `privileges` (`id`, `name`, `slug`, `description`, `created_at`, `up
 (9, 'View Billing', 'billing.view', 'Allows viewing billing statements.', '2026-02-21 01:19:44', '2026-02-21 01:19:44'),
 (10, 'Wildcard', '*', 'Grants every privilege.', '2026-02-21 01:19:44', '2026-02-21 01:19:44'),
 (11, 'Payment', '*payment', NULL, '2026-04-07 21:53:18', '2026-04-07 21:55:35'),
-(12, 'Comission', '*comission', NULL, '2026-04-07 21:55:21', '2026-04-07 21:55:21');
+(12, 'Comission', '*comission', NULL, '2026-04-07 21:55:21', '2026-04-07 21:55:21'),
+(13, 'Invoice', '*invoice', NULL, '2026-04-11 04:25:47', '2026-04-11 04:25:47');
 
 -- --------------------------------------------------------
 
@@ -865,7 +889,9 @@ INSERT INTO `privilege_role` (`id`, `role_id`, `privilege_id`, `created_at`, `up
 (11, 1, 9, '2026-02-21 01:19:44', '2026-02-21 01:19:44'),
 (12, 7, 9, '2026-02-21 01:19:44', '2026-02-21 01:19:44'),
 (14, 4, 11, '2026-04-07 21:53:18', '2026-04-07 21:53:18'),
-(15, 4, 12, '2026-04-07 21:55:21', '2026-04-07 21:55:21');
+(15, 4, 12, '2026-04-07 21:55:21', '2026-04-07 21:55:21'),
+(16, 3, 13, '2026-04-11 04:25:47', '2026-04-11 04:25:47'),
+(17, 4, 13, '2026-04-11 04:25:47', '2026-04-11 04:25:47');
 
 -- --------------------------------------------------------
 
@@ -949,7 +975,9 @@ CREATE TABLE `sessions` (
 --
 
 INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES
-('TDwf22lkCBisVijfLSMmUsbjk5YNq7BVYfzuleBV', 2, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:149.0) Gecko/20100101 Firefox/149.0', 'YTo1OntzOjY6Il90b2tlbiI7czo0MDoidTJFVHNZMTVCd2tuUDl6d05EdEpjaFh1dWU0NTZSSHBwb3A1Z2hObyI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czoxMDoidHlyby1sb2dpbiI7YToxOntzOjc6ImNhcHRjaGEiO2E6MDp7fX1zOjk6Il9wcmV2aW91cyI7YToyOntzOjM6InVybCI7czo1NDoiaHR0cDovLzEyNy4wLjAuMTo4MDAwL2Rhc2hib2FyZC9tYXJrZXRpbmcvbGVhZHMvNi9lZGl0IjtzOjU6InJvdXRlIjtzOjI2OiJhZG1pbi5tYXJrZXRpbmcubGVhZHMuZWRpdCI7fXM6NTA6ImxvZ2luX3dlYl81OWJhMzZhZGRjMmIyZjk0MDE1ODBmMDE0YzdmNThlYTRlMzA5ODlkIjtpOjI7fQ==', 1775737575);
+('AXK6X34a1aNWwVGXMxOuZQdez7Bvozgov2BmF6Sm', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:149.0) Gecko/20100101 Firefox/149.0', 'YTozOntzOjY6Il90b2tlbiI7czo0MDoiWTM1eWhRQmhDc0RWS0hPeDNWUzlvQ0ZLZ0lCd3VuNVB4N0lNRG9oYiI7czo5OiJfcHJldmlvdXMiO2E6Mjp7czozOiJ1cmwiO3M6NTY6Imh0dHA6Ly9pbnNhZl9iYWNrZW5kLnRlc3QvZGFzaGJvYXJkL2FwcGxpY2F0aW9ucy8xMC9lZGl0IjtzOjU6InJvdXRlIjtzOjIzOiJhZG1pbi5hcHBsaWNhdGlvbnMuZWRpdCI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1775902117),
+('CiFqtdCQDmbXTdv3Ek4qxGqgHX1opyWVdSuAhYBK', 6, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:149.0) Gecko/20100101 Firefox/149.0', 'YTo1OntzOjY6Il90b2tlbiI7czo0MDoic3ZxU2hiTTNsUUNqVG8xc3NvSngwcGJ6THlGUzlERlRaeklGSENXZyI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czoxMDoidHlyby1sb2dpbiI7YToxOntzOjc6ImNhcHRjaGEiO2E6MDp7fX1zOjk6Il9wcmV2aW91cyI7YToyOntzOjM6InVybCI7czo1MToiaHR0cDovL2luc2FmX2JhY2tlbmQudGVzdC9kYXNoYm9hcmQvaW52b2ljZXMvY3JlYXRlIjtzOjU6InJvdXRlIjtzOjIxOiJhZG1pbi5pbnZvaWNlcy5jcmVhdGUiO31zOjUwOiJsb2dpbl93ZWJfNTliYTM2YWRkYzJiMmY5NDAxNTgwZjAxNGM3ZjU4ZWE0ZTMwOTg5ZCI7aTo2O30=', 1775909212),
+('RrPsZQJxVjRdLrPGJ5lRZH7u0sNu6R6LzIsv4VKp', 6, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:149.0) Gecko/20100101 Firefox/149.0', 'YTo1OntzOjY6Il90b2tlbiI7czo0MDoiWlRHZlNVVFNKR3o5Y3hscHpVOU9XZ1h2bVltaWZYUDFkbHJNUk5VeiI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czoxMDoidHlyby1sb2dpbiI7YToxOntzOjc6ImNhcHRjaGEiO2E6MDp7fX1zOjk6Il9wcmV2aW91cyI7YToyOntzOjM6InVybCI7czo2NDoiaHR0cDovL2luc2FmX2JhY2tlbmQudGVzdC9kYXNoYm9hcmQvYXBwbGljYXRpb25zLzEwL2Rvd25sb2FkLXBkZiI7czo1OiJyb3V0ZSI7czozMToiYWRtaW4uYXBwbGljYXRpb25zLmRvd25sb2FkLXBkZiI7fXM6NTA6ImxvZ2luX3dlYl81OWJhMzZhZGRjMmIyZjk0MDE1ODBmMDE0YzdmNThlYTRlMzA5ODlkIjtpOjY7fQ==', 1775884413);
 
 -- --------------------------------------------------------
 
@@ -1139,7 +1167,22 @@ INSERT INTO `tyro_audit_logs` (`id`, `user_id`, `event`, `auditable_type`, `audi
 (44, 2, 'user.logout', 'App\\Models\\User', 2, NULL, '{\"email\": \"marketing@example.com\"}', '{\"ip\": \"127.0.0.1\", \"is_console\": false, \"user_agent\": \"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:149.0) Gecko/20100101 Firefox/149.0\"}', '2026-04-09 07:40:52'),
 (45, 3, 'user.login', 'App\\Models\\User', 3, NULL, '{\"email\": \"consultant@example.com\"}', '{\"ip\": \"127.0.0.1\", \"is_console\": false, \"user_agent\": \"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:149.0) Gecko/20100101 Firefox/149.0\"}', '2026-04-09 07:42:45'),
 (46, 3, 'user.logout', 'App\\Models\\User', 3, NULL, '{\"email\": \"consultant@example.com\"}', '{\"ip\": \"127.0.0.1\", \"is_console\": false, \"user_agent\": \"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:149.0) Gecko/20100101 Firefox/149.0\"}', '2026-04-09 11:50:21'),
-(47, 2, 'user.login', 'App\\Models\\User', 2, NULL, '{\"email\": \"marketing@example.com\"}', '{\"ip\": \"127.0.0.1\", \"is_console\": false, \"user_agent\": \"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:149.0) Gecko/20100101 Firefox/149.0\"}', '2026-04-09 11:50:35');
+(47, 2, 'user.login', 'App\\Models\\User', 2, NULL, '{\"email\": \"marketing@example.com\"}', '{\"ip\": \"127.0.0.1\", \"is_console\": false, \"user_agent\": \"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:149.0) Gecko/20100101 Firefox/149.0\"}', '2026-04-09 11:50:35'),
+(48, 2, 'user.logout', 'App\\Models\\User', 2, NULL, '{\"email\": \"marketing@example.com\"}', '{\"ip\": \"127.0.0.1\", \"is_console\": false, \"user_agent\": \"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:149.0) Gecko/20100101 Firefox/149.0\"}', '2026-04-09 13:21:27'),
+(49, 6, 'user.login', 'App\\Models\\User', 6, NULL, '{\"email\": \"application@example.com\"}', '{\"ip\": \"127.0.0.1\", \"is_console\": false, \"user_agent\": \"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:149.0) Gecko/20100101 Firefox/149.0\"}', '2026-04-11 03:38:23'),
+(50, 6, 'user.logout', 'App\\Models\\User', 6, NULL, '{\"email\": \"application@example.com\"}', '{\"ip\": \"127.0.0.1\", \"is_console\": false, \"user_agent\": \"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:149.0) Gecko/20100101 Firefox/149.0\"}', '2026-04-11 03:38:43'),
+(51, 3, 'user.login', 'App\\Models\\User', 3, NULL, '{\"email\": \"consultant@example.com\"}', '{\"ip\": \"127.0.0.1\", \"is_console\": false, \"user_agent\": \"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:149.0) Gecko/20100101 Firefox/149.0\"}', '2026-04-11 03:38:57'),
+(52, 3, 'user.logout', 'App\\Models\\User', 3, NULL, '{\"email\": \"consultant@example.com\"}', '{\"ip\": \"127.0.0.1\", \"is_console\": false, \"user_agent\": \"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:149.0) Gecko/20100101 Firefox/149.0\"}', '2026-04-11 05:12:38'),
+(53, 6, 'user.login', 'App\\Models\\User', 6, NULL, '{\"email\": \"application@example.com\"}', '{\"ip\": \"127.0.0.1\", \"is_console\": false, \"user_agent\": \"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:149.0) Gecko/20100101 Firefox/149.0\"}', '2026-04-11 05:12:48'),
+(54, 6, 'user.login', 'App\\Models\\User', 6, NULL, '{\"email\": \"application@example.com\"}', '{\"ip\": \"127.0.0.1\", \"is_console\": false, \"user_agent\": \"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:149.0) Gecko/20100101 Firefox/149.0\"}', '2026-04-11 10:08:54'),
+(55, 6, 'user.logout', 'App\\Models\\User', 6, NULL, '{\"email\": \"application@example.com\"}', '{\"ip\": \"127.0.0.1\", \"is_console\": false, \"user_agent\": \"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:149.0) Gecko/20100101 Firefox/149.0\"}', '2026-04-11 10:25:11'),
+(56, 1, 'user.login', 'App\\Models\\User', 1, NULL, '{\"email\": \"hello@inoodex.com\"}', '{\"ip\": \"127.0.0.1\", \"is_console\": false, \"user_agent\": \"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:149.0) Gecko/20100101 Firefox/149.0\"}', '2026-04-11 10:25:21'),
+(57, 1, 'privilege.created', 'HasinHayder\\Tyro\\Models\\Privilege', 13, NULL, '{\"id\": 13, \"name\": \"Invoice\", \"slug\": \"*invoice\", \"description\": null}', '{\"ip\": \"127.0.0.1\", \"is_console\": false, \"user_agent\": \"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:149.0) Gecko/20100101 Firefox/149.0\"}', '2026-04-11 10:25:47'),
+(58, 1, 'privilege.attached', 'HasinHayder\\Tyro\\Models\\Role', 3, NULL, '{\"privilege_id\": 13, \"privilege_slug\": \"*invoice\"}', '{\"ip\": \"127.0.0.1\", \"is_console\": false, \"user_agent\": \"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:149.0) Gecko/20100101 Firefox/149.0\"}', '2026-04-11 10:25:47'),
+(59, 1, 'privilege.attached', 'HasinHayder\\Tyro\\Models\\Role', 4, NULL, '{\"privilege_id\": 13, \"privilege_slug\": \"*invoice\"}', '{\"ip\": \"127.0.0.1\", \"is_console\": false, \"user_agent\": \"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:149.0) Gecko/20100101 Firefox/149.0\"}', '2026-04-11 10:25:47'),
+(60, 1, 'privilege.created', 'HasinHayder\\Tyro\\Models\\Privilege', 13, NULL, '{\"id\": 13, \"name\": \"Invoice\", \"slug\": \"*invoice\", \"roles\": [3, 4], \"description\": null}', '{\"ip\": \"127.0.0.1\", \"is_console\": false, \"user_agent\": \"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:149.0) Gecko/20100101 Firefox/149.0\"}', '2026-04-11 10:25:47'),
+(61, 1, 'user.logout', 'App\\Models\\User', 1, NULL, '{\"email\": \"hello@inoodex.com\"}', '{\"ip\": \"127.0.0.1\", \"is_console\": false, \"user_agent\": \"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:149.0) Gecko/20100101 Firefox/149.0\"}', '2026-04-11 10:26:07'),
+(62, 6, 'user.login', 'App\\Models\\User', 6, NULL, '{\"email\": \"application@example.com\"}', '{\"ip\": \"127.0.0.1\", \"is_console\": false, \"user_agent\": \"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:149.0) Gecko/20100101 Firefox/149.0\"}', '2026-04-11 10:26:18');
 
 -- --------------------------------------------------------
 
@@ -1753,7 +1796,7 @@ ALTER TABLE `marketing_videos`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=81;
+  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=85;
 
 --
 -- AUTO_INCREMENT for table `office_accounts`
@@ -1777,13 +1820,13 @@ ALTER TABLE `personal_access_tokens`
 -- AUTO_INCREMENT for table `privileges`
 --
 ALTER TABLE `privileges`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `privilege_role`
 --
 ALTER TABLE `privilege_role`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `roles`
@@ -1825,7 +1868,7 @@ ALTER TABLE `taxes`
 -- AUTO_INCREMENT for table `tyro_audit_logs`
 --
 ALTER TABLE `tyro_audit_logs`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=63;
 
 --
 -- AUTO_INCREMENT for table `universities`
@@ -1948,7 +1991,7 @@ ALTER TABLE `invoice_items`
 -- Constraints for table `journal_entries`
 --
 ALTER TABLE `journal_entries`
-  ADD CONSTRAINT `journal_entries_created_by_foreign` FOREIGN KEY (`created_by`) REFERENCES `users` (`id`) ON DELETE RESTRICT,
+  ADD CONSTRAINT `journal_entries_created_by_foreign` FOREIGN KEY (`created_by`) REFERENCES `users` (`id`) ON DELETE SET NULL,
   ADD CONSTRAINT `journal_entries_period_id_foreign` FOREIGN KEY (`period_id`) REFERENCES `accounting_periods` (`id`);
 
 --

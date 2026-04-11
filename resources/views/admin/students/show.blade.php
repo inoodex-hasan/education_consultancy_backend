@@ -14,7 +14,7 @@
                 </svg>
                 Back to List
             </a>
-            @can('update-student')
+            @can('*consultant')
                 <a href="{{ route('admin.students.edit', $student->id) }}" class="btn btn-primary gap-2">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5">
@@ -134,8 +134,8 @@
                 <div class="flex items-center justify-between mb-5">
                     <h5 class="font-semibold text-lg dark:text-white-light text-primary uppercase">University Applications
                     </h5>
-                    <a href="{{ route('admin.applications.create', ['student_id' => $student->id]) }}"
-                        class="btn btn-sm btn-primary">New Application</a>
+                    <!-- <a href="{{ route('admin.applications.create', ['student_id' => $student->id]) }}"
+                        class="btn btn-sm btn-primary">New Application</a> -->
                 </div>
                 @if ($student->applications->count() > 0)
                     <div class="overflow-x-auto">
@@ -143,26 +143,76 @@
                             <thead>
                                 <tr>
                                     <th>ID</th>
-                                    <th>University</th>
-                                    <th>Course</th>
+                                    <!-- <th>University</th>
+                                    <th>Course</th> -->
                                     <th>Status</th>
-                                    <th>Action</th>
+                                    <th>Offer Letter</th>
+                                    <th>VFS</th>
+                                    <th>File Submit</th>
+                                    <th>Visa</th>
+                                    <!-- <th>Priority</th> -->
+                                    <!-- <th>Action</th> -->
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach ($student->applications as $app)
                                     <tr>
                                         <td class="font-bold">{{ $app->application_id }}</td>
-                                        <td>{{ $app->university->name ?? 'N/A' }}</td>
-                                        <td>{{ $app->course->name ?? 'N/A' }}</td>
+                                        <!-- <td>{{ $app->university->name ?? 'N/A' }}</td>
+                                        <td>{{ $app->course->name ?? 'N/A' }}</td> -->
                                         <td>
                                             <span
                                                 class="badge badge-outline-primary capitalize text-xs">{{ str_replace('_', ' ', $app->status) }}</span>
                                         </td>
-                                        <td>
+                                        <td class="text-center">
+                                            @if ($app->offer_letter_received)
+                                                <span class="badge badge-outline-success text-xs">Yes</span>
+                                                @if ($app->offer_letter_received_date)
+                                                    <div class="text-xs text-white-dark mt-1">
+                                                        {{ $app->offer_letter_received_date->format('M d, Y') }}</div>
+                                                @endif
+                                            @else
+                                                <span class="badge badge-outline-danger text-xs">No</span>
+                                            @endif
+                                        </td>
+                                        <td class="text-center">
+                                            @if ($app->vfs_appointment)
+                                                <span class="badge badge-outline-success text-xs">Yes</span>
+                                                @if ($app->vfs_appointment_date)
+                                                    <div class="text-xs text-white-dark mt-1">
+                                                        {{ $app->vfs_appointment_date->format('M d, Y') }}</div>
+                                                @endif
+                                            @else
+                                                <span class="badge badge-outline-danger text-xs">No</span>
+                                            @endif
+                                        </td>
+                                        <td class="text-center">
+                                            @if ($app->file_submission)
+                                                <span class="badge badge-outline-success text-xs">Yes</span>
+                                                @if ($app->file_submission_date)
+                                                    <div class="text-xs text-white-dark mt-1">
+                                                        {{ $app->file_submission_date->format('M d, Y') }}</div>
+                                                @endif
+                                            @else
+                                                <span class="badge badge-outline-danger text-xs">No</span>
+                                            @endif
+                                        </td>
+                                        <td class="text-center">
+                                            <span
+                                                class="badge badge-outline-{{ $app->visa_status === 'approved' ? 'success' : ($app->visa_status === 'rejected' ? 'danger' : 'warning') }} text-xs">
+                                                {{ ucfirst(str_replace('_', ' ', $app->visa_status)) }}
+                                            </span>
+                                        </td>
+                                        <!-- <td class="text-center">
+                                            <span
+                                                class="badge badge-outline-{{ $app->application_priority === 'vip' ? 'danger' : ($app->application_priority === 'priority' ? 'warning' : 'info') }} text-xs">
+                                                {{ ucfirst($app->application_priority) }}
+                                            </span>
+                                        </td> -->
+                                        <!-- <td>
                                             <a href="{{ route('admin.applications.edit', $app->id) }}"
                                                 class="text-primary hover:underline">Edit</a>
-                                        </td>
+                                        </td> -->
                                     </tr>
                                 @endforeach
                             </tbody>
