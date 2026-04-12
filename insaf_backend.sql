@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Apr 11, 2026 at 12:07 PM
+-- Generation Time: Apr 12, 2026 at 11:29 AM
 -- Server version: 8.4.3
 -- PHP Version: 8.3.26
 
@@ -30,19 +30,26 @@ SET time_zone = "+00:00";
 CREATE TABLE `accounting_periods` (
   `id` bigint UNSIGNED NOT NULL,
   `name` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `year` year NOT NULL,
-  `month` tinyint UNSIGNED NOT NULL,
+  `year` year DEFAULT NULL,
+  `month` tinyint UNSIGNED DEFAULT NULL,
   `start_date` date DEFAULT NULL,
   `end_date` date DEFAULT NULL,
   `type` enum('fiscal_year','monthly','quarterly') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'monthly',
   `status` enum('open','closed') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'open',
   `remarks` text COLLATE utf8mb4_unicode_ci,
-  `is_closed` tinyint(1) NOT NULL DEFAULT '0',
+  `is_closed` tinyint(1) DEFAULT NULL,
   `closed_at` timestamp NULL DEFAULT NULL,
   `closed_by` bigint UNSIGNED DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `accounting_periods`
+--
+
+INSERT INTO `accounting_periods` (`id`, `name`, `year`, `month`, `start_date`, `end_date`, `type`, `status`, `remarks`, `is_closed`, `closed_at`, `closed_by`, `created_at`, `updated_at`) VALUES
+(1, 'FY-2026', NULL, NULL, '2026-01-01', '2026-12-31', 'fiscal_year', 'closed', NULL, NULL, '2026-04-12 05:16:07', 4, '2026-04-12 04:36:10', '2026-04-12 05:16:07');
 
 -- --------------------------------------------------------
 
@@ -178,8 +185,10 @@ INSERT INTO `cache` (`key`, `value`, `expiration`) VALUES
 ('admin-dashboard-cache-tyro:user-1:roles', 'a:1:{i:0;s:5:\"admin\";}', 1775903423),
 ('admin-dashboard-cache-tyro:user-2:privileges', 'a:1:{i:0;s:10:\"*marketing\";}', 1775741173),
 ('admin-dashboard-cache-tyro:user-2:roles', 'a:1:{i:0;s:9:\"marketing\";}', 1775741173),
-('admin-dashboard-cache-tyro:user-6:privileges', 'a:1:{i:0;s:12:\"*application\";}', 1775909511),
-('admin-dashboard-cache-tyro:user-6:roles', 'a:1:{i:0;s:11:\"application\";}', 1775909511);
+('admin-dashboard-cache-tyro:user-4:privileges', 'a:4:{i:0;s:11:\"*accountant\";i:1;s:8:\"*payment\";i:2;s:10:\"*comission\";i:3;s:8:\"*invoice\";}', 1775993596),
+('admin-dashboard-cache-tyro:user-4:roles', 'a:1:{i:0;s:10:\"accountant\";}', 1775993596),
+('admin-dashboard-cache-tyro:user-6:privileges', 'a:1:{i:0;s:12:\"*application\";}', 1775910520),
+('admin-dashboard-cache-tyro:user-6:roles', 'a:1:{i:0;s:11:\"application\";}', 1775910520);
 
 -- --------------------------------------------------------
 
@@ -221,7 +230,8 @@ INSERT INTO `chart_of_accounts` (`id`, `parent_id`, `code`, `name`, `type`, `is_
 (3, NULL, '51003', 'Salaries', 'expense', 1, 0, '2026-04-07 23:31:47', '2026-04-07 23:31:47'),
 (4, NULL, '51004', 'Utilities', 'expense', 1, 0, '2026-04-07 23:31:47', '2026-04-07 23:31:47'),
 (5, NULL, '51005', 'Office Supplies', 'expense', 1, 0, '2026-04-07 23:31:47', '2026-04-07 23:31:47'),
-(6, NULL, '41001', 'Student Fees', 'revenue', 1, 0, '2026-04-07 23:31:47', '2026-04-07 23:31:47');
+(6, NULL, '41001', 'Student Fees', 'revenue', 1, 0, '2026-04-07 23:31:47', '2026-04-07 23:31:47'),
+(7, NULL, '10001', 'Computer', 'asset', 1, 0, '2026-04-12 05:19:04', '2026-04-12 05:19:16');
 
 -- --------------------------------------------------------
 
@@ -691,7 +701,8 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (80, '2026_04_09_090000_add_follow_up_history_to_leads_table', 39),
 (82, '2026_04_11_000000_add_application_tracking_fields_to_applications_table', 40),
 (83, '2026_04_11_045646_add_payment_status_fields_to_applications_table', 41),
-(84, '2026_04_11_050000_fix_journal_entries_and_office_accounts', 42);
+(84, '2026_04_11_050000_fix_journal_entries_and_office_accounts', 42),
+(85, '2026_04_12_103504_fix_accounting_periods_old_columns', 43);
 
 -- --------------------------------------------------------
 
@@ -975,9 +986,7 @@ CREATE TABLE `sessions` (
 --
 
 INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES
-('AXK6X34a1aNWwVGXMxOuZQdez7Bvozgov2BmF6Sm', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:149.0) Gecko/20100101 Firefox/149.0', 'YTozOntzOjY6Il90b2tlbiI7czo0MDoiWTM1eWhRQmhDc0RWS0hPeDNWUzlvQ0ZLZ0lCd3VuNVB4N0lNRG9oYiI7czo5OiJfcHJldmlvdXMiO2E6Mjp7czozOiJ1cmwiO3M6NTY6Imh0dHA6Ly9pbnNhZl9iYWNrZW5kLnRlc3QvZGFzaGJvYXJkL2FwcGxpY2F0aW9ucy8xMC9lZGl0IjtzOjU6InJvdXRlIjtzOjIzOiJhZG1pbi5hcHBsaWNhdGlvbnMuZWRpdCI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1775902117),
-('CiFqtdCQDmbXTdv3Ek4qxGqgHX1opyWVdSuAhYBK', 6, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:149.0) Gecko/20100101 Firefox/149.0', 'YTo1OntzOjY6Il90b2tlbiI7czo0MDoic3ZxU2hiTTNsUUNqVG8xc3NvSngwcGJ6THlGUzlERlRaeklGSENXZyI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czoxMDoidHlyby1sb2dpbiI7YToxOntzOjc6ImNhcHRjaGEiO2E6MDp7fX1zOjk6Il9wcmV2aW91cyI7YToyOntzOjM6InVybCI7czo1MToiaHR0cDovL2luc2FmX2JhY2tlbmQudGVzdC9kYXNoYm9hcmQvaW52b2ljZXMvY3JlYXRlIjtzOjU6InJvdXRlIjtzOjIxOiJhZG1pbi5pbnZvaWNlcy5jcmVhdGUiO31zOjUwOiJsb2dpbl93ZWJfNTliYTM2YWRkYzJiMmY5NDAxNTgwZjAxNGM3ZjU4ZWE0ZTMwOTg5ZCI7aTo2O30=', 1775909212),
-('RrPsZQJxVjRdLrPGJ5lRZH7u0sNu6R6LzIsv4VKp', 6, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:149.0) Gecko/20100101 Firefox/149.0', 'YTo1OntzOjY6Il90b2tlbiI7czo0MDoiWlRHZlNVVFNKR3o5Y3hscHpVOU9XZ1h2bVltaWZYUDFkbHJNUk5VeiI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czoxMDoidHlyby1sb2dpbiI7YToxOntzOjc6ImNhcHRjaGEiO2E6MDp7fX1zOjk6Il9wcmV2aW91cyI7YToyOntzOjM6InVybCI7czo2NDoiaHR0cDovL2luc2FmX2JhY2tlbmQudGVzdC9kYXNoYm9hcmQvYXBwbGljYXRpb25zLzEwL2Rvd25sb2FkLXBkZiI7czo1OiJyb3V0ZSI7czozMToiYWRtaW4uYXBwbGljYXRpb25zLmRvd25sb2FkLXBkZiI7fXM6NTA6ImxvZ2luX3dlYl81OWJhMzZhZGRjMmIyZjk0MDE1ODBmMDE0YzdmNThlYTRlMzA5ODlkIjtpOjY7fQ==', 1775884413);
+('ttb6S4iwbblFC1yZ96W1bnzaPJai5nGA5gSwBKyB', 4, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:149.0) Gecko/20100101 Firefox/149.0', 'YTo1OntzOjY6Il90b2tlbiI7czo0MDoiYVZ0MUd5b1d5dTNaRlJmV0xmdWJDZktpeFBnRmhxak1nRWF2MnpKeCI7czo5OiJfcHJldmlvdXMiO2E6Mjp7czozOiJ1cmwiO3M6NTQ6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9kYXNoYm9hcmQvam91cm5hbC1lbnRyaWVzL2NyZWF0ZSI7czo1OiJyb3V0ZSI7czoyODoiYWRtaW4uam91cm5hbC1lbnRyaWVzLmNyZWF0ZSI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fXM6MTA6InR5cm8tbG9naW4iO2E6MTp7czo3OiJjYXB0Y2hhIjthOjA6e319czo1MDoibG9naW5fd2ViXzU5YmEzNmFkZGMyYjJmOTQwMTU4MGYwMTRjN2Y1OGVhNGUzMDk4OWQiO2k6NDt9', 1775993312);
 
 -- --------------------------------------------------------
 
@@ -1182,7 +1191,8 @@ INSERT INTO `tyro_audit_logs` (`id`, `user_id`, `event`, `auditable_type`, `audi
 (59, 1, 'privilege.attached', 'HasinHayder\\Tyro\\Models\\Role', 4, NULL, '{\"privilege_id\": 13, \"privilege_slug\": \"*invoice\"}', '{\"ip\": \"127.0.0.1\", \"is_console\": false, \"user_agent\": \"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:149.0) Gecko/20100101 Firefox/149.0\"}', '2026-04-11 10:25:47'),
 (60, 1, 'privilege.created', 'HasinHayder\\Tyro\\Models\\Privilege', 13, NULL, '{\"id\": 13, \"name\": \"Invoice\", \"slug\": \"*invoice\", \"roles\": [3, 4], \"description\": null}', '{\"ip\": \"127.0.0.1\", \"is_console\": false, \"user_agent\": \"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:149.0) Gecko/20100101 Firefox/149.0\"}', '2026-04-11 10:25:47'),
 (61, 1, 'user.logout', 'App\\Models\\User', 1, NULL, '{\"email\": \"hello@inoodex.com\"}', '{\"ip\": \"127.0.0.1\", \"is_console\": false, \"user_agent\": \"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:149.0) Gecko/20100101 Firefox/149.0\"}', '2026-04-11 10:26:07'),
-(62, 6, 'user.login', 'App\\Models\\User', 6, NULL, '{\"email\": \"application@example.com\"}', '{\"ip\": \"127.0.0.1\", \"is_console\": false, \"user_agent\": \"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:149.0) Gecko/20100101 Firefox/149.0\"}', '2026-04-11 10:26:18');
+(62, 6, 'user.login', 'App\\Models\\User', 6, NULL, '{\"email\": \"application@example.com\"}', '{\"ip\": \"127.0.0.1\", \"is_console\": false, \"user_agent\": \"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:149.0) Gecko/20100101 Firefox/149.0\"}', '2026-04-11 10:26:18'),
+(63, 4, 'user.login', 'App\\Models\\User', 4, NULL, '{\"email\": \"accountant@example.com\"}', '{\"ip\": \"127.0.0.1\", \"is_console\": false, \"user_agent\": \"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:149.0) Gecko/20100101 Firefox/149.0\"}', '2026-04-12 10:14:29');
 
 -- --------------------------------------------------------
 
@@ -1658,7 +1668,7 @@ ALTER TABLE `user_roles`
 -- AUTO_INCREMENT for table `accounting_periods`
 --
 ALTER TABLE `accounting_periods`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `applications`
@@ -1688,7 +1698,7 @@ ALTER TABLE `budgets`
 -- AUTO_INCREMENT for table `chart_of_accounts`
 --
 ALTER TABLE `chart_of_accounts`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `commissions`
@@ -1796,7 +1806,7 @@ ALTER TABLE `marketing_videos`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=85;
+  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=86;
 
 --
 -- AUTO_INCREMENT for table `office_accounts`
@@ -1868,7 +1878,7 @@ ALTER TABLE `taxes`
 -- AUTO_INCREMENT for table `tyro_audit_logs`
 --
 ALTER TABLE `tyro_audit_logs`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=63;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=64;
 
 --
 -- AUTO_INCREMENT for table `universities`
