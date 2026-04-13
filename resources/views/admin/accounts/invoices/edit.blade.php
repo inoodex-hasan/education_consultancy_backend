@@ -1,6 +1,6 @@
 @extends('admin.layouts.master')
 
-@section('title', 'Create Student Invoice')
+@section('title', 'Edit Invoice')
 
 @push('styles')
     <link rel="stylesheet" href="{{ asset('assets/css/nice-select2.css') }}">
@@ -36,7 +36,7 @@
 
 @section('content')
     <div class="flex flex-wrap items-center justify-between gap-4">
-        <h2 class="text-xl font-semibold uppercase">Generate Student Invoice</h2>
+        <h2 class="text-xl font-semibold uppercase">Edit Invoice — {{ $invoice->invoice_number }}</h2>
         <a href="{{ route('admin.invoices.index') }}" class="btn btn-secondary gap-2">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                 stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
@@ -47,25 +47,26 @@
         </a>
     </div>
 
-    <form id="invoice-form" action="{{ route('admin.invoices.store') }}" method="POST" x-data="invoiceForm()"
+    <form id="invoice-form" action="{{ route('admin.invoices.update', $invoice) }}" method="POST" x-data="invoiceForm()"
         @submit.prevent="submitInvoice">
         @csrf
+        @method('PUT')
 
         <div class="panel mt-6">
             <div class="grid grid-cols-1 gap-5 md:grid-cols-3">
                 <div class="form-group">
-                    <label for="application_search">Search Application <span class="text-danger">*</span></label>
+                    <label for="application_search">Application <span class="text-danger">*</span></label>
                     <select name="application_search" id="application_search" class="form-select"
                         x-model="selectedApplication" @change="onApplicationSelect" required>
                         <option value="">Select Application</option>
                         @foreach ($applications as $app)
-                            <option value="{{ $app->id }}">{{ $app->application_id }} - {{ $app->student->first_name }}
+                            <option value="{{ $app->id }}" {{ $invoice->application_id == $app->id ? 'selected' : '' }}>
+                                {{ $app->application_id }} - {{ $app->student->first_name }}
                                 {{ $app->student->last_name }}
                             </option>
                         @endforeach
                     </select>
                     <input type="hidden" name="application_id" :value="selectedApplication" />
-                    <span class="text-xs text-white-dark mt-1">Invoice will be generated for the selected application</span>
                 </div>
 
                 <div class="form-group">
@@ -81,13 +82,13 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="invoice_number">Invoice # (Auto-generated if empty)</label>
+                    <label for="invoice_number">Invoice #</label>
                     <input type="text" name="invoice_number" id="invoice_number" class="form-input"
-                        placeholder="INV-{{ date('Y') }}-XXXX" />
+                        value="{{ $invoice->invoice_number }}" />
                 </div>
             </div>
 
-            {{-- Auto-populated Application Details --}}
+            {{-- Application Details --}}
             <div x-show="applicationDetails" class="mt-5 p-4 bg-primary/5 rounded-lg border border-primary/20" x-cloak>
                 <h6 class="text-sm font-bold text-primary uppercase mb-3">Application Details</h6>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 text-sm">
@@ -99,29 +100,37 @@
                             x-text="applicationDetails?.intake || '-'"></span></div>
                     <div><span class="text-white-dark">Application ID:</span> <span class="font-semibold text-primary"
                             x-text="applicationDetails?.application_id || '-'"></span></div>
-                    {{-- <div><span class="text-white-dark">Tuition Fee:</span> <span class="font-semibold"
-                            x-text="applicationDetails?.tuition_fee || '-'"></span></div>
-                    <div><span class="text-white-dark">Service Charge:</span> <span class="font-semibold"
-                            x-text="applicationDetails?.service_charge || '-'"></span></div> --}}
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 gap-5 md:grid-cols-2 mt-5">
+            <div class="grid grid-cols-1 gap-5 md:grid-cols-3 mt-5">
                 <div class="form-group">
                     <label for="date">Issue Date <span class="text-danger">*</span></label>
-                    <input type="date" name="date" id="date" class="form-input" required value="{{ date('Y-m-d') }}" />
+                    <input type="date" name="date" id="date" class="form-input" required
+                        value="{{ $invoice->date->format('Y-m-d') }}" />
                 </div>
                 <div class="form-group">
                     <label for="due_date">Due Date <span class="text-danger">*</span></label>
                     <input type="date" name="due_date" id="due_date" class="form-input" required
-                        value="{{ date('Y-m-d', strtotime('+7 days')) }}" />
+                        value="{{ $invoice->due_date->format('Y-m-d') }}" />
+                </div>
+                <div class="form-group">
+                    <label for="status">Status <span class="text-danger">*</span></label>
+                    <select name="status" id="status" class="form-select" required>
+                        <option value="draft" {{ $invoice->status == 'draft' ? 'selected' : '' }}>Draft</option>
+                        <option value="sent" {{ $invoice->status == 'sent' ? 'selected' : '' }}>Sent</option>
+                        <option value="paid" {{ $invoice->status == 'paid' ? 'selected' : '' }}>Paid</option>
+                        <option value="partially_paid" {{ $invoice->status == 'partially_paid' ? 'selected' : '' }}>Partially
+                            Paid</option>
+                        <option value="void" {{ $invoice->status == 'void' ? 'selected' : '' }}>Void</option>
+                    </select>
                 </div>
             </div>
 
             <div class="mt-5">
                 <label for="notes">Internal Notes</label>
                 <textarea name="notes" id="notes" class="form-textarea" rows="2"
-                    placeholder="Public notes appearing on invoice..."></textarea>
+                    placeholder="Public notes appearing on invoice...">{{ $invoice->notes }}</textarea>
             </div>
         </div>
 
@@ -227,11 +236,11 @@
                 </button>
 
                 <div class="flex gap-4">
-                    <button type="reset" @click="window.location.reload()"
-                        class="btn btn-outline-danger uppercase text-[10px] font-bold">Reset</button>
+                    <a href="{{ route('admin.invoices.index') }}"
+                        class="btn btn-outline-danger uppercase text-[10px] font-bold">Cancel</a>
                     <button type="submit"
                         class="btn btn-primary px-16 uppercase text-xs font-black shadow-[0_10px_20px_-10px_rgba(67,97,238,0.44)]">
-                        Print Invoice
+                        Update Invoice
                     </button>
                 </div>
             </div>
@@ -244,38 +253,29 @@
     <script>
         function invoiceForm() {
             return {
-                items: [{
-                    chart_of_account_id: '',
-                    description: '',
-                    quantity: 1,
-                    unit_price: 0
-                }],
+                items: {!! json_encode($invoice->items->map(fn($item) => [
+        'chart_of_account_id' => (string) $item->chart_of_account_id,
+        'description' => $item->description,
+        'quantity' => (float) $item->quantity,
+        'unit_price' => (float) $item->unit_price,
+    ])->values()) !!},
                 grandTotal: 0,
-                selectedApplication: '{{ $selectedApplication ? $selectedApplication->id : '' }}',
-                selectedStudentId: '{{ $selectedApplication ? $selectedApplication->student_id : '' }}',
-                applicationDetails: {!! json_encode(
-        $selectedApplication
-        ? [
-            'application_id' => $selectedApplication->application_id,
-            'university' => $selectedApplication->university->name ?? '',
-            'course' => $selectedApplication->course->name ?? '',
-            'intake' => $selectedApplication->intake->intake_name ?? '',
-            'tuition_fee' => number_format($selectedApplication->tuition_fee ?? 0, 2, '.', ''),
-            'service_charge' => number_format($selectedApplication->service_charge ?? 0, 2, '.', ''),
-            'id' => $selectedApplication->id,
-        ]
-        : null,
-    ) !!},
+                selectedApplication: '{{ $invoice->application_id }}',
+                selectedStudentId: '{{ $invoice->student_id }}',
+                applicationDetails: {!! json_encode($invoice->application ? [
+        'application_id' => $invoice->application->application_id,
+        'university' => $invoice->application->university->name ?? '',
+        'course' => $invoice->application->course->name ?? '',
+        'intake' => $invoice->application->intake->intake_name ?? '',
+        'id' => $invoice->application->id,
+    ] : null) !!},
 
                 init() {
                     this.initNiceSelect();
-                    if (this.selectedApplication) {
-                        this.onApplicationSelect();
-                    }
+                    this.calculateTotals();
                 },
 
                 initNiceSelect() {
-                    const app = this;
                     setTimeout(() => {
                         const el = document.getElementById('application_search');
                         if (el) {
@@ -301,39 +301,9 @@
                                 university: data.university,
                                 course: data.course,
                                 intake: data.intake,
-                                tuition_fee: data.tuition_fee,
-                                service_charge: data.service_charge,
                                 id: data.id
                             };
                             this.selectedStudentId = data.student_id;
-
-                            // Auto-populate invoice items
-                            this.items = [];
-                            if (parseFloat(data.tuition_fee) > 0) {
-                                this.items.push({
-                                    chart_of_account_id: '',
-                                    description: `Tuition Fee - ${data.course} (${data.university})`,
-                                    quantity: 1,
-                                    unit_price: parseFloat(data.tuition_fee)
-                                });
-                            }
-                            if (parseFloat(data.service_charge) > 0) {
-                                this.items.push({
-                                    chart_of_account_id: '',
-                                    description: `Service Charge - ${data.application_id}`,
-                                    quantity: 1,
-                                    unit_price: parseFloat(data.service_charge)
-                                });
-                            }
-                            if (this.items.length === 0) {
-                                this.items.push({
-                                    chart_of_account_id: '',
-                                    description: '',
-                                    quantity: 1,
-                                    unit_price: 0
-                                });
-                            }
-                            this.calculateTotals();
                         });
                 },
 

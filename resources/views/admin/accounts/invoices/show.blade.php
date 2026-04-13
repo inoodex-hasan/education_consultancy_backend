@@ -2,112 +2,153 @@
 
 @section('title', 'Invoice: ' . $invoice->invoice_number)
 
+@push('styles')
+    <style>
+        @media print {
+            .print\:hidden {
+                display: none !important;
+            }
+
+            .panel {
+                border: 0 !important;
+                box-shadow: none !important;
+                margin: 0 !important;
+            }
+        }
+    </style>
+@endpush
+
 @section('content')
     <div class="flex flex-wrap items-center justify-between gap-4 print:hidden">
-        <h2 class="text-xl font-semibold uppercase">Invoice Billing Details</h2>
+        <h2 class="text-xl font-semibold uppercase">Invoice Details</h2>
         <div class="flex gap-2 text-xs">
-            <button onclick="window.print()" class="btn btn-outline-primary gap-2 font-black uppercase">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M17 17h2a2 2 0 0 0 2-2v-4a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h2m2 4h6a2 2 0 0 0 2-2v-4a2 2 0 0 0-2-2H9a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2zM17 9V5a2 2 0 0 0-2-2H9a2 2 0 0 0-2 2v4" />
+            <button onclick="window.print()" class="btn btn-outline-primary gap-2 font-bold uppercase">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path
+                        d="M17 17h2a2 2 0 0 0 2-2v-4a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h2m2 4h6a2 2 0 0 0 2-2v-4a2 2 0 0 0-2-2H9a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2zM17 9V5a2 2 0 0 0-2-2H9a2 2 0 0 0-2 2v4" />
                 </svg>
-                Print Voucher
+                Print
             </button>
-            <a href="{{ route('admin.invoices.index') }}" class="btn btn-secondary font-black uppercase">Back to List</a>
+            <a href="{{ route('admin.invoices.edit', $invoice) }}"
+                class="btn btn-outline-warning font-bold uppercase">Edit</a>
+            <a href="{{ route('admin.invoices.index') }}" class="btn btn-secondary font-bold uppercase">Back to List</a>
         </div>
     </div>
 
-    <!-- Premium Invoice Voucher -->
-    <div class="panel mt-6 print:border-0 print:shadow-none print:m-0 print:p-0">
-        <!-- Logo & Header -->
-        <div class="flex flex-col md:flex-row justify-between mb-10 pb-8 border-b-4 border-primary">
-            <div class="flex items-center gap-5">
-                <div class="p-4 bg-primary text-white rounded-2xl font-black text-4xl uppercase tracking-tighter shadow-lg">INS</div>
+    <!-- Invoice Voucher -->
+    <div class="panel mt-6">
+        <!-- Header -->
+        <div class="flex flex-col md:flex-row justify-between mb-8 pb-6 border-b-2 border-primary/20">
+            <div class="flex items-center gap-4">
+                @if(get_setting('app_logo'))
+                    <img src="{{ asset('storage/' . get_setting('app_logo')) }}" alt="Logo" class="h-14 w-auto" />
+                @else
+                    <div class="p-3 bg-primary text-white rounded-xl font-black text-2xl uppercase tracking-tighter shadow-md">
+                        INS</div>
+                @endif
                 <div>
-                    <h4 class="text-3xl font-black uppercase text-primary tracking-tighter">Insaf Education</h4>
-                    <p class="text-xs text-white-dark font-black tracking-[4px] uppercase mt-1">Consultancy & Agency</p>
+                    <h4 class="text-2xl font-black uppercase text-primary tracking-tight">
+                        {{ get_setting('app_name', 'Insaf Education') }}</h4>
+                    <p class="text-[10px] text-white-dark font-bold tracking-[3px] uppercase mt-0.5">Consultancy & Agency
+                    </p>
                 </div>
             </div>
-            <div class="text-right mt-6 md:mt-0 font-bold uppercase text-[9px] tracking-widest text-white-dark flex flex-col justify-end leading-relaxed">
-                <p>Road 12, Block B, Nikunja-2, Khilkhet</p>
-                <p>Dhaka-1229, Bangladesh</p>
-                <p class="text-primary font-black">Email: accounts@insaf.edu.bd</p>
-                <p>Phone: +880 1234 567890</p>
+            <div
+                class="text-right mt-4 md:mt-0 font-medium text-[10px] tracking-wide text-white-dark flex flex-col justify-end leading-relaxed">
+                <p>Haque Tower (Opposite of BRB Hospital), Floor - 6, Panthapath, </p>
+                <p>Dhaka-1205, Bangladesh</p>
+                <p class="text-primary font-bold mt-1">insafimmigration@gmail.com</p>
             </div>
         </div>
 
-        <!-- Invoice Info Card -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-10 mb-10 pb-8 border-b border-white-light dark:border-white-light/10">
-            <div class="space-y-6">
+        <!-- Invoice Info -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8 pb-6 border-b border-white-light dark:border-white-light/10">
+            <!-- Bill To -->
+            <div class="space-y-4">
                 <div>
-                    <h5 class="text-xs font-black text-white-dark uppercase tracking-[6px] mb-3">Invoice Bill To:</h5>
-                    <h4 class="text-2xl font-black text-dark dark:text-white-light">{{ $invoice->student->first_name }} {{ $invoice->student->last_name }}</h4>
-                    <p class="text-sm font-mono font-bold text-primary bg-primary/5 inline-block px-3 py-1 rounded mt-2">ID: {{ $invoice->student->id_number }}</p>
+                    <p class="text-[10px] text-white-dark font-bold uppercase tracking-[4px] mb-2">Invoice To:</p>
+                    <h4 class="text-xl font-black text-dark dark:text-white-light">{{ $invoice->student->first_name }}
+                        {{ $invoice->student->last_name }}</h4>
+                    <p class="text-xs font-mono font-bold text-primary bg-primary/5 inline-block px-2 py-0.5 rounded mt-1">
+                        {{ $invoice->student->id_number }}</p>
                 </div>
-                
-                <div class="grid grid-cols-2 gap-4">
+
+                <div class="grid grid-cols-2 gap-3">
                     <div>
-                        <p class="text-[10px] text-white-dark font-black uppercase tracking-widest mb-1">Target Institution:</p>
-                        <p class="text-sm font-black text-primary">{{ $invoice->university->name ?? 'N/A' }}</p>
+                        <p class="text-[10px] text-white-dark font-bold uppercase tracking-widest mb-0.5">University</p>
+                        <p class="text-sm font-bold text-primary">{{ $invoice->university->name ?? 'N/A' }}</p>
                     </div>
                     <div>
-                        <p class="text-[10px] text-white-dark font-black uppercase tracking-widest mb-1">Destination:</p>
-                        <p class="text-xs font-bold">{{ $invoice->university->location ?? 'Global Branch' }}</p>
+                        <p class="text-[10px] text-white-dark font-bold uppercase tracking-widest mb-0.5">Application</p>
+                        <p class="text-sm font-bold">{{ $invoice->application->application_id ?? 'N/A' }}</p>
                     </div>
                 </div>
             </div>
-            
-            <div class="bg-primary/5 p-8 rounded-3xl flex flex-col justify-center items-end relative overflow-hidden">
-                <div class="absolute top-0 right-0 p-2 opacity-10">
-                    <svg width="120" height="120" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M4 19h1a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2zM19 19h1a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2zM9 19h6a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2H9a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2z" />
-                    </svg>
+
+            <!-- Invoice Meta -->
+            <div class="bg-white-light/30 dark:bg-white-dark/5 p-6 rounded-2xl">
+                <div class="text-right mb-4">
+                    <p class="text-[10px] font-bold text-white-dark uppercase tracking-[5px] mb-1">Invoice No.</p>
+                    <h3 class="text-2xl font-black text-primary tracking-tight">{{ $invoice->invoice_number }}</h3>
                 </div>
-                <div class="text-right z-10 w-full">
-                    <p class="text-xs font-black text-primary uppercase tracking-[8px] mb-2 opacity-50">Invoice No.</p>
-                    <h3 class="text-3xl font-black text-primary tracking-tighter border-b-2 border-primary/20 pb-2 inline-block">{{ $invoice->invoice_number }}</h3>
-                </div>
-                <div class="grid grid-cols-2 gap-8 mt-8 w-full text-right z-10">
+                <div class="grid grid-cols-3 gap-4 text-right">
                     <div>
-                        <p class="text-[10px] font-black text-white-dark uppercase tracking-widest mb-1">Issue Date</p>
-                        <p class="text-sm font-black">{{ $invoice->date->format('M d, Y') }}</p>
+                        <p class="text-[10px] font-bold text-white-dark uppercase tracking-widest mb-0.5">Issue Date</p>
+                        <p class="text-xs font-bold">{{ $invoice->date->format('M d, Y') }}</p>
                     </div>
                     <div>
-                        <p class="text-[10px] font-black text-white-dark uppercase tracking-widest mb-1">Due Date</p>
-                        <p class="text-sm font-black text-danger underline decoration-wavy">{{ $invoice->due_date->format('M d, Y') }}</p>
+                        <p class="text-[10px] font-bold text-white-dark uppercase tracking-widest mb-0.5">Due Date</p>
+                        <p class="text-xs font-bold text-danger">{{ $invoice->due_date->format('M d, Y') }}</p>
+                    </div>
+                    <div>
+                        <p class="text-[10px] font-bold text-white-dark uppercase tracking-widest mb-0.5">Status</p>
+                        @if($invoice->status == 'paid')
+                            <span class="badge badge-outline-success text-[10px] font-black">Paid</span>
+                        @elseif($invoice->status == 'partially_paid')
+                            <span class="badge badge-outline-warning text-[10px] font-black">Partial</span>
+                        @elseif($invoice->status == 'sent')
+                            <span class="badge badge-outline-info text-[10px] font-black">Sent</span>
+                        @elseif($invoice->status == 'void')
+                            <span class="badge badge-outline-dark text-[10px] font-black">Void</span>
+                        @else
+                            <span class="badge badge-outline-secondary text-[10px] font-black">Draft</span>
+                        @endif
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Modern Transaction Table -->
+        <!-- Items Table -->
         <div class="table-responsive">
             <table class="w-full">
                 <thead>
-                    <tr class="bg-primary text-white font-black uppercase text-[10px] tracking-widest">
-                        <th class="p-5 text-left border-r border-white/10 rounded-tl-xl">Service Particulars</th>
-                        <th class="p-5 text-right border-r border-white/10 w-24">Qty</th>
-                        <th class="p-5 text-right border-r border-white/10 w-48">Unit Rate</th>
-                        <th class="p-5 text-right rounded-tr-xl w-48">Net Amount</th>
+                    <tr class="bg-primary text-black font-bold uppercase text-[10px] tracking-widest">
+                        <th class="p-4 text-left rounded-tl-lg">Service Particulars</th>
+                        <th class="p-4 text-right w-20">Qty</th>
+                        <th class="p-4 text-right w-36">Unit Rate</th>
+                        <th class="p-4 text-right w-40 rounded-tr-lg">Amount</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach($invoice->items as $item)
-                        <tr class="border-b-2 border-primary/5 hover:bg-primary/5 transition-all">
-                            <td class="p-5">
-                                <span class="font-black text-sm uppercase text-primary block mb-1">{{ $item->chartOfAccount->name }}</span>
-                                <span class="text-xs text-white-dark font-medium leading-relaxed">{{ $item->description }}</span>
+                        <tr class="border-b border-white-light/50 dark:border-white-light/10 hover:bg-primary/5 transition-all">
+                            <td class="p-4">
+                                <span class="font-bold text-sm text-primary block">{{ $item->chartOfAccount->name }}</span>
+                                <span class="text-xs text-white-dark">{{ $item->description }}</span>
                             </td>
-                            <td class="p-5 text-right font-black text-dark dark:text-white-light">{{ number_format($item->quantity, 0) }}</td>
-                            <td class="p-5 text-right font-mono font-bold text-white-dark">{{ number_format($item->unit_price, 2) }}</td>
-                            <td class="p-5 text-right font-black font-mono text-primary text-lg">{{ number_format($item->total, 2) }}</td>
+                            <td class="p-4 text-right font-bold">{{ number_format($item->quantity, 0) }}</td>
+                            <td class="p-4 text-right font-mono text-white-dark">{{ number_format($item->unit_price, 2) }}</td>
+                            <td class="p-4 text-right font-bold font-mono text-dark dark:text-white-light">
+                                {{ number_format($item->total, 2) }}</td>
                         </tr>
                     @endforeach
                 </tbody>
                 <tfoot>
-                    <tr class="bg-primary pt-1 shadow-2xl">
-                        <td colspan="3" class="p-6 text-right uppercase text-xs font-black tracking-[10px] text-white border-r border-white/20 rounded-bl-3xl">Grand Total Due:</td>
-                        <td class="p-6 text-right text-white font-black text-3xl font-mono rounded-br-3xl">
-                            <span class="text-xs font-bold text-white/50 mr-3">{{ $invoice->currency->code }}</span>
+                    <tr class="bg-primary">
+                        <td colspan="3"
+                            class="p-5 text-right uppercase text-xs font-bold tracking-[6px] text-black rounded-bl-lg">
+                            Grand Total:</td>
+                        <td class="p-5 text-right text-black font-black text-2xl font-mono rounded-br-lg">
                             {{ number_format($invoice->total_amount, 2) }}
                         </td>
                     </tr>
@@ -115,41 +156,40 @@
             </table>
         </div>
 
-        <!-- Footer Notes & Signatures -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-10 mt-16 pb-12">
+        <!-- Footer: Notes & Signatures -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-12 pb-8">
             <div>
                 @if($invoice->notes)
-                    <div class="p-6 bg-primary/5 border-l-8 border-primary rounded-r-3xl h-full shadow-inner">
-                        <span class="text-[10px] font-black uppercase tracking-[5px] text-primary block mb-3 opacity-60">Payment Advice & Terms:</span>
-                        <p class="text-sm font-semibold text-white-dark leading-relaxed italic">"{{ $invoice->notes }}"</p>
-                        <div class="mt-6 pt-4 border-t border-primary/10">
-                            <p class="text-[9px] text-white-dark font-bold">Please quote invoice number during payment transfer.</p>
-                        </div>
+                    <div class="p-5 bg-primary/5 border-l-4 border-primary rounded-r-xl">
+                        <p class="text-[10px] font-bold uppercase tracking-[3px] text-primary mb-2 opacity-60">Notes:</p>
+                        <p class="text-sm text-white-dark leading-relaxed italic">"{{ $invoice->notes }}"</p>
+                        <p class="text-[9px] text-white-dark mt-3 pt-2 border-t border-primary/10">Please quote invoice number
+                            during payment transfer.</p>
                     </div>
                 @endif
             </div>
 
-            <div class="flex flex-col justify-between pt-10">
-                <div class="grid grid-cols-2 gap-12 text-center">
+            <div class="flex flex-col justify-end pt-8">
+                <div class="grid grid-cols-2 gap-8 text-center">
                     <div class="flex flex-col items-center">
                         <div class="w-full h-px bg-white-dark/30 mb-2"></div>
-                        <p class="font-black uppercase text-[9px] tracking-widest text-primary">Student Signature</p>
-                        <p class="text-[7px] text-white-dark mt-1">Authorized acceptance</p>
+                        <p class="font-bold uppercase text-[9px] tracking-widest text-white-dark">Student Signature</p>
                     </div>
                     <div class="flex flex-col items-center">
-                        <div class="w-full h-px bg-primary mb-2 shadow-[0_0_10px_rgba(67,97,238,0.5)]"></div>
-                        <p class="font-black uppercase text-[9px] tracking-widest text-primary">Accounts Manager</p>
-                        <p class="text-[7px] text-white-dark mt-1">For Insaf Education</p>
+                        <div class="w-full h-px bg-primary mb-2"></div>
+                        <p class="font-bold uppercase text-[9px] tracking-widest text-primary">Accounts Manager</p>
+                        <p class="text-[7px] text-white-dark mt-0.5">For {{ get_setting('app_name', 'Insaf Education') }}
+                        </p>
                     </div>
                 </div>
-                
-                <div class="mt-12 text-right">
-                    <p class="text-[8px] font-black text-white-dark tracking-[8px] uppercase opacity-40">This is a system generated document</p>
+
+                <div class="mt-8 text-right">
+                    <p class="text-[8px] text-white-dark tracking-[5px] uppercase opacity-40">System generated document</p>
                 </div>
             </div>
         </div>
 
         <!-- Decorative Footer -->
-        <div class="w-full h-3 bg-gradient-to-r from-primary via-secondary to-primary rounded-full mb-4"></div>
+        <div class="w-full h-1.5 bg-gradient-to-r from-primary via-info to-primary rounded-full"></div>
     </div>
 @endsection

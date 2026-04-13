@@ -77,7 +77,7 @@ class InvoiceController extends Controller
                 'date' => $request->date,
                 'due_date' => $request->due_date,
                 'total_amount' => $totalAmount,
-                'status' => 'unpaid',
+                'status' => 'draft',
                 'notes' => $request->notes,
             ]);
 
@@ -111,6 +111,82 @@ class InvoiceController extends Controller
     {
         $invoice->load(['items.chartOfAccount', 'student', 'application', 'university']);
         return view('admin.accounts.invoices.show', compact('invoice'));
+    }
+
+    /**
+     * Show the form for editing the specified invoice.
+     */
+    public function edit(Invoice $invoice)
+    {
+        $invoice->load(['items', 'application.student', 'application.university', 'application.course', 'application.intake']);
+        $students = Student::orderBy('first_name')->get();
+        $accounts = ChartOfAccount::where('is_active', true)->orderBy('code')->get();
+        $applications = Application::with(['student', 'university', 'course', 'intake'])->orderBy('id', 'desc')->get();
+
+        return view('admin.accounts.invoices.edit', compact('invoice', 'students', 'accounts', 'applications'));
+    }
+
+    /**
+     * Update the specified invoice in storage.
+     */
+    public function update(Request $request, Invoice $invoice)
+    {
+        $request->validate([
+            'application_id' => 'required|exists:applications,id',
+            'date' => 'required|date',
+            'due_date' => 'required|date|after_or_equal:date',
+            'invoice_number' => 'nullable|string|max:50|unique:invoices,invoice_number,' . $invoice->id,
+            'status' => 'required|in:draft,sent,paid,partially_paid,void',
+            'notes' => 'nullable|string',
+            'items' => 'required|array|min:1',
+            'items.*.chart_of_account_id' => 'required|exists:chart_of_accounts,id',
+            'items.*.description' => 'required|string|max:255',
+            'items.*.quantity' => 'required|numeric|min:0.01',
+            'items.*.unit_price' => 'required|numeric|min:0',
+        ]);
+
+        try {
+            DB::beginTransaction();
+
+            $application = Application::find($request->application_id);
+            $totalAmount = collect($request->items)->sum(fn($i) => (float) $i['quantity'] * (float) $i['unit_price']);
+
+            $invoice->update([
+                'student_id' => $application->student_id,
+                'application_id' => $request->application_id,
+                'university_id' => $application->university_id,
+                'invoice_number' => $request->invoice_number ?: $invoice->invoice_number,
+                'date' => $request->date,
+                'due_date' => $request->due_date,
+                'total_amount' => $totalAmount,
+                'status' => $request->status,
+                'notes' => $request->notes,
+            ]);
+
+            // Delete old items and recreate
+            $invoice->items()->delete();
+
+            foreach ($request->items as $item) {
+                $subtotal = (float) $item['quantity'] * (float) $item['unit_price'];
+                InvoiceItem::create([
+                    'invoice_id' => $invoice->id,
+                    'chart_of_account_id' => $item['chart_of_account_id'],
+                    'description' => $item['description'],
+                    'quantity' => $item['quantity'],
+                    'unit_price' => $item['unit_price'],
+                    'subtotal' => $subtotal,
+                    'tax_amount' => 0.00,
+                    'total' => $subtotal,
+                ]);
+            }
+
+            DB::commit();
+            return redirect()->route('admin.invoices.index')->with('success', 'Invoice updated successfully.');
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->withErrors(['msg' => 'Invoice update failed: ' . $e->getMessage()])->withInput();
+        }
     }
 
     /**

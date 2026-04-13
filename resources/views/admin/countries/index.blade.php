@@ -14,16 +14,13 @@
             <form action="{{ route('admin.countries.index') }}" method="GET"
                 class="flex flex-1 flex-col gap-5 md:flex-row md:items-center w-full">
                 <div class="relative w-full md:w-80">
-                    <input type="text" name="search" value="{{ request('search') }}" placeholder="Search country name or code..."
-                        class="form-input ltr:pr-11 rtl:pl-11" />
+                    <input type="text" name="search" value="{{ request('search') }}"
+                        placeholder="Search country name or code..." class="form-input ltr:pr-11 rtl:pl-11" />
                     <button type="submit"
                         class="absolute inset-y-0 flex items-center hover:text-primary ltr:right-4 rtl:left-4">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <circle cx="11.5" cy="11.5" r="9.5" stroke="currentColor" stroke-width="1.5"
-                                opacity="0.5" />
-                            <path d="M18.5 18.5L22 22" stroke="currentColor" stroke-width="1.5"
-                                stroke-linecap="round" />
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="11.5" cy="11.5" r="9.5" stroke="currentColor" stroke-width="1.5" opacity="0.5" />
+                            <path d="M18.5 18.5L22 22" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
                         </svg>
                     </button>
                 </div>

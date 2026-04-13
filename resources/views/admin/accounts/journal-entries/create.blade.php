@@ -15,7 +15,7 @@
         </a>
     </div>
 
-    <form action="{{ route('admin.journal-entries.store') }}" method="POST" x-data="journalForm()"
+    <form id="journal-form" action="{{ route('admin.journal-entries.store') }}" method="POST" x-data="journalForm()"
         @submit.prevent="submitVoucher">
         @csrf
 
@@ -229,7 +229,7 @@
                     if (this.totalDebit === 0) {
                         return;
                     }
-                    document.querySelector('form').submit();
+                    document.getElementById('journal-form').submit();
                 }
             }
         }
