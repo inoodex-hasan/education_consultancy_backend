@@ -8,15 +8,9 @@ use Illuminate\Http\Request;
 
 class CountryController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('can:*editor');
-    }
 
     public function index(Request $request)
     {
-        $this->authorize('*editor');
-
         $query = Country::query();
 
         if ($search = $request->get('search')) {
@@ -31,14 +25,12 @@ class CountryController extends Controller
 
     public function create()
     {
-        $this->authorize('*editor');
 
         return view('admin.countries.create');
     }
 
     public function store(Request $request)
     {
-        $this->authorize('*editor');
 
         $validated = $this->validateCountry($request);
 
@@ -51,14 +43,12 @@ class CountryController extends Controller
 
     public function edit(Country $country)
     {
-        $this->authorize('*editor');
 
         return view('admin.countries.edit', compact('country'));
     }
 
     public function update(Request $request, Country $country)
     {
-        $this->authorize('*editor');
 
         $validated = $this->validateCountry($request);
 
@@ -71,7 +61,6 @@ class CountryController extends Controller
 
     public function destroy(Country $country)
     {
-        $this->authorize('*editor');
 
         $country->delete();
 

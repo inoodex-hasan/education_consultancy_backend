@@ -11,15 +11,9 @@ use App\Models\{Country, Course, CourseIntake, Lead, Student, University, User};
 
 class StudentController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('can:*consultant|*application')->only(['index', 'show']);
-    }
 
     public function index(Request $request)
     {
-        $this->authorize('*consultant|*application');
-
         $query = Student::query()->with(['marketingAssignee', 'consultantAssignee', 'applicationAssignee', 'creator']);
 
         if ($search = $request->get('search')) {
@@ -46,8 +40,6 @@ class StudentController extends Controller
 
     public function create(Request $request)
     {
-        $this->authorize('*consultant|*marketing');
-
         $users = User::whereHas('roles', function ($q) {
             $q->where('name', 'marketing');
         })->orderBy('name')->get(['id', 'name']);
@@ -68,8 +60,6 @@ class StudentController extends Controller
 
     public function store(Request $request)
     {
-        $this->authorize('*consultant|*marketing');
-
         $validated = $this->validateStudent($request);
         $validated['created_by'] = auth()->id();
 
@@ -110,7 +100,6 @@ class StudentController extends Controller
 
     public function show(Student $student)
     {
-        $this->authorize('*consultant|*application');
 
         $student->load(['marketingAssignee', 'consultantAssignee', 'applicationAssignee', 'creator', 'country', 'university', 'course', 'intake', 'applications.university', 'applications.course', 'applications.intake']);
 
@@ -119,8 +108,6 @@ class StudentController extends Controller
 
     public function edit(Student $student)
     {
-        $this->authorize('*consultant|*marketing');
-
         $users = User::whereHas('roles', function ($q) {
             $q->where('name', 'marketing');
         })->orderBy('name')->get(['id', 'name']);
@@ -134,8 +121,6 @@ class StudentController extends Controller
 
     public function update(Request $request, Student $student)
     {
-        $this->authorize('*consultant|*marketing');
-
         $validated = $this->validateStudent($request);
 
         $documents = $student->documents ?? [];
@@ -202,8 +187,6 @@ class StudentController extends Controller
 
     public function destroy(Student $student)
     {
-        $this->authorize('*consultant|*marketing');
-
         $student->delete();
 
         return redirect()

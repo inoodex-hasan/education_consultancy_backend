@@ -9,10 +9,6 @@ use Illuminate\Validation\Rule;
 
 class ChartOfAccountController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('can:*accountant');
-    }
 
     /**
      * Display a listing of the resource.

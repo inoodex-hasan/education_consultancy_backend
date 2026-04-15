@@ -13,11 +13,6 @@ use Illuminate\Support\Facades\Auth;
 
 class BankReconciliationController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('can:*accountant');
-    }
-
     public function index()
     {
         $reconciliations = BankReconciliation::with(['account', 'closedBy'])

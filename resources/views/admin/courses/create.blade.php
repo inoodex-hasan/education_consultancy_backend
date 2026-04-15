@@ -44,10 +44,10 @@
                 </div>
 
                 <!-- <div class="form-group">
-                                                                                                <label>Tuition Fee <span class="text-danger">*</span></label>
-                                                                                                <input type="number" name="tuition_fee" class="form-input"
-                                                                                                    value="{{ old('tuition_fee') }}" required>
-                                                                                            </div> -->
+                                                                                                    <label>Tuition Fee <span class="text-danger">*</span></label>
+                                                                                                    <input type="number" name="tuition_fee" class="form-input"
+                                                                                                        value="{{ old('tuition_fee') }}" required>
+                                                                                                </div> -->
 
                 <div class="form-group">
                     <label>Status <span class="text-danger">*</span></label>

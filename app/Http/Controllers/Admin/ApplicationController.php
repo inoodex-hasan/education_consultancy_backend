@@ -11,12 +11,6 @@ use Barryvdh\DomPDF\Facade\Pdf;
 
 class ApplicationController extends Controller
 {
-
-    public function __construct()
-    {
-        $this->middleware('can:*accountant|*application');
-    }
-
     public function index(Request $request)
     {
         $query = Application::with(['student', 'university', 'course', 'intake', 'creator']);
@@ -61,8 +55,8 @@ class ApplicationController extends Controller
             'university_id' => 'required|exists:universities,id',
             'course_id' => 'required|exists:courses,id',
             'course_intake_id' => 'required|exists:course_intakes,id',
-            'tuition_fee' => 'required|numeric|min:0',
-            'total_fee' => 'required|numeric|min:0',
+            // 'tuition_fee' => 'required|numeric|min:0',
+            // 'total_fee' => 'required|numeric|min:0',
             'status' => 'required|string',
             'notes' => 'nullable|string',
             'offer_letter_received' => 'nullable|boolean',
@@ -130,8 +124,8 @@ class ApplicationController extends Controller
             'university_id' => 'required|exists:universities,id',
             'course_id' => 'required|exists:courses,id',
             'course_intake_id' => 'required|exists:course_intakes,id',
-            'tuition_fee' => 'required|numeric|min:0',
-            'total_fee' => 'required|numeric|min:0',
+            // 'tuition_fee' => 'required|numeric|min:0',
+            // 'total_fee' => 'required|numeric|min:0',
             'status' => 'required|string',
             'notes' => 'nullable|string',
             'offer_letter_received' => 'nullable|boolean',

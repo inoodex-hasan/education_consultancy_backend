@@ -28,10 +28,8 @@
                         placeholder="Search name, phone or email..." class="form-input ltr:pr-11 rtl:pl-11" />
                     <button type="submit"
                         class="absolute inset-y-0 flex items-center hover:text-primary ltr:right-4 rtl:left-4">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <circle cx="11.5" cy="11.5" r="9.5" stroke="currentColor" stroke-width="1.5"
-                                opacity="0.5" />
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="11.5" cy="11.5" r="9.5" stroke="currentColor" stroke-width="1.5" opacity="0.5" />
                             <path d="M18.5 18.5L22 22" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
                         </svg>
                     </button>
@@ -68,10 +66,10 @@
                             <th>Father's Name</th>
                             <th>Phone</th>
                             <!-- <th>Stage</th>
-                                                                                    <th>Status</th> -->
+                                                                                                    <th>Status</th> -->
                             <th>Address</th>
                             <th>Collected By</th>
-                            <th>Assigned By</th>
+                            <!-- <th>Assigned By</th> -->
                             <th class="text-center">Action</th>
                         </tr>
                     </thead>
@@ -85,11 +83,11 @@
                                 <td>{{ $student->father_name }}</td>
                                 <td>{{ $student->phone }}</td>
                                 <!-- <td>
-                                                                                                    <span class="badge badge-outline-primary capitalize">{{ $student->current_stage }}</span>
-                                                                                                </td>
-                                                                                                <td>
-                                                                                                    <span class="badge badge-outline-primary capitalize">{{ $student->current_status }}</span>
-                                                                                                </td> -->
+                                                                                                                                    <span class="badge badge-outline-primary capitalize">{{ $student->current_stage }}</span>
+                                                                                                                                </td>
+                                                                                                                                <td>
+                                                                                                                                    <span class="badge badge-outline-primary capitalize">{{ $student->current_status }}</span>
+                                                                                                                                </td> -->
                                 <td>{{ $student->address }}</td>
                                 <td>
                                     @if ($student->creator)
@@ -99,10 +97,10 @@
                                     @endif
                                 </td>
 
-                                <td>
-                                    <span
-                                        class="badge badge-outline-secondary">{{ $student->marketingAssignee->name ?? '-' }}</span>
-                                </td>
+                                <!-- <td>
+                                                    <span
+                                                        class="badge badge-outline-secondary">{{ $student->marketingAssignee->name ?? '-' }}</span>
+                                                </td> -->
                                 <td class="text-center">
                                     <div class="flex items-center justify-center gap-2">
                                         <a href="{{ route('admin.students.show', $student->id) }}"

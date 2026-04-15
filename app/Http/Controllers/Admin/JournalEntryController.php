@@ -14,10 +14,6 @@ use Illuminate\Support\Facades\Auth;
 
 class JournalEntryController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('can:*accountant');
-    }
 
     /**
      * Display a listing of the resource.

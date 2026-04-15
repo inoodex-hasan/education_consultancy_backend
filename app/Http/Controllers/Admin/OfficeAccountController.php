@@ -9,14 +9,9 @@ use Illuminate\Validation\Rule;
 
 class OfficeAccountController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('can:*accountant');
-    }
 
     public function index(Request $request)
     {
-        $this->authorize('*accountant');
 
         $query = OfficeAccount::with(['creator'])
             ->withSum('incomingTransactions as total_income', 'credit')
@@ -41,13 +36,11 @@ class OfficeAccountController extends Controller
 
     public function create()
     {
-        $this->authorize('*accountant');
         return view('admin.office-accounts.create');
     }
 
     public function store(Request $request)
     {
-        $this->authorize('*accountant');
 
         $validated = $this->validateAccount($request);
 
@@ -60,14 +53,11 @@ class OfficeAccountController extends Controller
 
     public function edit(OfficeAccount $officeAccount)
     {
-        $this->authorize('*accountant');
         return view('admin.office-accounts.edit', compact('officeAccount'));
     }
 
     public function update(Request $request, OfficeAccount $officeAccount)
     {
-        $this->authorize('*accountant');
-
         $validated = $this->validateAccount($request);
 
         $officeAccount->update($validated);
@@ -79,8 +69,6 @@ class OfficeAccountController extends Controller
 
     public function destroy(OfficeAccount $officeAccount)
     {
-        $this->authorize('*accountant');
-
         $officeAccount->delete();
 
         return redirect()

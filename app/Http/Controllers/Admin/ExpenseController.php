@@ -11,11 +11,6 @@ use Barryvdh\DomPDF\Facade\Pdf;
 
 class ExpenseController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('can:*accountant');
-    }
-
     public function index(Request $request)
     {
         $this->authorize('*accountant');

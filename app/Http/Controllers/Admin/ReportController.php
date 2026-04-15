@@ -14,14 +14,9 @@ use Carbon\Carbon;
 
 class ReportController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('can:*accountant');
-    }
 
     public function summary(Request $request)
     {
-        $this->authorize('*accountant');
 
         $month = $request->get('month', date('m'));
         $year = $request->get('year', date('Y'));
@@ -85,7 +80,6 @@ class ReportController extends Controller
 
     public function balanceSheet(Request $request)
     {
-        $this->authorize('*accountant');
 
         $asOfDate = $request->get('as_of_date', date('Y-m-d'));
         $date = Carbon::parse($asOfDate)->endOfDay();
@@ -164,7 +158,6 @@ class ReportController extends Controller
 
     public function downloadPdf(Request $request)
     {
-        $this->authorize('*accountant');
 
         $month = $request->get('month', date('m'));
         $year = $request->get('year', date('Y'));

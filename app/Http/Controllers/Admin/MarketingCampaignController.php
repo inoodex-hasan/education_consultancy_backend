@@ -10,10 +10,6 @@ use Illuminate\Validation\Rule;
 
 class MarketingCampaignController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('can:*marketing');
-    }
 
     public function index(Request $request)
     {

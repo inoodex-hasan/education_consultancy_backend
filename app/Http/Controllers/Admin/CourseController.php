@@ -8,14 +8,9 @@ use App\Models\{Course, University};
 
 class CourseController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('can:*editor');
-    }
 
     public function index(Request $request)
     {
-        $this->authorize('*editor');
 
         $query = Course::with('university');
 
@@ -35,8 +30,6 @@ class CourseController extends Controller
 
     public function create()
     {
-        $this->authorize('*editor');
-
         $universities = University::where('status', 1)->orderBy('name')->get();
 
         return view('admin.courses.create', compact('universities'));
@@ -44,7 +37,6 @@ class CourseController extends Controller
 
     public function store(Request $request)
     {
-        $this->authorize('*editor');
 
         $validated = $this->validateCourse($request);
 
@@ -57,7 +49,6 @@ class CourseController extends Controller
 
     public function edit(Course $course)
     {
-        $this->authorize('*editor');
 
         $universities = University::where('status', 1)->orderBy('name')->get();
 
@@ -66,7 +57,6 @@ class CourseController extends Controller
 
     public function update(Request $request, Course $course)
     {
-        $this->authorize('*editor');
 
         $validated = $this->validateCourse($request);
 
@@ -79,7 +69,6 @@ class CourseController extends Controller
 
     public function destroy(Course $course)
     {
-        $this->authorize('*editor');
 
         $course->delete();
 

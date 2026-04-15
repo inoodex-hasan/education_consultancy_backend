@@ -31,129 +31,109 @@
 
                     <div class="form-group">
                         <label for="country_id">Country</label>
-                        <select name="country_id" id="country_id"
-                            class="form-select {{ !$canEdit ? 'bg-gray-100 dark:bg-black/20' : '' }}"
-                            {{ !$canEdit ? 'disabled' : '' }}>
-                            <option value="">Select Country</option>
+                        <select name="country_id" id="country_id" class="form-select bg-gray-100 dark:bg-black/20" disabled>
                             @foreach ($countries as $country)
-                                <option value="{{ $country->id }}"
-                                    {{ old('country_id', $application->university->country_id ?? '') == $country->id ? 'selected' : '' }}>
+                                <option value="{{ $country->id }}" {{ old('country_id', $application->university->country_id ?? '') == $country->id ? 'selected' : '' }}>
                                     {{ $country->name }}
                                 </option>
                             @endforeach
                         </select>
-                        @if (!$canEdit)
-                            <input type="hidden" name="country_id"
-                                value="{{ old('country_id', $application->university->country_id ?? '') }}">
-                        @endif
+
+                        <input type="hidden" name="country_id"
+                            value="{{ old('country_id', $application->university->country_id ?? '') }}">
                     </div>
+
+
 
                     <div class="form-group">
                         <label for="university_id">Select University</label>
-                        <select name="university_id" id="university_id"
-                            class="form-select {{ !$canEdit ? 'bg-gray-100 dark:bg-black/20' : '' }}"
-                            {{ !$canEdit ? 'disabled' : '' }} required>
-                            <option value="">Select University</option>
+                        <select name="university_id" id="university_id" class="form-select bg-gray-100 dark:bg-black/20"
+                            disabled>
                             @foreach ($universities as $university)
-                                <option value="{{ $university->id }}"
-                                    {{ old('university_id', $application->university_id) == $university->id ? 'selected' : '' }}>
+                                <option value="{{ $university->id }}" {{ old('university_id', $application->university_id) == $university->id ? 'selected' : '' }}>
                                     {{ $university->name }}
                                 </option>
                             @endforeach
                         </select>
-                        @if (!$canEdit)
-                            <input type="hidden" name="university_id"
-                                value="{{ old('university_id', $application->university_id) }}">
-                        @endif
-                        @error('university_id')
-                            <span class="text-danger text-sm">{{ $message }}</span>
-                        @enderror
+
+                        <input type="hidden" name="university_id"
+                            value="{{ old('university_id', $application->university_id) }}">
                     </div>
+
+
 
                     <div class="form-group">
                         <label for="course_id">Select Course</label>
-                        <select name="course_id" id="course_id"
-                            class="form-select {{ !$canEdit ? 'bg-gray-100 dark:bg-black/20' : '' }}"
-                            {{ !$canEdit ? 'disabled' : '' }} required>
-                            <option value="">Select Course</option>
+                        <select name="course_id" id="course_id" class="form-select bg-gray-100 dark:bg-black/20" disabled>
                             @foreach ($courses as $course)
-                                <option value="{{ $course->id }}" data-tuition-fee="{{ $course->tuition_fee }}"
-                                    data-currency="{{ $course->currency }}"
-                                    data-exchange-rate="{{ $course->exchange_rate }}"
-                                    {{ old('course_id', $application->course_id) == $course->id ? 'selected' : '' }}>
+                                <option value="{{ $course->id }}" data-tuition-fee="{{ $course->tuition_fee }}" {{ old('course_id', $application->course_id) == $course->id ? 'selected' : '' }}>
                                     {{ $course->name }}
                                 </option>
                             @endforeach
                         </select>
-                        @if (!$canEdit)
-                            <input type="hidden" name="course_id" value="{{ old('course_id', $application->course_id) }}">
-                        @endif
-                        @error('course_id')
-                            <span class="text-danger text-sm">{{ $message }}</span>
-                        @enderror
+
+                        <input type="hidden" name="course_id" value="{{ old('course_id', $application->course_id) }}">
                     </div>
+
+
+
+
 
                     <div class="form-group">
                         <label for="course_intake_id">Select Intake</label>
                         <select name="course_intake_id" id="course_intake_id"
-                            class="form-select {{ !$canEdit ? 'bg-gray-100 dark:bg-black/20' : '' }}"
-                            {{ !$canEdit ? 'disabled' : '' }} required>
-                            <option value="">Select Intake</option>
+                            class="form-select bg-gray-100 dark:bg-black/20" disabled>
                             @foreach ($intakes as $intake)
-                                <option value="{{ $intake->id }}"
-                                    {{ old('course_intake_id', $application->course_intake_id) == $intake->id ? 'selected' : '' }}>
+                                <option value="{{ $intake->id }}" {{ old('course_intake_id', $application->course_intake_id) == $intake->id ? 'selected' : '' }}>
                                     {{ $intake->intake_name }}
                                 </option>
                             @endforeach
                         </select>
-                        @if (!$canEdit)
-                            <input type="hidden" name="course_intake_id"
-                                value="{{ old('course_intake_id', $application->course_intake_id) }}">
-                        @endif
-                        @error('course_intake_id')
-                            <span class="text-danger text-sm">{{ $message }}</span>
-                        @enderror
+
+                        <input type="hidden" name="course_intake_id"
+                            value="{{ old('course_intake_id', $application->course_intake_id) }}">
                     </div>
 
-                    <div class="grid grid-cols-1 gap-4 sm:grid-cols-1">
-                        <div class="form-group">
-                            <label for="tuition_fee">Tuition Fee</label>
-                            <input type="number" name="tuition_fee" id="tuition_fee"
-                                class="form-input {{ !$canEdit ? 'bg-gray-100 dark:bg-black/20' : '' }}"
-                                value="{{ old('tuition_fee', $application->tuition_fee) }}"
-                                {{ !$canEdit ? 'disabled' : '' }} required>
-                            @if (!$canEdit)
-                                <input type="hidden" name="tuition_fee"
-                                    value="{{ old('tuition_fee', $application->tuition_fee) }}">
-                            @endif
-                            @error('tuition_fee')
-                                <span class="text-danger text-sm">{{ $message }}</span>
-                            @enderror
-                        </div>
-                    </div>
+
+
+
+
+                    <!-- <div class="grid grid-cols-1 gap-4 sm:grid-cols-1">
+                                                                <div class="form-group">
+                                                                    <label for="tuition_fee">Tuition Fee</label>
+                                                                    <input type="number" name="tuition_fee" id="tuition_fee"
+                                                                        class="form-input {{ !$canEdit ? 'bg-gray-100 dark:bg-black/20' : '' }}"
+                                                                        value="{{ old('tuition_fee', $application->tuition_fee) }}" {{ !$canEdit ? 'disabled' : '' }} required>
+                                                                    @if (!$canEdit)
+                                                                        <input type="hidden" name="tuition_fee"
+                                                                            value="{{ old('tuition_fee', $application->tuition_fee) }}">
+                                                                    @endif
+                                                                    @error('tuition_fee')
+                                                                        <span class="text-danger text-sm">{{ $message }}</span>
+                                                                    @enderror
+                                                                </div>
+                                                            </div> -->
 
                     <!-- <div class="form-group">
-                        <label for="total_fee">Total Fee <span class="text-danger">*</span></label>
-                        <input type="number" name="total_fee" id="total_fee" step="0.01"
-                            class="form-input {{ !$canEdit ? 'bg-gray-100 dark:bg-black/20' : '' }}"
-                            value="{{ old('total_fee', $application->total_fee) }}" {{ !$canEdit ? 'disabled' : '' }}
-                            required>
-                        @if (!$canEdit)
-                            <input type="hidden" name="total_fee" value="{{ old('total_fee', $application->total_fee) }}">
-                        @endif
-                        @error('total_fee')
-                            <span class="text-danger text-sm">{{ $message }}</span>
-                        @enderror
-                    </div> -->
+                                                                    <label for="total_fee">Total Fee <span class="text-danger">*</span></label>
+                                                                    <input type="number" name="total_fee" id="total_fee" step="0.01"
+                                                                        class="form-input {{ !$canEdit ? 'bg-gray-100 dark:bg-black/20' : '' }}"
+                                                                        value="{{ old('total_fee', $application->total_fee) }}" {{ !$canEdit ? 'disabled' : '' }}
+                                                                        required>
+                                                                    @if (!$canEdit)
+                                                                        <input type="hidden" name="total_fee" value="{{ old('total_fee', $application->total_fee) }}">
+                                                                    @endif
+                                                                    @error('total_fee')
+                                                                        <span class="text-danger text-sm">{{ $message }}</span>
+                                                                    @enderror
+                                                                </div> -->
 
                     <div class="form-group">
                         <label for="status">Application Status</label>
                         <select name="status" id="status"
-                            class="form-select {{ !($canEdit || $canEditStatus) ? 'bg-gray-100 dark:bg-black/20' : '' }}"
-                            {{ !($canEdit || $canEditStatus) ? 'disabled' : '' }} required>
+                            class="form-select {{ !($canEdit || $canEditStatus) ? 'bg-gray-100 dark:bg-black/20' : '' }}" {{ !($canEdit || $canEditStatus) ? 'disabled' : '' }} required>
                             @foreach (['pending', 'ready_for_apply', 'applied', 'under_review', 'offer_issued', 'conditional_offer', 'unconditional_offer', 'rejected', 'withdrawn', 'visa_processing', 'enrolled'] as $status)
-                                <option value="{{ $status }}"
-                                    {{ old('status', $application->status) == $status ? 'selected' : '' }}>
+                                <option value="{{ $status }}" {{ old('status', $application->status) == $status ? 'selected' : '' }}>
                                     {{ ucfirst(str_replace('_', ' ', $status)) }}
                                 </option>
                             @endforeach
@@ -165,8 +145,9 @@
 
                     <div class="form-group md:col-span-2">
                         <label for="notes">Notes</label>
-                        <textarea name="notes" id="notes" class="form-input {{ !$canEdit ? 'bg-gray-100 dark:bg-black/20' : '' }}"
-                            rows="3" placeholder="Additional information..." {{ !$canEdit ? 'disabled' : '' }}>{{ old('notes', $application->notes) }}</textarea>
+                        <textarea name="notes" id="notes"
+                            class="form-input {{ !$canEdit ? 'bg-gray-100 dark:bg-black/20' : '' }}" rows="3"
+                            placeholder="Additional information..." {{ !$canEdit ? 'disabled' : '' }}>{{ old('notes', $application->notes) }}</textarea>
                         @if (!$canEdit)
                             <input type="hidden" name="notes" value="{{ old('notes', $application->notes) }}">
                         @endif
@@ -186,9 +167,8 @@
                                 <div>
                                     <label class="flex items-center gap-2 cursor-pointer">
                                         <input type="hidden" name="offer_letter_received" value="0">
-                                        <input type="checkbox" name="offer_letter_received" value="1" id="offer_letter_received"
-                                            class="form-checkbox w-5 h-5 text-primary rounded"
-                                            {{ old('offer_letter_received', $application->offer_letter_received) ? 'checked' : '' }}>
+                                        <input type="checkbox" name="offer_letter_received" value="1"
+                                            id="offer_letter_received" class="form-checkbox w-5 h-5 text-primary rounded" {{ old('offer_letter_received', $application->offer_letter_received) ? 'checked' : '' }}>
                                         <span class="text-sm font-medium">Offer Letter Received</span>
                                     </label>
                                     <input type="date" name="offer_letter_received_date" id="offer_letter_received_date"
@@ -201,8 +181,7 @@
                                     <label class="flex items-center gap-2 cursor-pointer">
                                         <input type="hidden" name="vfs_appointment" value="0">
                                         <input type="checkbox" name="vfs_appointment" value="1" id="vfs_appointment"
-                                            class="form-checkbox w-5 h-5 text-primary rounded"
-                                            {{ old('vfs_appointment', $application->vfs_appointment) ? 'checked' : '' }}>
+                                            class="form-checkbox w-5 h-5 text-primary rounded" {{ old('vfs_appointment', $application->vfs_appointment) ? 'checked' : '' }}>
                                         <span class="text-sm font-medium">VFS Appointment</span>
                                     </label>
                                     <input type="date" name="vfs_appointment_date" id="vfs_appointment_date"
@@ -215,8 +194,7 @@
                                     <label class="flex items-center gap-2 cursor-pointer">
                                         <input type="hidden" name="file_submission" value="0">
                                         <input type="checkbox" name="file_submission" value="1" id="file_submission"
-                                            class="form-checkbox w-5 h-5 text-primary rounded"
-                                            {{ old('file_submission', $application->file_submission) ? 'checked' : '' }}>
+                                            class="form-checkbox w-5 h-5 text-primary rounded" {{ old('file_submission', $application->file_submission) ? 'checked' : '' }}>
                                         <span class="text-sm font-medium">File Submission</span>
                                     </label>
                                     <input type="date" name="file_submission_date" id="file_submission_date"
@@ -231,11 +209,9 @@
                         <div class="form-group">
                             <label for="visa_status">Visa Status</label>
                             <select name="visa_status" id="visa_status"
-                                class="form-select {{ !$canEdit ? 'bg-gray-100 dark:bg-black/20' : '' }}"
-                                {{ !$canEdit ? 'disabled' : '' }}>
+                                class="form-select {{ !$canEdit ? 'bg-gray-100 dark:bg-black/20' : '' }}" {{ !$canEdit ? 'disabled' : '' }}>
                                 @foreach (['not_applied', 'pending', 'approved', 'rejected'] as $status)
-                                    <option value="{{ $status }}"
-                                        {{ old('visa_status', $application->visa_status) == $status ? 'selected' : '' }}>
+                                    <option value="{{ $status }}" {{ old('visa_status', $application->visa_status) == $status ? 'selected' : '' }}>
                                         {{ ucfirst(str_replace('_', ' ', $status)) }}
                                     </option>
                                 @endforeach
@@ -255,11 +231,9 @@
                         <div class="form-group">
                             <label for="tuition_fee_status">Tuition Fee Status</label>
                             <select name="tuition_fee_status" id="tuition_fee_status"
-                                class="form-select {{ !$canEdit ? 'bg-gray-100 dark:bg-black/20' : '' }}"
-                                {{ !$canEdit ? 'disabled' : '' }}>
+                                class="form-select {{ !$canEdit ? 'bg-gray-100 dark:bg-black/20' : '' }}" {{ !$canEdit ? 'disabled' : '' }}>
                                 @foreach (['pending', 'paid', 'partial'] as $status)
-                                    <option value="{{ $status }}"
-                                        {{ old('tuition_fee_status', $application->tuition_fee_status) == $status ? 'selected' : '' }}>
+                                    <option value="{{ $status }}" {{ old('tuition_fee_status', $application->tuition_fee_status) == $status ? 'selected' : '' }}>
                                         {{ ucfirst($status) }}
                                     </option>
                                 @endforeach
@@ -270,11 +244,9 @@
                         <div class="form-group">
                             <label for="service_charge_status">Service Charge Status</label>
                             <select name="service_charge_status" id="service_charge_status"
-                                class="form-select {{ !$canEdit ? 'bg-gray-100 dark:bg-black/20' : '' }}"
-                                {{ !$canEdit ? 'disabled' : '' }}>
+                                class="form-select {{ !$canEdit ? 'bg-gray-100 dark:bg-black/20' : '' }}" {{ !$canEdit ? 'disabled' : '' }}>
                                 @foreach (['pending', 'paid', 'partial'] as $status)
-                                    <option value="{{ $status }}"
-                                        {{ old('service_charge_status', $application->service_charge_status) == $status ? 'selected' : '' }}>
+                                    <option value="{{ $status }}" {{ old('service_charge_status', $application->service_charge_status) == $status ? 'selected' : '' }}>
                                         {{ ucfirst($status) }}
                                     </option>
                                 @endforeach
@@ -285,11 +257,9 @@
                         <div class="form-group">
                             <label for="application_priority">Application Priority</label>
                             <select name="application_priority" id="application_priority"
-                                class="form-select {{ !$canEdit ? 'bg-gray-100 dark:bg-black/20' : '' }}"
-                                {{ !$canEdit ? 'disabled' : '' }}>
+                                class="form-select {{ !$canEdit ? 'bg-gray-100 dark:bg-black/20' : '' }}" {{ !$canEdit ? 'disabled' : '' }}>
                                 @foreach (['normal', 'priority', 'vip'] as $priority)
-                                    <option value="{{ $priority }}"
-                                        {{ old('application_priority', $application->application_priority) == $priority ? 'selected' : '' }}>
+                                    <option value="{{ $priority }}" {{ old('application_priority', $application->application_priority) == $priority ? 'selected' : '' }}>
                                         {{ ucfirst($priority) }}
                                     </option>
                                 @endforeach
@@ -300,11 +270,9 @@
                         <div class="form-group">
                             <label for="final_status">Final Status</label>
                             <select name="final_status" id="final_status"
-                                class="form-select {{ !$canEdit ? 'bg-gray-100 dark:bg-black/20' : '' }}"
-                                {{ !$canEdit ? 'disabled' : '' }}>
+                                class="form-select {{ !$canEdit ? 'bg-gray-100 dark:bg-black/20' : '' }}" {{ !$canEdit ? 'disabled' : '' }}>
                                 @foreach (['pending', 'in_progress', 'completed', 'cancelled'] as $status)
-                                    <option value="{{ $status }}"
-                                        {{ old('final_status', $application->final_status) == $status ? 'selected' : '' }}>
+                                    <option value="{{ $status }}" {{ old('final_status', $application->final_status) == $status ? 'selected' : '' }}>
                                         {{ ucfirst(str_replace('_', ' ', $status)) }}
                                     </option>
                                 @endforeach
@@ -317,41 +285,36 @@
                             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
                                 <label class="flex items-center gap-2 cursor-pointer">
                                     <input type="hidden" name="security_deposit_status" value="0">
-                                    <input type="checkbox" name="security_deposit_status" value="1" id="security_deposit_status"
-                                        class="form-checkbox w-5 h-5 text-primary rounded"
-                                        {{ old('security_deposit_status', $application->security_deposit_status) ? 'checked' : '' }}>
+                                    <input type="checkbox" name="security_deposit_status" value="1"
+                                        id="security_deposit_status" class="form-checkbox w-5 h-5 text-primary rounded" {{ old('security_deposit_status', $application->security_deposit_status) ? 'checked' : '' }}>
                                     <span class="text-sm font-medium">Security Deposit</span>
                                 </label>
 
                                 <label class="flex items-center gap-2 cursor-pointer">
                                     <input type="hidden" name="cvu_fee_status" value="0">
                                     <input type="checkbox" name="cvu_fee_status" value="1" id="cvu_fee_status"
-                                        class="form-checkbox w-5 h-5 text-primary rounded"
-                                        {{ old('cvu_fee_status', $application->cvu_fee_status) ? 'checked' : '' }}>
+                                        class="form-checkbox w-5 h-5 text-primary rounded" {{ old('cvu_fee_status', $application->cvu_fee_status) ? 'checked' : '' }}>
                                     <span class="text-sm font-medium">CVU Fee</span>
                                 </label>
 
                                 <label class="flex items-center gap-2 cursor-pointer">
                                     <input type="hidden" name="admission_fee_status" value="0">
                                     <input type="checkbox" name="admission_fee_status" value="1" id="admission_fee_status"
-                                        class="form-checkbox w-5 h-5 text-primary rounded"
-                                        {{ old('admission_fee_status', $application->admission_fee_status) ? 'checked' : '' }}>
+                                        class="form-checkbox w-5 h-5 text-primary rounded" {{ old('admission_fee_status', $application->admission_fee_status) ? 'checked' : '' }}>
                                     <span class="text-sm font-medium">Admission Fee</span>
                                 </label>
 
                                 <label class="flex items-center gap-2 cursor-pointer">
                                     <input type="hidden" name="final_payment_status" value="0">
                                     <input type="checkbox" name="final_payment_status" value="1" id="final_payment_status"
-                                        class="form-checkbox w-5 h-5 text-primary rounded"
-                                        {{ old('final_payment_status', $application->final_payment_status) ? 'checked' : '' }}>
+                                        class="form-checkbox w-5 h-5 text-primary rounded" {{ old('final_payment_status', $application->final_payment_status) ? 'checked' : '' }}>
                                     <span class="text-sm font-medium">Final Payment</span>
                                 </label>
 
                                 <label class="flex items-center gap-2 cursor-pointer">
                                     <input type="hidden" name="emgs_payment_status" value="0">
                                     <input type="checkbox" name="emgs_payment_status" value="1" id="emgs_payment_status"
-                                        class="form-checkbox w-5 h-5 text-primary rounded"
-                                        {{ old('emgs_payment_status', $application->emgs_payment_status) ? 'checked' : '' }}>
+                                        class="form-checkbox w-5 h-5 text-primary rounded" {{ old('emgs_payment_status', $application->emgs_payment_status) ? 'checked' : '' }}>
                                     <span class="text-sm font-medium">EMGS Payment</span>
                                 </label>
                             </div>
@@ -360,8 +323,9 @@
                         {{-- Internal Notes --}}
                         <div class="form-group md:col-span-2">
                             <label for="internal_notes">Internal Notes</label>
-                            <textarea name="internal_notes" id="internal_notes" class="form-input {{ !$canEdit ? 'bg-gray-100 dark:bg-black/20' : '' }}"
-                                rows="3" placeholder="Staff-only notes..." {{ !$canEdit ? 'disabled' : '' }}>{{ old('internal_notes', $application->internal_notes) }}</textarea>
+                            <textarea name="internal_notes" id="internal_notes"
+                                class="form-input {{ !$canEdit ? 'bg-gray-100 dark:bg-black/20' : '' }}" rows="3"
+                                placeholder="Staff-only notes..." {{ !$canEdit ? 'disabled' : '' }}>{{ old('internal_notes', $application->internal_notes) }}</textarea>
                         </div>
                     </div>
                 </div>
@@ -416,18 +380,18 @@
                 </div>
             </div>
         </div>
-    @endsection
+@endsection
 
     @push('scripts')
         <script>
-            document.addEventListener('DOMContentLoaded', function() {
+            document.addEventListener('DOMContentLoaded', function () {
                 // Auto-fill dates when checkboxes are ticked
                 function setupAutoDate(checkboxId, dateInputId) {
                     const checkbox = document.getElementById(checkboxId);
                     const dateInput = document.getElementById(dateInputId);
 
                     if (checkbox && dateInput) {
-                        checkbox.addEventListener('change', function() {
+                        checkbox.addEventListener('change', function () {
                             if (this.checked) {
                                 const today = new Date();
                                 const yyyy = today.getFullYear();
@@ -450,7 +414,7 @@
                 const visaDecisionDateInput = document.getElementById('visa_decision_date');
 
                 if (visaStatusSelect && visaDecisionDateInput) {
-                    visaStatusSelect.addEventListener('change', function() {
+                    visaStatusSelect.addEventListener('change', function () {
                         if (this.value === 'approved' || this.value === 'rejected') {
                             const today = new Date();
                             const yyyy = today.getFullYear();
@@ -497,71 +461,71 @@
                     // No longer needed
                 }
 
-                countrySelect.addEventListener('change', function() {
-                    const countryId = this.value;
-                    universitySelect.innerHTML = '<option value="">Select University</option>';
-                    courseSelect.innerHTML = '<option value="">Select Course</option>';
-                    intakeSelect.innerHTML = '<option value="">Select Intake</option>';
+                // countrySelect.addEventListener('change', function () {
+                //     const countryId = this.value;
+                //     universitySelect.innerHTML = '<option value="">Select University</option>';
+                //     courseSelect.innerHTML = '<option value="">Select Course</option>';
+                //     intakeSelect.innerHTML = '<option value="">Select Intake</option>';
 
-                    if (countryId) {
-                        fetch(`{{ route('admin.applications.get-universities') }}?country_id=${countryId}`)
-                            .then(response => response.json())
-                            .then(data => {
-                                data.forEach(university => {
-                                    const option = document.createElement('option');
-                                    option.value = university.id;
-                                    option.textContent = university.name;
-                                    universitySelect.appendChild(option);
-                                });
-                            });
-                    }
-                });
+                //     if (countryId) {
+                //         fetch(`{{ route('admin.applications.get-universities') }}?country_id=${countryId}`)
+                //             .then(response => response.json())
+                //             .then(data => {
+                //                 data.forEach(university => {
+                //                     const option = document.createElement('option');
+                //                     option.value = university.id;
+                //                     option.textContent = university.name;
+                //                     universitySelect.appendChild(option);
+                //                 });
+                //             });
+                //     }
+                // });
 
-                universitySelect.addEventListener('change', function() {
-                    const universityId = this.value;
-                    courseSelect.innerHTML = '<option value="">Select Course</option>';
-                    intakeSelect.innerHTML = '<option value="">Select Intake</option>';
+                // universitySelect.addEventListener('change', function () {
+                //     const universityId = this.value;
+                //     courseSelect.innerHTML = '<option value="">Select Course</option>';
+                //     intakeSelect.innerHTML = '<option value="">Select Intake</option>';
 
-                    if (universityId) {
-                        fetch(`{{ route('admin.applications.get-courses') }}?university_id=${universityId}`)
-                            .then(response => response.json())
-                            .then(data => {
-                                data.forEach(course => {
-                                    const option = document.createElement('option');
-                                    option.value = course.id;
-                                    option.textContent = course.name;
-                                    option.dataset.tuitionFee = course.tuition_fee;
-                                    courseSelect.appendChild(option);
-                                });
-                            });
-                    }
-                });
+                //     if (universityId) {
+                //         fetch(`{{ route('admin.applications.get-courses') }}?university_id=${universityId}`)
+                //             .then(response => response.json())
+                //             .then(data => {
+                //                 data.forEach(course => {
+                //                     const option = document.createElement('option');
+                //                     option.value = course.id;
+                //                     option.textContent = course.name;
+                //                     option.dataset.tuitionFee = course.tuition_fee;
+                //                     courseSelect.appendChild(option);
+                //                 });
+                //             });
+                //     }
+                // });
 
-                courseSelect.addEventListener('change', function() {
-                    const courseId = this.value;
-                    intakeSelect.innerHTML = '<option value="">Select Intake</option>';
-                    tuitionFeeInput.value = '';
-                    currencyInput.value = '';
+                // courseSelect.addEventListener('change', function () {
+                //     const courseId = this.value;
+                //     intakeSelect.innerHTML = '<option value="">Select Intake</option>';
+                //     tuitionFeeInput.value = '';
+                //     currencyInput.value = '';
 
-                    const selectedOption = this.options[this.selectedIndex];
-                    if (selectedOption && selectedOption.dataset.tuitionFee) {
-                        tuitionFeeInput.value = selectedOption.dataset.tuitionFee;
-                        totalFeeInput.value = selectedOption.dataset.tuitionFee;
-                    }
+                //     const selectedOption = this.options[this.selectedIndex];
+                //     if (selectedOption && selectedOption.dataset.tuitionFee) {
+                //         tuitionFeeInput.value = selectedOption.dataset.tuitionFee;
+                //         totalFeeInput.value = selectedOption.dataset.tuitionFee;
+                //     }
 
-                    if (courseId) {
-                        fetch(`{{ route('admin.applications.get-intakes') }}?course_id=${courseId}`)
-                            .then(response => response.json())
-                            .then(data => {
-                                data.forEach(intake => {
-                                    const option = document.createElement('option');
-                                    option.value = intake.id;
-                                    option.textContent = intake.intake_name;
-                                    intakeSelect.appendChild(option);
-                                });
-                            });
-                    }
-                });
+                //     if (courseId) {
+                //         fetch(`{{ route('admin.applications.get-intakes') }}?course_id=${courseId}`)
+                //             .then(response => response.json())
+                //             .then(data => {
+                //                 data.forEach(intake => {
+                //                     const option = document.createElement('option');
+                //                     option.value = intake.id;
+                //                     option.textContent = intake.intake_name;
+                //                     intakeSelect.appendChild(option);
+                //                 });
+                //             });
+                //     }
+                // });
 
                 // Initial calculation
                 // calculateBDT();  // Removed

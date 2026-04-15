@@ -12,15 +12,9 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class SalaryController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('can:*accountant');
-    }
 
     public function index(Request $request)
     {
-        $this->authorize('*accountant');
-
         $query = Salary::with(['user', 'creator']);
 
         if ($search = $request->get('search')) {
@@ -54,7 +48,6 @@ class SalaryController extends Controller
 
     public function create()
     {
-        $this->authorize('*accountant');
 
         $users = User::whereDoesntHave('roles', function ($q) {
             $q->where('name', 'admin');
@@ -68,7 +61,6 @@ class SalaryController extends Controller
 
     public function store(Request $request)
     {
-        $this->authorize('*accountant');
 
         $validated = $this->validateSalary($request);
 
@@ -81,7 +73,6 @@ class SalaryController extends Controller
 
     public function show(Salary $salary)
     {
-        $this->authorize('*accountant');
 
         $salary->load(['user', 'creator']);
 
@@ -90,7 +81,6 @@ class SalaryController extends Controller
 
     public function edit(Salary $salary)
     {
-        $this->authorize('*accountant');
 
         $users = User::whereDoesntHave('roles', function ($q) {
             $q->where('name', 'admin');
@@ -101,7 +91,6 @@ class SalaryController extends Controller
 
     public function update(Request $request, Salary $salary)
     {
-        $this->authorize('*accountant');
 
         $validated = $this->validateSalary($request);
 
@@ -114,7 +103,6 @@ class SalaryController extends Controller
 
     public function destroy(Salary $salary)
     {
-        $this->authorize('*accountant');
 
         $salary->delete();
 
@@ -125,7 +113,6 @@ class SalaryController extends Controller
 
     public function markAsPaid(Request $request, Salary $salary)
     {
-        $this->authorize('*accountant');
 
         $validated = $request->validate([
             'payment_date' => ['required', 'date'],
@@ -152,8 +139,6 @@ class SalaryController extends Controller
 
     public function generate(Request $request)
     {
-        $this->authorize('*accountant');
-
         // Get all users as employees (excluding admins)
         $employees = User::whereDoesntHave('roles', function ($q) {
             $q->where('name', 'admin');
@@ -214,8 +199,6 @@ class SalaryController extends Controller
 
     public function bulkStore(Request $request)
     {
-        $this->authorize('*accountant');
-
         $validated = $request->validate([
             'month' => ['required', 'string', 'regex:/^\d{4}-(0[1-9]|1[0-2])$/'],
             'salaries' => ['required', 'array'],
@@ -258,7 +241,6 @@ class SalaryController extends Controller
 
     public function bulkUpdateBasicSalary(Request $request)
     {
-        $this->authorize('*accountant');
 
         $validated = $request->validate([
             'employees' => ['required', 'array'],
@@ -280,7 +262,6 @@ class SalaryController extends Controller
 
     public function bulkUpdateAccountDetails(Request $request)
     {
-        $this->authorize('*accountant');
 
         $validated = $request->validate([
             'employees' => ['required', 'array'],
@@ -348,7 +329,6 @@ class SalaryController extends Controller
 
     public function bulkPayForm(Request $request)
     {
-        $this->authorize('*accountant');
 
         $salaryIds = $request->get('salary_ids', []);
 
@@ -387,7 +367,6 @@ class SalaryController extends Controller
 
     public function bulkPay(Request $request)
     {
-        $this->authorize('*accountant');
 
         $validated = $request->validate([
             'salary_ids' => ['required', 'array'],
@@ -466,7 +445,6 @@ class SalaryController extends Controller
 
     public function exportExcel(Request $request)
     {
-        $this->authorize('*accountant');
 
         $month = $request->get('month', now()->format('Y-m'));
 
@@ -478,7 +456,6 @@ class SalaryController extends Controller
 
     public function exportPdf(Request $request)
     {
-        $this->authorize('*accountant');
 
         $month = $request->get('month', now()->format('Y-m'));
 

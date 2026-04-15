@@ -9,14 +9,8 @@ use Illuminate\Http\Request;
 
 class CourseIntakeController extends Controller
 {
-
-    public function __construct()
-    {
-        $this->middleware('can:*editor');
-    }
     public function index(Request $request)
     {
-        $this->authorize('*editor');
 
         $query = CourseIntake::with('course.university');
 
@@ -36,7 +30,6 @@ class CourseIntakeController extends Controller
 
     public function create()
     {
-        $this->authorize('*editor');
 
         $courses = Course::where('status', 1)->orderBy('name')->get();
 
@@ -45,7 +38,6 @@ class CourseIntakeController extends Controller
 
     public function store(Request $request)
     {
-        $this->authorize('*editor');
 
         $validated = $this->validateIntake($request);
 
@@ -58,7 +50,6 @@ class CourseIntakeController extends Controller
 
     public function edit(CourseIntake $courseIntake)
     {
-        $this->authorize('*editor');
 
         $courses = Course::where('status', 1)->orderBy('name')->get();
 
@@ -67,7 +58,6 @@ class CourseIntakeController extends Controller
 
     public function update(Request $request, CourseIntake $courseIntake)
     {
-        $this->authorize('*editor');
 
         $validated = $this->validateIntake($request);
 
@@ -80,7 +70,6 @@ class CourseIntakeController extends Controller
 
     public function destroy(CourseIntake $courseIntake)
     {
-        $this->authorize('*editor');
 
         $courseIntake->delete();
 

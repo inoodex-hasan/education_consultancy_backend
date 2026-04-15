@@ -17,7 +17,6 @@ class PaymentController extends Controller
 
     public function __construct(CommissionService $commissionService)
     {
-        $this->middleware('can:*accountant');
         $this->commissionService = $commissionService;
     }
 

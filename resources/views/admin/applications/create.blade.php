@@ -96,14 +96,14 @@
                         @error('course_intake_id') <span class="text-danger text-sm">{{ $message }}</span> @enderror
                     </div>
 
-                    <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
+                    <!-- <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
                         <div class="form-group">
                             <label for="tuition_fee">Tuition Fee</label>
                             <input type="number" name="tuition_fee" id="tuition_fee" class="form-input"
                                 value="{{ old('tuition_fee') }}" required>
                             @error('tuition_fee') <span class="text-danger text-sm">{{ $message }}</span> @enderror
                         </div>
-                    </div>
+                    </div> -->
 
                     <!-- <div class="form-group">
                             <label for="total_fee">Total Fee <span class="text-danger">*</span></label>
@@ -142,6 +142,244 @@
 
 @push('scripts')
     <script src="{{ asset('assets/js/nice-select2.js') }}"></script>
+<!-- <script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    const studentSelect = document.getElementById('student_id');
+    const countrySelect = document.getElementById('country_id');
+    const universitySelect = document.getElementById('university_id');
+    const courseSelect = document.getElementById('course_id');
+    const intakeSelect = document.getElementById('course_intake_id');
+    const tuitionFeeInput = document.getElementById('tuition_fee');
+
+    // Safety check
+    if (!studentSelect || !countrySelect || !universitySelect || !courseSelect || !intakeSelect) {
+        console.error('Missing required select elements');
+        return;
+    }
+
+    // NiceSelect init (safe)
+    if (typeof NiceSelect !== 'undefined') {
+        NiceSelect.bind(studentSelect, {
+            searchable: true,
+            placeholder: 'Select Student (Search by Name, Phone or Email)'
+        });
+    }
+
+    // ----------------------
+    // SAFE FETCH
+    // ----------------------
+    function safeFetch(url) {
+        return fetch(url, {
+            method: 'GET',
+            credentials: 'same-origin',
+            headers: {
+                'Accept': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        }).then(res => {
+            if (!res.ok) throw new Error('HTTP Error ' + res.status);
+            return res.json();
+        });
+    }
+
+    function clearDropdown(select, placeholder) {
+        select.innerHTML = `<option value="">${placeholder}</option>`;
+    }
+
+    function toggleFields(disabled) {
+        [countrySelect, universitySelect, courseSelect, intakeSelect].forEach(el => {
+            el.disabled = disabled;
+        });
+    }
+
+    // =====================
+    // STUDENT CHANGE
+    // =====================
+    studentSelect.addEventListener('change', function () {
+
+        const studentId = this.value;
+
+        toggleFields(false);
+
+        if (!studentId) {
+            countrySelect.value = '';
+            clearDropdown(universitySelect, 'Select University');
+            clearDropdown(courseSelect, 'Select Course');
+            clearDropdown(intakeSelect, 'Select Intake');
+            tuitionFeeInput.value = '';
+            return;
+        }
+
+        safeFetch(`{{ route('admin.applications.get-student-details') }}?student_id=${studentId}`)
+            .then(data => {
+
+                if (!data.country_id) return;
+
+                countrySelect.value = data.country_id;
+
+                return safeFetch(`{{ route('admin.applications.get-universities') }}?country_id=${data.country_id}`)
+                    .then(universities => {
+
+                        clearDropdown(universitySelect, 'Select University');
+
+                        universities.forEach(u => {
+                            const option = document.createElement('option');
+                            option.value = u.id;
+                            option.textContent = u.name;
+                            universitySelect.appendChild(option);
+                        });
+
+                        if (!data.university_id) return;
+
+                        universitySelect.value = data.university_id;
+
+                        return safeFetch(`{{ route('admin.applications.get-courses') }}?university_id=${data.university_id}`)
+                            .then(courses => {
+
+                                clearDropdown(courseSelect, 'Select Course');
+
+                                courses.forEach(c => {
+                                    const option = document.createElement('option');
+                                    option.value = c.id;
+                                    option.textContent = c.name;
+
+                                    // SAFE tuition fee handling
+                                    option.dataset.tuitionFee = c.tuition_fee ?? '';
+
+                                    courseSelect.appendChild(option);
+                                });
+
+                                if (!data.course_id) return;
+
+                                courseSelect.value = data.course_id;
+
+                                // trigger intake load
+                                courseSelect.dispatchEvent(new Event('change'));
+
+                                return safeFetch(`{{ route('admin.applications.get-intakes') }}?course_id=${data.course_id}`)
+                                    .then(intakes => {
+
+                                        clearDropdown(intakeSelect, 'Select Intake');
+
+                                        intakes.forEach(i => {
+                                            const option = document.createElement('option');
+                                            option.value = i.id;
+                                            option.textContent = i.intake_name;
+                                            intakeSelect.appendChild(option);
+                                        });
+
+                                        if (data.course_intake_id) {
+                                            intakeSelect.value = data.course_intake_id;
+                                        }
+
+                                        toggleFields(true);
+                                    });
+                            });
+                    });
+            })
+            .catch(err => console.error('Student load error:', err));
+    });
+
+    // =====================
+    // COUNTRY CHANGE
+    // =====================
+    countrySelect.addEventListener('change', function () {
+
+        const countryId = this.value;
+
+        clearDropdown(universitySelect, 'Select University');
+        clearDropdown(courseSelect, 'Select Course');
+        clearDropdown(intakeSelect, 'Select Intake');
+        tuitionFeeInput.value = '';
+
+        if (!countryId) return;
+
+        safeFetch(`{{ route('admin.applications.get-universities') }}?country_id=${countryId}`)
+            .then(data => {
+
+                data.forEach(u => {
+                    const option = document.createElement('option');
+                    option.value = u.id;
+                    option.textContent = u.name;
+                    universitySelect.appendChild(option);
+                });
+
+            })
+            .catch(err => console.error('University load error:', err));
+    });
+
+    // =====================
+    // UNIVERSITY CHANGE
+    // =====================
+    universitySelect.addEventListener('change', function () {
+
+        const universityId = this.value;
+
+        clearDropdown(courseSelect, 'Select Course');
+        clearDropdown(intakeSelect, 'Select Intake');
+        tuitionFeeInput.value = '';
+
+        if (!universityId) return;
+
+        safeFetch(`{{ route('admin.applications.get-courses') }}?university_id=${universityId}`)
+            .then(data => {
+
+                data.forEach(c => {
+                    const option = document.createElement('option');
+                    option.value = c.id;
+                    option.textContent = c.name;
+                    option.dataset.tuitionFee = c.tuition_fee ?? '';
+                    courseSelect.appendChild(option);
+                });
+
+            })
+            .catch(err => console.error('Course load error:', err));
+    });
+
+    // =====================
+    // COURSE CHANGE
+    // =====================
+    courseSelect.addEventListener('change', function () {
+
+        const courseId = this.value;
+
+        clearDropdown(intakeSelect, 'Select Intake');
+
+        const selected = this.options[this.selectedIndex];
+
+const fee = selected?.dataset?.tuitionFee;
+
+tuitionFeeInput.value =
+    fee === undefined || fee === null || fee === "null"
+        ? '0'
+        : fee;
+
+        if (!courseId) return;
+
+        safeFetch(`{{ route('admin.applications.get-intakes') }}?course_id=${courseId}`)
+            .then(data => {
+
+                data.forEach(i => {
+                    const option = document.createElement('option');
+                    option.value = i.id;
+                    option.textContent = i.intake_name;
+                    intakeSelect.appendChild(option);
+                });
+
+            })
+            .catch(err => console.error('Intake load error:', err));
+    });
+
+    // =====================
+    // AUTO TRIGGER
+    // =====================
+    if (studentSelect.value) {
+        studentSelect.dispatchEvent(new Event('change'));
+    }
+
+});
+</script> -->
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const studentSelect = document.getElementById('student_id');
@@ -157,9 +395,8 @@
             const courseSelect = document.getElementById('course_id');
             const intakeSelect = document.getElementById('course_intake_id');
             const tuitionFeeInput = document.getElementById('tuition_fee');
-            const currencyInput = document.getElementById('currency');
             const bdtAmountInput = document.getElementById('bdt_amount');
-            const totalFeeInput = document.getElementById('total_fee');
+            // const totalFeeInput = document.getElementById('total_fee');
 
             function toggleAcademicFields(disabled) {
                 const fields = [countrySelect, universitySelect, courseSelect, intakeSelect];
@@ -220,7 +457,7 @@
                                                         option.value = course.id;
                                                         option.textContent = course.name;
                                                         option.dataset.tuitionFee = course.tuition_fee;
-                                                        option.dataset.currency = course.currency;
+                                                        // option.dataset.currency = course.currency;
                                                         option.dataset.exchangeRate = course.exchange_rate;
                                                         courseSelect.appendChild(option);
                                                     });
@@ -228,10 +465,10 @@
                                                     if (data.course_id) {
                                                         courseSelect.value = data.course_id;
                                                         const selectedOption = courseSelect.options[courseSelect.selectedIndex];
-                                                        if (selectedOption && selectedOption.dataset.tuitionFee) {
-                                                            tuitionFeeInput.value = selectedOption.dataset.tuitionFee;
-                                                            totalFeeInput.value = selectedOption.dataset.tuitionFee;
-                                                        }
+                                                        // if (selectedOption && selectedOption.dataset.tuitionFee) {
+                                                        //     // tuitionFeeInput.value = selectedOption.dataset.tuitionFee;
+                                                        //     // totalFeeInput.value = selectedOption.dataset.tuitionFee;
+                                                        // }
 
                                                         // Load intakes
                                                         fetch(`{{ route('admin.applications.get-intakes') }}?course_id=${data.course_id}`)
@@ -311,7 +548,7 @@
                                 option.value = course.id;
                                 option.textContent = course.name;
                                 option.dataset.tuitionFee = course.tuition_fee;
-                                option.dataset.currency = course.currency;
+                                // option.dataset.currency = course.currency;
                                 option.dataset.exchangeRate = course.exchange_rate;
                                 courseSelect.appendChild(option);
                             });
@@ -323,7 +560,6 @@
                 const courseId = this.value;
                 intakeSelect.innerHTML = '<option value="">Select Intake</option>';
                 tuitionFeeInput.value = '';
-                currencyInput.value = '';
 
                 const selectedOption = this.options[this.selectedIndex];
                 if (selectedOption && selectedOption.dataset.tuitionFee) {

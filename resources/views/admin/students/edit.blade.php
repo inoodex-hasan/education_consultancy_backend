@@ -75,8 +75,8 @@
                     @error('email') <span class="text-danger text-sm">{{ $message }}</span> @enderror
                 </div>
                 <div class="form-group">
-                    <label for="password">Change Portal Password</label>
-                    <input type="password" name="password" id="password" class="form-input" placeholder="Leave blank to keep current" />
+                    <label for="password">Password</label>
+                    <input type="text" name="password" id="password" class="form-input" placeholder="Leave blank to keep current" />
                     @error('password') <span class="text-danger text-sm">{{ $message }}</span> @enderror
                 </div>
                 <div class="form-group md:col-span-2">

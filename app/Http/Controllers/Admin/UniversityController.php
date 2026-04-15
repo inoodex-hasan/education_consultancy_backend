@@ -8,14 +8,9 @@ use App\Models\{Country, University};
 
 class UniversityController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('can:*editor');
-    }
 
     public function index(Request $request)
     {
-        $this->authorize('*editor');
 
         $query = University::with('country');
 
@@ -35,7 +30,6 @@ class UniversityController extends Controller
 
     public function create()
     {
-        $this->authorize('*editor');
 
         $countries = Country::where('status', 1)->orderBy('name')->get();
 
@@ -44,7 +38,6 @@ class UniversityController extends Controller
 
     public function store(Request $request)
     {
-        $this->authorize('*editor');
 
         $validated = $this->validateUniversity($request);
 
@@ -57,7 +50,6 @@ class UniversityController extends Controller
 
     public function edit(University $university)
     {
-        $this->authorize('*editor');
 
         $countries = Country::where('status', 1)->orderBy('name')->get();
 
@@ -66,7 +58,6 @@ class UniversityController extends Controller
 
     public function update(Request $request, University $university)
     {
-        $this->authorize('*editor');
 
         $validated = $this->validateUniversity($request);
 
@@ -79,7 +70,6 @@ class UniversityController extends Controller
 
     public function destroy(University $university)
     {
-        $this->authorize('*editor');
 
         $university->delete();
 

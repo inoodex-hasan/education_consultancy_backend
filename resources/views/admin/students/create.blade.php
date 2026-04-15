@@ -89,8 +89,8 @@
                     @enderror
                 </div>
                 <div class="form-group">
-                    <label for="password">Portal Password</label>
-                    <input type="password" name="password" id="password" class="form-input" />
+                    <label for="password">Password <span class="text-danger">*</span></label>
+                    <input type="text" name="password" id="password" class="form-input" required />
                     @error('password')
                         <span class="text-danger text-sm">{{ $message }}</span>
                     @enderror

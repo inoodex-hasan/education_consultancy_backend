@@ -10,10 +10,6 @@ use Illuminate\Validation\Rule;
 
 class BudgetController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('can:*accountant');
-    }
 
     public function index(Request $request)
     {
