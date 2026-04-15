@@ -116,19 +116,19 @@ class JournalEntryController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(JournalEntry $entry)
+    public function show(JournalEntry $journalEntry)
     {
-        $entry->load(['items.chartOfAccount', 'period', 'creator', 'application.student']);
-        return view('admin.accounts.journal-entries.show', compact('entry'));
+        $journalEntry->load(['items.chartOfAccount', 'period', 'creator', 'application.student']);
+        return view('admin.accounts.journal-entries.show', compact('journalEntry'));
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(JournalEntry $entry)
+    public function destroy(JournalEntry $journalEntry)
     {
         // Logic to prevent deletion if reconciled (future)
-        $entry->delete();
+        $journalEntry->delete();
         return redirect()->back()->with('success', 'Journal entry deleted.');
     }
 }

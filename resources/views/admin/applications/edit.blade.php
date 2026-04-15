@@ -99,34 +99,34 @@
 
 
                     <!-- <div class="grid grid-cols-1 gap-4 sm:grid-cols-1">
-                                                                <div class="form-group">
-                                                                    <label for="tuition_fee">Tuition Fee</label>
-                                                                    <input type="number" name="tuition_fee" id="tuition_fee"
-                                                                        class="form-input {{ !$canEdit ? 'bg-gray-100 dark:bg-black/20' : '' }}"
-                                                                        value="{{ old('tuition_fee', $application->tuition_fee) }}" {{ !$canEdit ? 'disabled' : '' }} required>
-                                                                    @if (!$canEdit)
-                                                                        <input type="hidden" name="tuition_fee"
-                                                                            value="{{ old('tuition_fee', $application->tuition_fee) }}">
-                                                                    @endif
-                                                                    @error('tuition_fee')
-                                                                        <span class="text-danger text-sm">{{ $message }}</span>
-                                                                    @enderror
-                                                                </div>
-                                                            </div> -->
+                                                                    <div class="form-group">
+                                                                        <label for="tuition_fee">Tuition Fee</label>
+                                                                        <input type="number" name="tuition_fee" id="tuition_fee"
+                                                                            class="form-input {{ !$canEdit ? 'bg-gray-100 dark:bg-black/20' : '' }}"
+                                                                            value="{{ old('tuition_fee', $application->tuition_fee) }}" {{ !$canEdit ? 'disabled' : '' }} required>
+                                                                        @if (!$canEdit)
+                                                                            <input type="hidden" name="tuition_fee"
+                                                                                value="{{ old('tuition_fee', $application->tuition_fee) }}">
+                                                                        @endif
+                                                                        @error('tuition_fee')
+                                                                            <span class="text-danger text-sm">{{ $message }}</span>
+                                                                        @enderror
+                                                                    </div>
+                                                                </div> -->
 
                     <!-- <div class="form-group">
-                                                                    <label for="total_fee">Total Fee <span class="text-danger">*</span></label>
-                                                                    <input type="number" name="total_fee" id="total_fee" step="0.01"
-                                                                        class="form-input {{ !$canEdit ? 'bg-gray-100 dark:bg-black/20' : '' }}"
-                                                                        value="{{ old('total_fee', $application->total_fee) }}" {{ !$canEdit ? 'disabled' : '' }}
-                                                                        required>
-                                                                    @if (!$canEdit)
-                                                                        <input type="hidden" name="total_fee" value="{{ old('total_fee', $application->total_fee) }}">
-                                                                    @endif
-                                                                    @error('total_fee')
-                                                                        <span class="text-danger text-sm">{{ $message }}</span>
-                                                                    @enderror
-                                                                </div> -->
+                                                                        <label for="total_fee">Total Fee <span class="text-danger">*</span></label>
+                                                                        <input type="number" name="total_fee" id="total_fee" step="0.01"
+                                                                            class="form-input {{ !$canEdit ? 'bg-gray-100 dark:bg-black/20' : '' }}"
+                                                                            value="{{ old('total_fee', $application->total_fee) }}" {{ !$canEdit ? 'disabled' : '' }}
+                                                                            required>
+                                                                        @if (!$canEdit)
+                                                                            <input type="hidden" name="total_fee" value="{{ old('total_fee', $application->total_fee) }}">
+                                                                        @endif
+                                                                        @error('total_fee')
+                                                                            <span class="text-danger text-sm">{{ $message }}</span>
+                                                                        @enderror
+                                                                    </div> -->
 
                     <div class="form-group">
                         <label for="status">Application Status</label>

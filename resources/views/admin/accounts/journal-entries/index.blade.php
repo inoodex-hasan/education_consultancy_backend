@@ -21,7 +21,7 @@
                 <thead>
                     <tr>
                         <th>Transaction Date</th>
-                        <th>Reference #</th>
+                        <th>Reference</th>
                         <th>Student</th>
                         <th>Period</th>
                         <th>Voucher Amount</th>
@@ -34,10 +34,11 @@
                         <tr>
                             <td class="whitespace-nowrap text-xs font-semibold">{{ $entry->date->format('M d, Y') }}</td>
                             <td class="font-bold underline text-primary">
-                                <a href="{{ route('admin.journal-entries.show', $entry) }}">{{ $entry->reference_number }}</a>
+                                <a
+                                    href="{{ route('admin.journal-entries.show', $entry) }}">{{ $entry->reference_number }}</a>
                             </td>
                             <td class="font-xs">
-                                @if($entry->application)
+                                @if ($entry->application)
                                     <div class="flex flex-col">
                                         <span
                                             class="font-bold text-black dark:text-white">{{ $entry->application->student->first_name }}
@@ -72,8 +73,8 @@
                         <tr>
                             <td colspan="7" class="text-center text-gray-400 py-16">
                                 <div class="flex flex-col items-center">
-                                    <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                        stroke-width="1" opacity="0.2">
+                                    <svg width="60" height="60" viewBox="0 0 24 24" fill="none"
+                                        stroke="currentColor" stroke-width="1" opacity="0.2">
                                         <path
                                             d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                                     </svg>

@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 use App\Http\Controllers\Controller;
-use App\Models\{Application, OfficeAccount, Payment, Setting, Student, User, JournalEntry, JournalEntryItem, AccountingPeriod, ChartOfAccount};
+use App\Models\{Application, Invoice, OfficeAccount, Payment, Setting, Student, User, JournalEntry, JournalEntryItem, AccountingPeriod, ChartOfAccount};
 use App\Services\CommissionService;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\DB;
@@ -216,6 +216,7 @@ class PaymentController extends Controller
     {
         return $request->validate([
             'application_id' => ['required', 'exists:applications,id'],
+            'invoice_id' => ['nullable', 'exists:invoices,id'],
             'amount' => ['required', 'numeric', 'min:0.01'],
             'payment_type' => ['required', Rule::in(['advance', 'partial', 'final'])],
             'payment_date' => ['nullable', 'date'],
@@ -240,6 +241,32 @@ class PaymentController extends Controller
             'total_fee' => $application->total_fee,
             'total_paid' => $totalPaid,
             'balance' => $application->total_fee - $totalPaid
+        ]);
+    }
+
+    public function getApplicationInvoices(Request $request)
+    {
+        $request->validate(['application_id' => 'required|exists:applications,id']);
+
+        $invoices = Invoice::where('application_id', $request->application_id)
+            ->with(['payments' => function ($q) {
+                $q->whereIn('payment_status', ['pending', 'completed']);
+            }])
+            ->get()
+            ->map(function ($invoice) {
+                $totalPaid = $invoice->payments->sum('amount');
+                return [
+                    'id' => $invoice->id,
+                    'invoice_number' => $invoice->invoice_number,
+                    'total_amount' => $invoice->total_amount,
+                    'total_paid' => $totalPaid,
+                    'remaining' => $invoice->total_amount - $totalPaid,
+                    'status' => $invoice->status,
+                ];
+            });
+
+        return response()->json([
+            'invoices' => $invoices
         ]);
     }
 }

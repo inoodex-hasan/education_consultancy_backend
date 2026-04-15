@@ -1,6 +1,6 @@
 @extends('admin.layouts.master')
 
-@section('title', 'Journal Voucher: ' . $entry->reference_number)
+@section('title', 'Journal Voucher: ' . $journalEntry->reference_number)
 
 @push('styles')
     <style>
@@ -39,10 +39,11 @@
         <!-- Header -->
         <div class="flex flex-col md:flex-row justify-between mb-8 pb-6 border-b-2 border-primary/20">
             <div class="flex items-center gap-4">
-                @if(get_setting('app_logo'))
+                @if (get_setting('app_logo'))
                     <img src="{{ asset('storage/' . get_setting('app_logo')) }}" alt="Logo" class="h-14 w-auto" />
                 @else
-                    <div class="p-3 bg-primary text-white rounded-xl font-black text-2xl uppercase tracking-tighter shadow-md">
+                    <div
+                        class="p-3 bg-primary text-white rounded-xl font-black text-2xl uppercase tracking-tighter shadow-md">
                         INS</div>
                 @endif
                 <div>
@@ -66,7 +67,7 @@
             <div class="space-y-4">
                 <div>
                     <p class="text-[10px] text-white-dark font-bold uppercase tracking-[4px] mb-2">Voucher Prepared By:</p>
-                    <h4 class="text-xl font-black text-dark dark:text-white-light">{{ $entry->creator->name }}</h4>
+                    <h4 class="text-xl font-black text-dark dark:text-white-light">{{ $journalEntry->creator->name }}</h4>
                     <p class="text-xs font-mono font-bold text-primary bg-primary/5 inline-block px-2 py-0.5 rounded mt-1">
                         Accounts Dept.</p>
                 </div>
@@ -75,16 +76,18 @@
                     <div>
                         <p class="text-[10px] text-white-dark font-bold uppercase tracking-widest mb-0.5">Accounting Period
                         </p>
-                        <p class="text-sm font-bold text-primary">{{ $entry->period->name }}</p>
+                        <p class="text-sm font-bold text-primary">{{ $journalEntry->period->name }}</p>
                     </div>
-                    @if($entry->application)
+                    @if ($journalEntry->application)
                         <div>
                             <p class="text-[10px] text-white-dark font-bold uppercase tracking-widest mb-0.5">Related
                                 Application</p>
-                            <a href="{{ route('admin.applications.show', $entry->application) }}"
+                            <a href="{{ route('admin.applications.edit', $journalEntry->application) }}"
                                 class="text-sm font-bold text-primary hover:underline">
-                                {{ $entry->application->student->first_name }} {{ $entry->application->student->last_name }}
-                                <span class="block text-[10px] text-white-dark">{{ $entry->application->application_id }}</span>
+                                {{ $journalEntry->application->student->first_name }}
+                                {{ $journalEntry->application->student->last_name }}
+                                <span
+                                    class="block text-[10px] text-white-dark">{{ $journalEntry->application->application_id }}</span>
                             </a>
                         </div>
                     @endif
@@ -95,17 +98,17 @@
             <div class="bg-white-light/30 dark:bg-white-dark/5 p-6 rounded-2xl">
                 <div class="text-right mb-4">
                     <p class="text-[10px] font-bold text-white-dark uppercase tracking-[5px] mb-1">Voucher No.</p>
-                    <h3 class="text-2xl font-black text-primary tracking-tight">{{ $entry->reference_number }}</h3>
+                    <h3 class="text-2xl font-black text-primary tracking-tight">{{ $journalEntry->reference_number }}</h3>
                 </div>
                 <div class="grid grid-cols-2 gap-4 text-right">
                     <div>
                         <p class="text-[10px] font-bold text-white-dark uppercase tracking-widest mb-0.5">Voucher Date</p>
-                        <p class="text-xs font-bold">{{ $entry->date->format('M d, Y') }}</p>
+                        <p class="text-xs font-bold">{{ $journalEntry->date->format('M d, Y') }}</p>
                     </div>
                     <div>
                         <p class="text-[10px] font-bold text-white-dark uppercase tracking-widest mb-0.5">Status</p>
                         <span
-                            class="badge badge-outline-success text-[10px] font-black uppercase">{{ $entry->status }}</span>
+                            class="badge badge-outline-success text-[10px] font-black uppercase">{{ $journalEntry->status }}</span>
                     </div>
                 </div>
             </div>
@@ -122,8 +125,9 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($entry->items as $item)
-                        <tr class="border-b border-white-light/50 dark:border-white-light/10 hover:bg-primary/5 transition-all">
+                    @foreach ($journalEntry->items as $item)
+                        <tr
+                            class="border-b border-white-light/50 dark:border-white-light/10 hover:bg-primary/5 transition-all">
                             <td class="p-4">
                                 <span class="font-bold text-sm text-primary block leading-none mb-1">
                                     <span
@@ -147,10 +151,10 @@
                             class="p-5 text-right uppercase text-xs font-bold tracking-[6px] text-black border-r border-black/5 rounded-bl-lg">
                             Voucher Totals:</td>
                         <td class="p-5 text-right text-black font-black text-2xl font-mono border-r border-black/5">
-                            {{ number_format($entry->items->sum('debit'), 2) }}
+                            {{ number_format($journalEntry->items->sum('debit'), 2) }}
                         </td>
                         <td class="p-5 text-right text-black font-black text-2xl font-mono rounded-br-lg">
-                            {{ number_format($entry->items->sum('credit'), 2) }}
+                            {{ number_format($journalEntry->items->sum('credit'), 2) }}
                         </td>
                     </tr>
                 </tfoot>
@@ -160,11 +164,11 @@
         <!-- Footnote & Signatures -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-12 pb-8">
             <div>
-                @if($entry->note)
+                @if ($journalEntry->note)
                     <div class="p-5 bg-primary/5 border-l-4 border-primary rounded-r-xl">
                         <p class="text-[10px] font-bold uppercase tracking-[3px] text-primary mb-2 opacity-60">Narration /
                             Remarks:</p>
-                        <p class="text-sm text-white-dark leading-relaxed italic">"{{ $entry->note }}"</p>
+                        <p class="text-sm text-white-dark leading-relaxed italic">"{{ $journalEntry->note }}"</p>
                     </div>
                 @endif
             </div>
@@ -174,7 +178,7 @@
                     <div class="flex flex-col items-center">
                         <div class="w-full h-px bg-white-dark/30 mb-2"></div>
                         <p class="font-bold uppercase text-[9px] tracking-widest text-white-dark">Prepared By</p>
-                        <p class="text-[7px] text-white-dark mt-0.5">{{ $entry->creator->name }}</p>
+                        <p class="text-[7px] text-white-dark mt-0.5">{{ $journalEntry->creator->name }}</p>
                     </div>
                     <div class="flex flex-col items-center">
                         <div class="w-full h-px bg-primary mb-2"></div>

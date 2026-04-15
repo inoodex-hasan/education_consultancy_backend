@@ -80,6 +80,7 @@ Route::prefix('dashboard/payments')->name('admin.payments.')->group(function () 
     Route::get('{payment}/edit', [PaymentController::class, 'edit'])->name('edit')->middleware('can:*accountant');
     Route::get('{payment}/download-invoice', [PaymentController::class, 'downloadInvoice'])->name('download-invoice')->middleware('can:*accountant');
     Route::get('/get-application-balance', [PaymentController::class, 'getApplicationBalance'])->name('get-application-balance');
+    Route::get('/get-application-invoices', [PaymentController::class, 'getApplicationInvoices'])->name('get-application-invoices');
     Route::put('{payment}', [PaymentController::class, 'update'])->name('update')->middleware('can:*accountant');
     Route::delete('{payment}', [PaymentController::class, 'destroy'])->name('destroy')->middleware('can:*accountant');
 });
@@ -192,8 +193,8 @@ Route::prefix('dashboard/journal-entries')->name('admin.journal-entries.')->grou
     Route::get('/', [App\Http\Controllers\Admin\JournalEntryController::class, 'index'])->name('index')->middleware('can:*accountant');
     Route::get('/create', [App\Http\Controllers\Admin\JournalEntryController::class, 'create'])->name('create')->middleware('can:*accountant');
     Route::post('/', [App\Http\Controllers\Admin\JournalEntryController::class, 'store'])->name('store')->middleware('can:*accountant');
-    Route::get('{entry}', [App\Http\Controllers\Admin\JournalEntryController::class, 'show'])->name('show')->middleware('can:*accountant');
-    Route::delete('{entry}', [App\Http\Controllers\Admin\JournalEntryController::class, 'destroy'])->name('destroy')->middleware('can:*accountant');
+    Route::get('{journalEntry}', [App\Http\Controllers\Admin\JournalEntryController::class, 'show'])->name('show')->middleware('can:*accountant');
+    Route::delete('{journalEntry}', [App\Http\Controllers\Admin\JournalEntryController::class, 'destroy'])->name('destroy')->middleware('can:*accountant');
 });
 
 // Invoices
@@ -201,8 +202,8 @@ Route::prefix('dashboard/invoices')->name('admin.invoices.')->group(function () 
     Route::get('/', [App\Http\Controllers\Admin\InvoiceController::class, 'index'])->name('index')->middleware('can:*consultant|*application|*accountant');
     Route::get('/create', [App\Http\Controllers\Admin\InvoiceController::class, 'create'])->name('create')->middleware('can:*consultant|*application|*accountant');
     Route::post('/', [App\Http\Controllers\Admin\InvoiceController::class, 'store'])->name('store')->middleware('can:*consultant|*application|*accountant');
-    Route::get('{invoice}/edit', [App\Http\Controllers\Admin\InvoiceController::class, 'edit'])->name('edit')->middleware('can:*consultant|*application|*accountant');
-    Route::put('{invoice}', [App\Http\Controllers\Admin\InvoiceController::class, 'update'])->name('update')->middleware('can:*consultant|*application|*accountant');
+    Route::get('{invoice}/edit', [App\Http\Controllers\Admin\InvoiceController::class, 'edit'])->name('edit')->middleware('can:*application|*accountant');
+    Route::put('{invoice}', [App\Http\Controllers\Admin\InvoiceController::class, 'update'])->name('update')->middleware('can:*application|*accountant');
     Route::get('{invoice}', [App\Http\Controllers\Admin\InvoiceController::class, 'show'])->name('show')->middleware('can:*consultant|*application|*accountant');
     Route::delete('{invoice}', [App\Http\Controllers\Admin\InvoiceController::class, 'destroy'])->name('destroy')->middleware('can:*accountant');
 });

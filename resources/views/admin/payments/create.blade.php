@@ -56,7 +56,8 @@
                     <select name="application_id" id="application_id" class="form-select" required>
                         <option value="">Select Application (Search by ID or Student Name)</option>
                         @foreach ($applications as $app)
-                            <option value="{{ $app->id }}" {{ old('application_id', $selected_application_id) == $app->id ? 'selected' : '' }}>
+                            <option value="{{ $app->id }}"
+                                {{ old('application_id', $selected_application_id) == $app->id ? 'selected' : '' }}>
                                 {{ $app->application_id }} - {{ $app->student->first_name }} {{ $app->student->last_name }}
                             </option>
                         @endforeach
@@ -66,10 +67,18 @@
                     @enderror
                 </div>
 
+                <div class="form-group md:col-span-2" id="invoice_section">
+                    <label for="invoice_id">Invoice<span class="text-danger">*</span></label>
+                    <select name="invoice_id" id="invoice_id" class="form-select" required>
+                        <option value="">-- Select Invoice --</option>
+                    </select>
+                    <span class="text-xs text-white-dark mt-1">Select a specific invoice to record payment against it</span>
+                </div>
+
                 <div id="balance_info_container" class="md:col-span-2 hidden">
                     <div class="grid grid-cols-1 gap-4 sm:grid-cols-3 bg-primary/5 p-4 rounded-lg border border-primary/20">
                         <div class="flex flex-col">
-                            <span class="text-xs text-white-dark uppercase">Total Fee</span>
+                            <span class="text-xs text-white-dark uppercase">Total Amount</span>
                             <span id="info_total_fee" class="text-lg font-bold text-primary">BDT 0.00</span>
                         </div>
                         <div class="flex flex-col border-l border-r border-white-light/20 px-4">
@@ -85,8 +94,8 @@
 
                 <div class="form-group">
                     <label for="amount">Amount <span class="text-danger">*</span></label>
-                    <input type="number" name="amount" id="amount" class="form-input" required step="0.01" min="0"
-                        value="{{ old('amount') }}" />
+                    <input type="number" name="amount" id="amount" class="form-input" required step="0.01"
+                        min="0" value="{{ old('amount') }}" />
                     @error('amount')
                         <span class="text-danger text-sm">{{ $message }}</span>
                     @enderror
@@ -132,7 +141,8 @@
                     <select name="office_account_id" id="office_account_id" class="form-select">
                         <option value="">-- Select Account --</option>
                         @foreach ($accounts as $account)
-                            <option value="{{ $account->id }}" {{ old('office_account_id') == $account->id ? 'selected' : '' }}>
+                            <option value="{{ $account->id }}"
+                                {{ old('office_account_id') == $account->id ? 'selected' : '' }}>
                                 {{ $account->account_name }}
                                 ({{ ucfirst($account->account_type) }}{{ $account->provider_name ? ' - ' . $account->provider_name : '' }}
                                 - {{ $account->account_number }})
@@ -146,8 +156,7 @@
 
                 <div class="form-group md:col-span-2">
                     <label for="notes">Notes</label>
-                    <textarea name="notes" id="notes" class="form-input" rows="3"
-                        placeholder="Additional information...">{{ old('notes') }}</textarea>
+                    <textarea name="notes" id="notes" class="form-input" rows="3" placeholder="Additional information...">{{ old('notes') }}</textarea>
                     @error('notes')
                         <span class="text-danger text-sm">{{ $message }}</span>
                     @enderror
@@ -165,7 +174,7 @@
 @push('scripts')
     <script src="{{ asset('assets/js/nice-select2.js') }}"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
             const applicationSelect = document.getElementById('application_id');
             const amountInput = document.getElementById('amount');
             const paymentTypeSelect = document.getElementById('payment_type');
@@ -176,11 +185,53 @@
             const infoBalance = document.getElementById('info_balance');
             const submitBtn = document.getElementById('submitBtn');
 
-            // Initialize NiceSelect2
+            // Initialize NiceSelect2 for the application selector only
             const niceSelect = NiceSelect.bind(applicationSelect, {
                 searchable: true,
                 placeholder: 'Select Application (Search by ID or Student Name)'
             });
+
+            function loadInvoices(applicationId) {
+                const invoiceSection = document.getElementById('invoice_id');
+                invoiceSection.innerHTML = '<option value="">-- Loading invoices... --</option>';
+
+                if (!applicationId) {
+                    invoiceSection.innerHTML =
+                        '<option value="">-- Select Invoice (Leave blank for general payment) --</option>';
+                    return;
+                }
+
+                fetch(`{{ route('admin.payments.get-application-invoices') }}?application_id=${applicationId}`)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(`Invoice endpoint returned ${response.status}`);
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        let options =
+                            '<option value="">-- Select Invoice (Leave blank for general payment) --</option>';
+
+                        if (Array.isArray(data.invoices) && data.invoices.length > 0) {
+                            data.invoices.forEach(invoice => {
+                                const remaining = invoice.total_amount - invoice.total_paid;
+                                options += `<option value="${invoice.id}" data-amount="${remaining}" data-total="${invoice.total_amount}" data-paid="${invoice.total_paid}">
+                                                ${invoice.invoice_number} 
+                                                
+                                            </option>`;
+                            });
+                        } else {
+                            options =
+                                '<option value="">-- No invoices found for this application --</option>';
+                        }
+
+                        invoiceSection.innerHTML = options;
+                    })
+                    .catch(error => {
+                        console.error('Error loading invoices:', error);
+                        invoiceSection.innerHTML = '<option value="">-- Error loading invoices --</option>';
+                    });
+            }
 
             function updateBalance() {
                 const applicationId = applicationSelect.value;
@@ -203,7 +254,6 @@
                         if (data.balance <= 0) {
                             amountInput.value = '0.00';
                             amountInput.disabled = true;
-                            submitBtn.disabled = true;
                             submitBtn.textContent = 'Payment Completed';
 
                             // Visual feedback for completed status
@@ -214,7 +264,7 @@
                             submitBtn.disabled = false;
                             submitBtn.textContent = 'Save Payment';
                             amountInput.value = data.balance.toFixed(2);
-                            paymentTypeSelect.value = 'final';
+                            amountInput.max = data.balance;
 
                             infoBalance.classList.remove('text-success');
                             infoBalance.classList.add('text-danger');
@@ -225,19 +275,53 @@
                     });
             }
 
-            applicationSelect.addEventListener('change', updateBalance);
+            applicationSelect.addEventListener('change', function() {
+                loadInvoices(this.value);
+                updateBalance();
+            });
+
+            // Handle invoice selection - auto-fill amount with remaining balance and update balance info
+            document.getElementById('invoice_id').addEventListener('change', function() {
+                const selectedOption = this.options[this.selectedIndex];
+                if (selectedOption.value && selectedOption.dataset.amount) {
+                    const remainingAmount = parseFloat(selectedOption.dataset.amount);
+                    const totalAmount = parseFloat(selectedOption.dataset.total);
+                    const totalPaid = parseFloat(selectedOption.dataset.paid);
+
+                    // Update balance info for selected invoice
+                    balanceInfoContainer.classList.remove('hidden');
+                    infoTotalFee.textContent =
+                        `BDT ${totalAmount.toLocaleString(undefined, { minimumFractionDigits: 2 })}`;
+                    infoTotalPaid.textContent =
+                        `BDT ${totalPaid.toLocaleString(undefined, { minimumFractionDigits: 2 })}`;
+                    infoBalance.textContent =
+                        `BDT ${remainingAmount.toLocaleString(undefined, { minimumFractionDigits: 2 })}`;
+
+                    if (remainingAmount > 0) {
+                        amountInput.disabled = false;
+                        amountInput.max = remainingAmount;
+                        amountInput.value = remainingAmount.toFixed(2);
+                    } else {
+                        amountInput.disabled = true;
+                    }
+                } else {
+                    // No invoice selected, show application balance
+                    updateBalance();
+                }
+            });
 
             // Trigger once if application is pre-selected (e.g. from history view or old input)
             if (applicationSelect.value) {
+                loadInvoices(applicationSelect.value);
                 updateBalance();
             }
 
-            document.getElementById('paymentForm').addEventListener('submit', function () {
+            document.getElementById('paymentForm').addEventListener('submit', function() {
                 // Re-enable if disabled so it submits
                 amountInput.disabled = false;
             });
 
-            document.getElementById('resetBtn').addEventListener('click', function () {
+            document.getElementById('resetBtn').addEventListener('click', function() {
                 setTimeout(() => {
                     niceSelect.update();
                     balanceInfoContainer.classList.add('hidden');

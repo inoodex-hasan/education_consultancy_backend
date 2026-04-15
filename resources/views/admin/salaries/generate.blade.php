@@ -185,7 +185,7 @@
                                 <th>Net Salary</th>
                                 <th>Account Number</th>
                                 <th>Bank Name</th>
-                                <th>Action</th>
+                                {{-- <th>Action</th> --}}
                             </tr>
                         </thead>
                         <tbody>
@@ -207,7 +207,7 @@
                                         @else
                                             <input type="number" step="0.01"
                                                 name="salaries[{{ $index }}][basic_salary]"
-                                                value="{{ $salary['basic_salary'] }}" class="form-input w-24" required />
+                                                value="{{ $salary['basic_salary'] }}" class="form-input w-40" required />
                                         @endif
                                     </td>
                                     <td>
@@ -242,13 +242,13 @@
                                     </td>
                                     <td>{{ $salary['account_number'] ?? 'N/A' }}</td>
                                     <td>{{ $salary['bank_name'] ?? 'N/A' }}</td>
-                                    <td>
+                                    {{-- <td>
                                         @if ($salary['id'])
                                             <span class="badge badge-outline-success">Exists</span>
                                         @else
                                             <span class="badge badge-outline-warning">New</span>
                                         @endif
-                                    </td>
+                                    </td> --}}
                                 </tr>
                             @empty
                                 <tr>
