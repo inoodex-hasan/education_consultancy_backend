@@ -42,22 +42,22 @@
                 </div>
 
                 <div class="form-group">
-                    <label>Email<span class="text-danger">*</span></label>
+                    <label>Email</label>
                     <input type="email" name="email" class="form-input" value="{{ old('email') }}">
                 </div>
 
                 <div class="form-group">
-                    <label>Website<span class="text-danger">*</span></label>
+                    <label>Website</label>
                     <input type="url" name="website" class="form-input" value="{{ old('website') }}">
                 </div>
 
                 <div class="form-group">
-                    <label>Phone<span class="text-danger">*</span></label>
+                    <label>Phone</label>
                     <input type="text" name="phone" class="form-input" value="{{ old('phone') }}">
                 </div>
 
                 <div class="form-group">
-                    <label>Address<span class="text-danger">*</span></label>
+                    <label>Address</label>
                     <textarea name="address" class="form-input">{{ old('address') }}</textarea>
                 </div>
 
