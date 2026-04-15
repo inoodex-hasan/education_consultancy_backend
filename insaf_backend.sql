@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Apr 13, 2026 at 11:29 AM
+-- Generation Time: Apr 14, 2026 at 06:23 PM
 -- Server version: 8.4.3
--- PHP Version: 8.3.26
+-- PHP Version: 8.3.28
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -29,14 +29,14 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `accounting_periods` (
   `id` bigint UNSIGNED NOT NULL,
-  `name` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `year` year DEFAULT NULL,
   `month` tinyint UNSIGNED DEFAULT NULL,
   `start_date` date DEFAULT NULL,
   `end_date` date DEFAULT NULL,
-  `type` enum('fiscal_year','monthly','quarterly') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'monthly',
-  `status` enum('open','closed') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'open',
-  `remarks` text COLLATE utf8mb4_unicode_ci,
+  `type` enum('fiscal_year','monthly','quarterly') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'monthly',
+  `status` enum('open','closed') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'open',
+  `remarks` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   `is_closed` tinyint(1) DEFAULT NULL,
   `closed_at` timestamp NULL DEFAULT NULL,
   `closed_by` bigint UNSIGNED DEFAULT NULL,
@@ -65,12 +65,12 @@ CREATE TABLE `applications` (
   `course_id` bigint UNSIGNED NOT NULL,
   `course_intake_id` bigint UNSIGNED NOT NULL,
   `tuition_fee` decimal(12,2) DEFAULT NULL,
-  `tuition_fee_status` enum('pending','paid','partial') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'pending',
-  `service_charge_status` enum('pending','paid','partial') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'pending',
-  `application_priority` enum('normal','priority','vip') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'normal',
-  `internal_notes` text COLLATE utf8mb4_unicode_ci,
+  `tuition_fee_status` enum('pending','paid','partial') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'pending',
+  `service_charge_status` enum('pending','paid','partial') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'pending',
+  `application_priority` enum('normal','priority','vip') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'normal',
+  `internal_notes` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   `documents_checklist` json DEFAULT NULL,
-  `final_status` enum('pending','in_progress','completed','cancelled') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'pending',
+  `final_status` enum('pending','in_progress','completed','cancelled') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'pending',
   `security_deposit_status` tinyint(1) NOT NULL DEFAULT '0',
   `cvu_fee_status` tinyint(1) NOT NULL DEFAULT '0',
   `admission_fee_status` tinyint(1) NOT NULL DEFAULT '0',
@@ -84,7 +84,7 @@ CREATE TABLE `applications` (
   `vfs_appointment_date` date DEFAULT NULL,
   `file_submission` tinyint(1) NOT NULL DEFAULT '0',
   `file_submission_date` date DEFAULT NULL,
-  `visa_status` enum('not_applied','pending','approved','rejected') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'not_applied',
+  `visa_status` enum('not_applied','pending','approved','rejected') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'not_applied',
   `visa_decision_date` date DEFAULT NULL,
   `visa_approval_date` date DEFAULT NULL,
   `notes` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
@@ -113,7 +113,7 @@ CREATE TABLE `bank_reconciliations` (
   `statement_balance` decimal(15,2) NOT NULL,
   `system_balance` decimal(15,2) NOT NULL,
   `difference` decimal(15,2) NOT NULL DEFAULT '0.00',
-  `status` enum('draft','closed') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'draft',
+  `status` enum('draft','closed') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'draft',
   `closed_at` timestamp NULL DEFAULT NULL,
   `closed_by` bigint UNSIGNED DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
@@ -137,9 +137,9 @@ INSERT INTO `bank_reconciliations` (`id`, `account_id`, `statement_date`, `state
 CREATE TABLE `bank_reconciliation_items` (
   `id` bigint UNSIGNED NOT NULL,
   `reconciliation_id` bigint UNSIGNED NOT NULL,
-  `bank_statement_ref` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `bank_statement_ref` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `amount` decimal(15,2) NOT NULL,
-  `type` enum('matched','unmatched','adjustment') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'unmatched',
+  `type` enum('matched','unmatched','adjustment') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'unmatched',
   `matched_at` timestamp NULL DEFAULT NULL,
   `matched_by` bigint UNSIGNED DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
@@ -190,8 +190,8 @@ CREATE TABLE `cache` (
 --
 
 INSERT INTO `cache` (`key`, `value`, `expiration`) VALUES
-('admin-dashboard-cache-tyro:user-4:privileges', 'a:4:{i:0;s:11:\"*accountant\";i:1;s:8:\"*payment\";i:2;s:10:\"*comission\";i:3;s:8:\"*invoice\";}', 1776079814),
-('admin-dashboard-cache-tyro:user-4:roles', 'a:1:{i:0;s:10:\"accountant\";}', 1776079814),
+('admin-dashboard-cache-tyro:user-4:privileges', 'a:4:{i:0;s:11:\"*accountant\";i:1;s:8:\"*payment\";i:2;s:10:\"*comission\";i:3;s:8:\"*invoice\";}', 1776137547),
+('admin-dashboard-cache-tyro:user-4:roles', 'a:1:{i:0;s:10:\"accountant\";}', 1776137547),
 ('admin-dashboard-cache-tyro:user-6:privileges', 'a:1:{i:0;s:12:\"*application\";}', 1776062567),
 ('admin-dashboard-cache-tyro:user-6:roles', 'a:1:{i:0;s:11:\"application\";}', 1776062567);
 
@@ -216,9 +216,9 @@ CREATE TABLE `cache_locks` (
 CREATE TABLE `chart_of_accounts` (
   `id` bigint UNSIGNED NOT NULL,
   `parent_id` bigint UNSIGNED DEFAULT NULL,
-  `code` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `type` enum('asset','liability','equity','revenue','expense') COLLATE utf8mb4_unicode_ci NOT NULL,
+  `code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `type` enum('asset','liability','equity','revenue','expense') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `is_active` tinyint(1) NOT NULL DEFAULT '1',
   `is_default` tinyint(1) NOT NULL DEFAULT '0',
   `created_at` timestamp NULL DEFAULT NULL,
@@ -354,7 +354,7 @@ CREATE TABLE `expenses` (
   `description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `amount` decimal(10,2) NOT NULL,
   `expense_date` date NOT NULL,
-  `payment_method` enum('cash','bank_transfer','mobile_banking','cheque') COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `payment_method` enum('cash','bank_transfer','mobile_banking','cheque') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `office_account_id` bigint UNSIGNED DEFAULT NULL,
   `created_by` bigint UNSIGNED DEFAULT NULL,
   `notes` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
@@ -433,12 +433,12 @@ CREATE TABLE `invoices` (
   `student_id` bigint UNSIGNED DEFAULT NULL,
   `application_id` bigint UNSIGNED DEFAULT NULL,
   `university_id` bigint UNSIGNED DEFAULT NULL,
-  `invoice_number` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `invoice_number` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `date` date NOT NULL,
   `due_date` date DEFAULT NULL,
   `total_amount` decimal(15,2) NOT NULL,
-  `status` enum('draft','sent','paid','partially_paid','void') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'draft',
-  `notes` text COLLATE utf8mb4_unicode_ci,
+  `status` enum('draft','sent','paid','partially_paid','void') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'draft',
+  `notes` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -460,7 +460,7 @@ CREATE TABLE `invoice_items` (
   `id` bigint UNSIGNED NOT NULL,
   `invoice_id` bigint UNSIGNED NOT NULL,
   `chart_of_account_id` bigint UNSIGNED NOT NULL,
-  `description` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `quantity` decimal(15,2) NOT NULL DEFAULT '1.00',
   `unit_price` decimal(15,2) NOT NULL,
   `subtotal` decimal(15,2) NOT NULL,
@@ -523,9 +523,9 @@ CREATE TABLE `journal_entries` (
   `period_id` bigint UNSIGNED NOT NULL,
   `application_id` bigint UNSIGNED DEFAULT NULL,
   `date` date NOT NULL,
-  `reference_number` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `note` text COLLATE utf8mb4_unicode_ci,
-  `status` enum('draft','posted','void') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'draft',
+  `reference_number` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `note` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `status` enum('draft','posted','void') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'draft',
   `created_by` bigint UNSIGNED DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
@@ -550,7 +550,7 @@ CREATE TABLE `journal_entry_items` (
   `chart_of_account_id` bigint UNSIGNED NOT NULL,
   `debit` decimal(15,2) NOT NULL DEFAULT '0.00',
   `credit` decimal(15,2) NOT NULL DEFAULT '0.00',
-  `description` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -605,10 +605,10 @@ INSERT INTO `leads` (`id`, `student_name`, `email`, `phone`, `current_education`
 
 CREATE TABLE `marketing_campaigns` (
   `id` bigint UNSIGNED NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `boosting_status` enum('on','off') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'off',
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `boosting_status` enum('on','off') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'off',
   `created_by` bigint UNSIGNED DEFAULT NULL,
-  `notes` text COLLATE utf8mb4_unicode_ci,
+  `notes` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -622,8 +622,8 @@ CREATE TABLE `marketing_campaigns` (
 CREATE TABLE `marketing_posters` (
   `id` bigint UNSIGNED NOT NULL,
   `campaign_id` bigint UNSIGNED NOT NULL,
-  `poster_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `status` enum('ready','not_ready','uploaded') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'not_ready',
+  `poster_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `status` enum('ready','not_ready','uploaded') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'not_ready',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -637,8 +637,8 @@ CREATE TABLE `marketing_posters` (
 CREATE TABLE `marketing_videos` (
   `id` bigint UNSIGNED NOT NULL,
   `campaign_id` bigint UNSIGNED NOT NULL,
-  `video_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `status` enum('edited','upload','not_edited','ready') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'not_edited',
+  `video_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `status` enum('edited','upload','not_edited','ready') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'not_edited',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -843,7 +843,7 @@ CREATE TABLE `payments` (
   `journal_entry_id` bigint UNSIGNED DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
-  `notes` text COLLATE utf8mb4_unicode_ci
+  `notes` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -1025,7 +1025,7 @@ CREATE TABLE `sessions` (
 --
 
 INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES
-('FE4e9cBf2CKO85wmilSLX4aIWuTtWn3VFAOascvQ', 4, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36', 'YTo1OntzOjY6Il90b2tlbiI7czo0MDoiam1GdHBuMm5OYkpYZ2FXaTFKdTRaNDNFRGpLYlA2RmdiTEtsOUdyWiI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czoxMDoidHlyby1sb2dpbiI7YToxOntzOjc6ImNhcHRjaGEiO2E6MDp7fX1zOjk6Il9wcmV2aW91cyI7YToyOntzOjM6InVybCI7czo1NDoiaHR0cDovLzEyNy4wLjAuMTo4MDAwL2Rhc2hib2FyZC9iYW5rLXJlY29uY2lsaWF0aW9ucy8xIjtzOjU6InJvdXRlIjtzOjMxOiJhZG1pbi5iYW5rLXJlY29uY2lsaWF0aW9ucy5zaG93Ijt9czo1MDoibG9naW5fd2ViXzU5YmEzNmFkZGMyYjJmOTQwMTU4MGYwMTRjN2Y1OGVhNGUzMDk4OWQiO2k6NDt9', 1776079526);
+('0znXjD2A62uLZmOO7kCxcYKKWH0FPpjWOJfD631S', 4, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:149.0) Gecko/20100101 Firefox/149.0', 'YTo1OntzOjY6Il90b2tlbiI7czo0MDoiZUZtYkszb2c3SGNWcDJoNFNIanZLdEsyaTZzN05HSGJMckl6S1ZUcyI7czo5OiJfcHJldmlvdXMiO2E6Mjp7czozOiJ1cmwiO3M6MzE6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9kYXNoYm9hcmQiO3M6NToicm91dGUiO3M6MjA6InR5cm8tZGFzaGJvYXJkLmluZGV4Ijt9czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czoxMDoidHlyby1sb2dpbiI7YToxOntzOjc6ImNhcHRjaGEiO2E6MDp7fX1zOjUwOiJsb2dpbl93ZWJfNTliYTM2YWRkYzJiMmY5NDAxNTgwZjAxNGM3ZjU4ZWE0ZTMwOTg5ZCI7aTo0O30=', 1776137397);
 
 -- --------------------------------------------------------
 
@@ -1099,9 +1099,9 @@ CREATE TABLE `students` (
   `passport_validity` date DEFAULT NULL,
   `translation_documents` json DEFAULT NULL,
   `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `password` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `phone` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `sponsor_phone` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `sponsor_phone` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `address` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   `dob` date DEFAULT NULL,
   `ssc_result` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -1139,7 +1139,7 @@ INSERT INTO `students` (`id`, `first_name`, `last_name`, `father_name`, `mother_
 CREATE TABLE `taxes` (
   `id` bigint UNSIGNED NOT NULL,
   `chart_of_account_id` bigint UNSIGNED NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `rate` decimal(5,2) NOT NULL,
   `is_active` tinyint(1) NOT NULL DEFAULT '1',
   `created_at` timestamp NULL DEFAULT NULL,
@@ -1261,7 +1261,8 @@ INSERT INTO `tyro_audit_logs` (`id`, `user_id`, `event`, `auditable_type`, `audi
 (90, 6, 'user.logout', 'App\\Models\\User', 6, NULL, '{\"email\": \"application@example.com\"}', '{\"ip\": \"127.0.0.1\", \"is_console\": false, \"user_agent\": \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36\"}', '2026-04-13 06:27:49'),
 (91, 6, 'user.login', 'App\\Models\\User', 6, NULL, '{\"email\": \"application@example.com\"}', '{\"ip\": \"127.0.0.1\", \"is_console\": false, \"user_agent\": \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36\"}', '2026-04-13 06:27:59'),
 (92, 6, 'user.logout', 'App\\Models\\User', 6, NULL, '{\"email\": \"application@example.com\"}', '{\"ip\": \"127.0.0.1\", \"is_console\": false, \"user_agent\": \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36\"}', '2026-04-13 06:29:09'),
-(93, 4, 'user.login', 'App\\Models\\User', 4, NULL, '{\"email\": \"accountant@example.com\"}', '{\"ip\": \"127.0.0.1\", \"is_console\": false, \"user_agent\": \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36\"}', '2026-04-13 06:29:17');
+(93, 4, 'user.login', 'App\\Models\\User', 4, NULL, '{\"email\": \"accountant@example.com\"}', '{\"ip\": \"127.0.0.1\", \"is_console\": false, \"user_agent\": \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36\"}', '2026-04-13 06:29:17'),
+(94, 4, 'user.login', 'App\\Models\\User', 4, NULL, '{\"email\": \"accountant@example.com\"}', '{\"ip\": \"127.0.0.1\", \"is_console\": false, \"user_agent\": \"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:149.0) Gecko/20100101 Firefox/149.0\"}', '2026-04-14 03:20:46');
 
 -- --------------------------------------------------------
 
@@ -1948,7 +1949,7 @@ ALTER TABLE `taxes`
 -- AUTO_INCREMENT for table `tyro_audit_logs`
 --
 ALTER TABLE `tyro_audit_logs`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=94;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=95;
 
 --
 -- AUTO_INCREMENT for table `universities`

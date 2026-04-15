@@ -455,6 +455,7 @@
                     <li><a href="{{ route('admin.journal-entries.index') }}">Journal Vouchers</a></li>
                     <li><a href="{{ route('admin.invoices.index') }}">Student Invoices</a></li>
                     <li><a href="{{ route('admin.bank-reconciliations.index') }}">Bank Reconciliation</a></li>
+                    <li><a href="{{ route('admin.reports.balance-sheet') }}">Balance Sheet</a></li>
                 </ul>
             </li>
         @endcan
@@ -571,7 +572,21 @@
 
                         {{-- Budgets & Reports --}}
                         <li><a href="{{ route('admin.budgets.index') }}">Budgets</a></li>
-                        <li><a href="{{ route('admin.reports.summary') }}">Financial Reports</a></li>
+                        <li class="menu nav-item relative group px-0">
+                            <a href="javascript:;" class="flex justify-between items-center w-full">
+                                Reports
+                                <svg class="h-3 w-3 rotate-90 transition-transform duration-300 group-hover:rotate-0"
+                                    viewBox="0 0 24 24" fill="none">
+                                    <path d="M9 5L15 12L9 19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                </svg>
+                            </a>
+                            <ul
+                                class="child-menu absolute ltr:left-full rtl:right-full top-0 ml-1 hidden min-w-[180px] bg-white shadow-lg rounded-md z-50 dark:bg-[#0e1726]">
+                                <li><a href="{{ route('admin.reports.summary') }}" class="block px-4 py-2 hover:bg-gray-100">Financial Summary</a></li>
+                               
+                            </ul>
+                        </li>
                     @endcan
                 </ul>
             </li>

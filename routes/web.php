@@ -221,6 +221,7 @@ Route::prefix('dashboard/bank-reconciliations')->name('admin.bank-reconciliation
 // Financial Reports
 Route::prefix('dashboard/reports')->name('admin.reports.')->group(function () {
     Route::get('/summary', [App\Http\Controllers\Admin\ReportController::class, 'summary'])->name('summary')->middleware('can:*accountant');
+    Route::get('/balance-sheet', [App\Http\Controllers\Admin\ReportController::class, 'balanceSheet'])->name('balance-sheet')->middleware('can:*accountant');
     Route::get('/download-pdf', [App\Http\Controllers\Admin\ReportController::class, 'downloadPdf'])->name('download-pdf')->middleware('can:*accountant');
 });
 

@@ -83,6 +83,85 @@ class ReportController extends Controller
         return view('admin.reports.summary', compact('summary', 'month', 'year', 'expenses', 'transfers', 'budgets', 'payments', 'accounts', 'accountId', 'transactionType'));
     }
 
+    public function balanceSheet(Request $request)
+    {
+        $this->authorize('*accountant');
+
+        $asOfDate = $request->get('as_of_date', date('Y-m-d'));
+        $date = Carbon::parse($asOfDate)->endOfDay();
+
+        // Fetch all accounts with their debit/credit sums up to the date
+        $accounts = \App\Models\ChartOfAccount::withSum([
+            'journalEntryItems as total_debit' => function ($query) use ($date) {
+                $query->whereHas('journalEntry', function ($q) use ($date) {
+                    $q->where('date', '<=', $date);
+                });
+            }
+        ], 'debit')
+            ->withSum([
+                'journalEntryItems as total_credit' => function ($query) use ($date) {
+                    $query->whereHas('journalEntry', function ($q) use ($date) {
+                        $q->where('date', '<=', $date);
+                    });
+                }
+            ], 'credit')
+            ->get();
+
+        // Group by type and calculate balances
+        $grouped = $accounts->groupBy('type');
+
+        $data = [
+            'asset' => collect(),
+            'liability' => collect(),
+            'equity' => collect(),
+            'revenue' => collect(),
+            'expense' => collect(),
+        ];
+
+        foreach ($grouped as $type => $typeAccounts) {
+            foreach ($typeAccounts as $account) {
+                $balance = 0;
+                $debit = $account->total_debit ?? 0;
+                $credit = $account->total_credit ?? 0;
+
+                if ($type === 'asset') {
+                    $balance = $debit - $credit;
+                } else {
+                    // liability, equity, revenue
+                    $balance = $credit - $debit;
+                }
+
+                // If expense, balance is usually Dr - Cr, but we treat it as a reduction of profit
+                if ($type === 'expense') {
+                    $balance = $debit - $credit;
+                }
+
+                if ($balance != 0 || $account->is_default) {
+                    $account->balance = $balance;
+                    $data[$type]->push($account);
+                }
+            }
+        }
+
+        // Calculate Net Profit/Loss for Retained Earnings
+        $totalRevenue = $data['revenue']->sum('balance');
+        $totalExpenses = $data['expense']->sum('balance');
+        $netProfit = $totalRevenue - $totalExpenses;
+
+        $totalAssets = $data['asset']->sum('balance');
+        $totalLiabilities = $data['liability']->sum('balance');
+        $totalEquity = $data['equity']->sum('balance');
+
+        return view('admin.reports.balance_sheet', compact(
+            'data',
+            'asOfDate',
+            'netProfit',
+            'totalAssets',
+            'totalLiabilities',
+            'totalEquity'
+        ));
+    }
+
     public function downloadPdf(Request $request)
     {
         $this->authorize('*accountant');
