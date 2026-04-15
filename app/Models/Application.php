@@ -127,4 +127,9 @@ class Application extends Model
     {
         return $this->hasMany(Payment::class);
     }
+
+    public function vfsChecklist()
+    {
+        return $this->hasMany(VfsChecklist::class);
+    }
 }

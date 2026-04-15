@@ -218,6 +218,18 @@ Route::prefix('dashboard/bank-reconciliations')->name('admin.bank-reconciliation
     Route::delete('/{reconciliation}', [App\Http\Controllers\Admin\BankReconciliationController::class, 'destroy'])->name('destroy');
 });
 
+// VFS Checklist
+Route::prefix('dashboard/vfs-checklist')->name('admin.vfs-checklist.')->group(function () {
+    Route::get('/', [App\Http\Controllers\Admin\VfsChecklistController::class, 'index'])->name('index')->middleware('can:*application');
+    Route::get('/{application}', [App\Http\Controllers\Admin\VfsChecklistController::class, 'show'])->name('show')->middleware('can:*application');
+    Route::post('/{application}/items', [App\Http\Controllers\Admin\VfsChecklistController::class, 'storeItem'])->name('store-item')->middleware('can:*application');
+    Route::post('/items/{item}/toggle', [App\Http\Controllers\Admin\VfsChecklistController::class, 'toggleItem'])->name('toggle-item')->middleware('can:*application');
+    Route::put('/items/{item}/notes', [App\Http\Controllers\Admin\VfsChecklistController::class, 'updateNotes'])->name('update-notes')->middleware('can:*application');
+    Route::delete('/items/{item}', [App\Http\Controllers\Admin\VfsChecklistController::class, 'deleteItem'])->name('delete-item')->middleware('can:*application');
+    Route::post('/{application}/bulk-check', [App\Http\Controllers\Admin\VfsChecklistController::class, 'bulkCheck'])->name('bulk-check')->middleware('can:*application');
+    Route::post('/{application}/bulk-uncheck', [App\Http\Controllers\Admin\VfsChecklistController::class, 'bulkUncheck'])->name('bulk-uncheck')->middleware('can:*application');
+});
+
 // Financial Reports
 Route::prefix('dashboard/reports')->name('admin.reports.')->group(function () {
     Route::get('/summary', [App\Http\Controllers\Admin\ReportController::class, 'summary'])->name('summary')->middleware('can:*accountant');
