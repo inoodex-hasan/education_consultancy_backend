@@ -70,12 +70,7 @@ class UniversityController extends Controller
 
     public function destroy(University $university)
     {
-
-        $university->delete();
-
-        return redirect()
-            ->route('admin.universities.index')
-            ->with('success', 'University deleted successfully.');
+        return $this->safeDelete($university, 'admin.universities.index', [], 'University deleted successfully.');
     }
 
     private function validateUniversity(Request $request): array

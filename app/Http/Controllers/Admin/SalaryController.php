@@ -103,12 +103,7 @@ class SalaryController extends Controller
 
     public function destroy(Salary $salary)
     {
-
-        $salary->delete();
-
-        return redirect()
-            ->route('admin.salaries.index')
-            ->with('success', 'Salary record deleted successfully.');
+        return $this->safeDelete($salary, 'admin.salaries.index', [], 'Salary record deleted successfully.');
     }
 
     public function markAsPaid(Request $request, Salary $salary)

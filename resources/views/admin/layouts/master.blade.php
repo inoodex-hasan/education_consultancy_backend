@@ -45,6 +45,7 @@
             @include('admin.layouts.header')
 
             <div class="animate__animated p-6" :class="[$store.app.animation]">
+                @include('admin.layouts.partials.flash-messages')
                 @yield('content')
             </div>
 

@@ -81,11 +81,8 @@ class BudgetController extends Controller
     public function destroy(Budget $budget)
     {
         $this->authorize('*accountant');
-        $budget->delete();
 
-        return redirect()
-            ->route('admin.budgets.index')
-            ->with('success', 'Budget deleted successfully.');
+        return $this->safeDelete($budget, 'admin.budgets.index', [], 'Budget deleted successfully.');
     }
 
     private function validateBudget(Request $request): array

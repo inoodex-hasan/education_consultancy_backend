@@ -199,12 +199,17 @@ class InvoiceController extends Controller
      */
     public function destroy(Invoice $invoice)
     {
-        // Prevent deletion if payments are linked
+        // Prevent deletion if payments are linked (financial records)
         if ($invoice->payments()->exists()) {
-            return redirect()->back()->withErrors(['msg' => 'Invoice cannot be deleted because it has linked payments.']);
+            $count = $invoice->payments()->count();
+            return redirect()->back()
+                ->with('warning', "Cannot delete this Invoice because it has {$count} linked Payment(s). Please remove all payments first.");
         }
 
+        // Cascade delete invoice items first, then the invoice
+        $invoice->items()->delete();
         $invoice->delete();
+
         return redirect()->back()->with('success', 'Invoice deleted successfully.');
     }
 }

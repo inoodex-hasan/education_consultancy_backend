@@ -80,10 +80,7 @@ class MarketingCampaignController extends Controller
 
     public function destroy(MarketingCampaign $campaign)
     {
-        $campaign->delete();
-        return redirect()
-            ->route('admin.marketing.campaigns.index')
-            ->with('success', 'Campaign deleted successfully.');
+        return $this->safeDelete($campaign, 'admin.marketing.campaigns.index', [], 'Campaign deleted successfully.');
     }
 
     public function toggleBoosting(MarketingCampaign $campaign)

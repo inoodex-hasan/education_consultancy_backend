@@ -61,12 +61,7 @@ class CountryController extends Controller
 
     public function destroy(Country $country)
     {
-
-        $country->delete();
-
-        return redirect()
-            ->route('admin.countries.index')
-            ->with('success', 'Country deleted successfully.');
+        return $this->safeDelete($country, 'admin.countries.index', [], 'Country deleted successfully.');
     }
 
     private function validateCountry(Request $request): array

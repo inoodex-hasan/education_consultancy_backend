@@ -69,11 +69,7 @@ class OfficeAccountController extends Controller
 
     public function destroy(OfficeAccount $officeAccount)
     {
-        $officeAccount->delete();
-
-        return redirect()
-            ->route('admin.office-accounts.index')
-            ->with('success', 'Office account deleted successfully.');
+        return $this->safeDelete($officeAccount, 'admin.office-accounts.index', [], 'Office account deleted successfully.');
     }
 
     private function validateAccount(Request $request): array

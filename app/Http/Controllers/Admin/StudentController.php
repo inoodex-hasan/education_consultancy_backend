@@ -206,11 +206,7 @@ class StudentController extends Controller
 
     public function destroy(Student $student)
     {
-        $student->delete();
-
-        return redirect()
-            ->route('admin.students.index')
-            ->with('success', 'Student deleted successfully.');
+        return $this->safeDelete($student, 'admin.students.index', [], 'Student deleted successfully.');
     }
 
     private function validateStudent(Request $request): array

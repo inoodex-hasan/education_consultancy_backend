@@ -113,9 +113,9 @@
                         @if (auth()->check() && auth()->user()->unreadNotifications->count() > 0)
                             <span class="absolute top-0 flex h-3 w-3 ltr:right-0 rtl:left-0">
                                 <span
-                                    class="absolute -top-[3px] inline-flex h-full w-full animate-ping rounded-full bg-success/50 opacity-75 ltr:-right-[3px] rtl:-left-[3px]"></span>
+                                    class="absolute -top-[3px] inline-flex h-full w-full animate-ping rounded-full bg-danger/50 opacity-75 ltr:-right-[3px] rtl:-left-[3px]"></span>
                                 <span
-                                    class="relative inline-flex h-[6px] w-[6px] rounded-full bg-success ltr:right-0 rtl:left-0"></span>
+                                    class="relative inline-flex h-[6px] w-[6px] rounded-full bg-danger ltr:right-0 rtl:left-0"></span>
                             </span>
                         @endif
                     </a>

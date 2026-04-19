@@ -128,7 +128,6 @@ class JournalEntryController extends Controller
     public function destroy(JournalEntry $journalEntry)
     {
         // Logic to prevent deletion if reconciled (future)
-        $journalEntry->delete();
-        return redirect()->back()->with('success', 'Journal entry deleted.');
+        return $this->safeDelete($journalEntry, 'admin.journal-entries.index', [], 'Journal entry deleted.');
     }
 }

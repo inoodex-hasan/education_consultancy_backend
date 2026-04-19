@@ -231,7 +231,7 @@
                         class="btn btn-outline-danger uppercase text-[10px] font-bold">Reset</button>
                     <button type="submit"
                         class="btn btn-primary px-16 uppercase text-xs font-black shadow-[0_10px_20px_-10px_rgba(67,97,238,0.44)]">
-                        Print Invoice
+                        Save
                     </button>
                 </div>
             </div>

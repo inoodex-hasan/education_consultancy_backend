@@ -102,8 +102,6 @@ class CommissionController extends Controller
     {
         $this->authorize('*accountant');
 
-        $commission->delete();
-
-        return redirect()->back()->with('success', 'Commission removed.');
+        return $this->safeDelete($commission, 'admin.commissions.index', [], 'Commission removed.');
     }
 }

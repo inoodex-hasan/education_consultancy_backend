@@ -69,6 +69,7 @@
                     <select name="payment_method" id="payment_method" class="form-select" required>
                         <option value="">Select Payment Method</option>
                         <option value="cash" {{ old('payment_method') == 'cash' ? 'selected' : '' }}>Cash</option>
+                        <option value="credit" {{ old('payment_method') == 'credit' ? 'selected' : '' }}>Credit</option>
                         <option value="bank_transfer" {{ old('payment_method') == 'bank_transfer' ? 'selected' : '' }}>Bank
                             Transfer</option>
                         <option value="mobile_banking" {{ old('payment_method') == 'mobile_banking' ? 'selected' : '' }}>
@@ -97,7 +98,7 @@
                     @enderror
                 </div>
 
-                <div class="form-group">
+                <!-- <div class="form-group">
                     <label for="salary_id">Link to Salary (Optional)</label>
                     <select name="salary_id" id="salary_id" class="form-select">
                         <option value="">-- Not Linked to Salary --</option>
@@ -112,7 +113,7 @@
                     @error('salary_id')
                         <span class="text-danger text-sm">{{ $message }}</span>
                     @enderror
-                </div>
+                </div> -->
 
                 <div class="form-group md:col-span-2">
                     <label for="notes">Notes</label>

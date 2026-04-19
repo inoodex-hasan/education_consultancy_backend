@@ -70,12 +70,7 @@ class CourseIntakeController extends Controller
 
     public function destroy(CourseIntake $courseIntake)
     {
-
-        $courseIntake->delete();
-
-        return redirect()
-            ->route('admin.course-intakes.index')
-            ->with('success', 'Intake deleted successfully.');
+        return $this->safeDelete($courseIntake, 'admin.course-intakes.index', [], 'Intake deleted successfully.');
     }
 
     private function validateIntake(Request $request): array

@@ -132,11 +132,7 @@ class ExpenseController extends Controller
     {
         $this->authorize('*accountant');
 
-        $expense->delete();
-
-        return redirect()
-            ->route('admin.expenses.index')
-            ->with('success', 'Expense deleted successfully.');
+        return $this->safeDelete($expense, 'admin.expenses.index', [], 'Expense deleted successfully.');
     }
 
     public function downloadPdf(Expense $expense)

@@ -153,8 +153,7 @@ class LeadController extends Controller
      */
     public function destroy(Lead $lead)
     {
-        $lead->delete();
-        return redirect()->route('admin.marketing.leads.index')->with('success', 'Lead deleted successfully.');
+        return $this->safeDelete($lead, 'admin.marketing.leads.index', [], 'Lead deleted successfully.');
     }
 
     public function getUniversities(Request $request)

@@ -69,12 +69,7 @@ class CourseController extends Controller
 
     public function destroy(Course $course)
     {
-
-        $course->delete();
-
-        return redirect()
-            ->route('admin.courses.index')
-            ->with('success', 'Course deleted successfully.');
+        return $this->safeDelete($course, 'admin.courses.index', [], 'Course deleted successfully.');
     }
 
     private function validateCourse(Request $request): array
