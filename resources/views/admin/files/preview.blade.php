@@ -12,21 +12,21 @@
             <a href="{{ url()->previous() }}" class="btn btn-secondary">Back</a>
         </div>
 
-        <div class="panel">
+        <div class="panel p-0">
             @if (in_array($extension, ['jpg', 'jpeg', 'png']))
                 <div class="rounded-lg bg-black/10 p-4">
-                    <img src="{{ $fileUrl }}" alt="{{ $name }}" class="max-h-[75vh] w-full object-contain">
+                    <img src="{{ $fileUrl }}" alt="{{ $name }}" class="h-[90vh] w-full object-contain">
                 </div>
             @elseif ($extension === 'pdf')
-                <div class="rounded-lg bg-black/10 p-4">
-                    <div class="overflow-hidden rounded-lg border border-slate-300 bg-white">
-                        <iframe
-                            src="{{ $fileUrl }}"
-                            class="w-full h-[75vh] border-0"
-                            title="{{ $name }}"
-                        ></iframe>
-                    </div>
-                    <div class="mt-4 text-sm text-white-dark">If the PDF does not render above, open or download it below.</div>
+                <div class="h-[calc(100vh-80px)]">
+                    <iframe
+                        src="{{ $fileUrl }}"
+                        class="w-full h-full border-0"
+                        title="{{ $name }}"
+                    ></iframe>
+                </div>
+                <div class="p-4">
+                    <div class="text-sm text-white-dark">If the PDF does not render above, open or download it below.</div>
                     <div class="mt-4 flex items-center justify-center gap-3">
                         <a href="{{ $fileUrl }}" target="_blank" class="btn btn-outline-primary">Open PDF</a>
                         <a href="{{ $downloadUrl }}" class="btn btn-primary">Download</a>
@@ -43,11 +43,11 @@
                 </div>
             @endif
 
-            <div class="mt-4 flex justify-end">
+            <!-- <div class="mt-4 flex justify-end">
                 <a href="{{ $downloadUrl }}" class="btn btn-outline-primary">
                     Download
                 </a>
-            </div>
+            </div> -->
         </div>
     </div>
 @endsection
