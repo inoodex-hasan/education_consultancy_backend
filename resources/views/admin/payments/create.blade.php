@@ -86,7 +86,7 @@
                             <span id="info_total_paid" class="text-lg font-bold text-success">BDT 0.00</span>
                         </div>
                         <div class="flex flex-col">
-                            <span class="text-xs text-white-dark uppercase">Remaining Balance</span>
+                            <span class="text-xs text-white-dark uppercase">Due Amount</span>
                             <span id="info_balance" class="text-lg font-bold text-danger">BDT 0.00</span>
                         </div>
                     </div>
