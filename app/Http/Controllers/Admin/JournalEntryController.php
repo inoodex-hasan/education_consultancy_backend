@@ -18,15 +18,52 @@ class JournalEntryController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $entries = JournalEntry::with(['period', 'creator', 'application.student'])
-            ->withSum('items as total_amount', 'debit')
-            ->orderBy('date', 'desc')
-            ->orderBy('id', 'desc')
-            ->paginate(20);
+        $query = JournalEntry::with(['period', 'creator', 'application.student'])
+            ->withSum('items as total_amount', 'debit');
 
-        return view('admin.accounts.journal-entries.index', compact('entries'));
+        // Date range filter
+        if ($request->filled('start_date')) {
+            $query->whereDate('date', '>=', $request->start_date);
+        }
+        if ($request->filled('end_date')) {
+            $query->whereDate('date', '<=', $request->end_date);
+        }
+
+        // Reference number filter
+        if ($request->filled('reference_number')) {
+            $query->where('reference_number', 'like', '%' . $request->reference_number . '%');
+        }
+
+        // Period filter
+        if ($request->filled('period_id')) {
+            $query->where('period_id', $request->period_id);
+        }
+
+        // Student name filter
+        if ($request->filled('student_name')) {
+            $query->whereHas('application.student', function ($q) use ($request) {
+                $q->where(function ($sq) use ($request) {
+                    $sq->where('first_name', 'like', '%' . $request->student_name . '%')
+                        ->orWhere('last_name', 'like', '%' . $request->student_name . '%');
+                });
+            });
+        }
+
+        // Status filter
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        $entries = $query->orderBy('date', 'desc')
+            ->orderBy('id', 'desc')
+            ->paginate(20)
+            ->withQueryString();
+
+        $periods = AccountingPeriod::orderBy('start_date', 'desc')->get();
+
+        return view('admin.accounts.journal-entries.index', compact('entries', 'periods'));
     }
 
     /**

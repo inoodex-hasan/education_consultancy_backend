@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use App\Models\{Application, Invoice, OfficeAccount, Payment, Setting, Student, User, JournalEntry, JournalEntryItem, AccountingPeriod, ChartOfAccount};
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\DB;
+use Mpdf\Mpdf;
 
 class PaymentController extends Controller
 {
@@ -182,18 +183,42 @@ class PaymentController extends Controller
         }
     }
 
-    public function downloadInvoice(Payment $payment)
+    // public function downloadInvoice(Payment $payment)
+    // {
+    //     $this->authorize('*accountant');
+
+    //     $payment->load(['student', 'collector', 'application.university.country', 'application.course', 'application.intake']);
+    //     $settings = Setting::pluck('value', 'key')->all();
+
+    //     $pdf = Pdf::loadView('admin.payments.invoice', compact('payment', 'settings'));
+
+    //     $filename = 'Invoice_' . ($payment->receipt_number ?: $payment->id) . '.pdf';
+
+    //     return $pdf->download($filename);
+    // }
+
+      public function downloadInvoice(Payment $payment)
     {
         $this->authorize('*accountant');
 
-        $payment->load(['student', 'collector', 'application.university.country', 'application.course', 'application.intake']);
+        $payment->load(['student', 'collector', 'application.university.country', 'application.course', 'application.intake', 'invoice.payments', 'invoice.items']);
         $settings = Setting::pluck('value', 'key')->all();
 
-        $pdf = Pdf::loadView('admin.payments.invoice', compact('payment', 'settings'));
+        // Calculate remaining balance considering all payments
+        $totalPaid = $payment->invoice ? $payment->invoice->payments->sum('amount') : $payment->amount;
+        $remainingBalance = $payment->invoice ? max(0, $payment->invoice->total_amount - $totalPaid) : 0;
+
+        $mpdf = new Mpdf([
+        'mode' => 'utf-8',
+        'format' => 'A4',
+        'margin_top' => 10,
+        'margin_bottom' => 10,
+        ]);
+        $mpdf->WriteHTML(view('admin.payments.invoice', compact('payment', 'settings', 'remainingBalance', 'totalPaid'))->render());
 
         $filename = 'Invoice_' . ($payment->receipt_number ?: $payment->id) . '.pdf';
 
-        return $pdf->download($filename);
+        return $mpdf->Output($filename, 'D');
     }
 
     private function validatePayment(Request $request): array

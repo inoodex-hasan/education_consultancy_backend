@@ -142,6 +142,7 @@ Route::prefix('dashboard/marketing')->name('admin.marketing.')->group(function (
 // Expense Management
 Route::prefix('dashboard/expenses')->name('admin.expenses.')->group(function () {
     Route::get('/', [App\Http\Controllers\Admin\ExpenseController::class, 'index'])->name('index')->middleware('can:*accountant');
+    Route::get('/report', [App\Http\Controllers\Admin\ExpenseController::class, 'report'])->name('report')->middleware('can:*accountant');
     Route::get('/create', [App\Http\Controllers\Admin\ExpenseController::class, 'create'])->name('create')->middleware('can:*accountant');
     Route::post('/', [App\Http\Controllers\Admin\ExpenseController::class, 'store'])->name('store')->middleware('can:*accountant');
     Route::get('{expense}/pdf', [App\Http\Controllers\Admin\ExpenseController::class, 'downloadPdf'])->name('download-pdf')->middleware('can:*accountant');
@@ -212,6 +213,7 @@ Route::prefix('dashboard/invoices')->name('admin.invoices.')->group(function () 
     Route::put('{invoice}', [App\Http\Controllers\Admin\InvoiceController::class, 'update'])->name('update')->middleware('can:*application|*accountant');
     Route::get('{invoice}', [App\Http\Controllers\Admin\InvoiceController::class, 'show'])->name('show')->middleware('can:*consultant|*application|*accountant');
     Route::delete('{invoice}', [App\Http\Controllers\Admin\InvoiceController::class, 'destroy'])->name('destroy')->middleware('can:*accountant');
+    Route::get('/{invoice}/pdf', [App\Http\Controllers\Admin\InvoiceController::class, 'downloadPdf'])->name('download-pdf')->middleware('can:*consultant|*application|*accountant');
 });
 
 Route::prefix('dashboard/bank-reconciliations')->name('admin.bank-reconciliations.')->middleware(['auth'])->group(function () {
@@ -284,7 +286,7 @@ Route::prefix('dashboard/applications')->name('admin.applications.')->group(func
     Route::get('{application}/edit', [ApplicationController::class, 'edit'])->name('edit')->middleware('can:*application');
     Route::put('{application}', [ApplicationController::class, 'update'])->name('update')->middleware('can:*application');
     Route::delete('{application}', [ApplicationController::class, 'destroy'])->name('destroy')->middleware('can:*application');
-
+   
 });
 
 // Storage file serving route - handled through Laravel route to ensure proper access control

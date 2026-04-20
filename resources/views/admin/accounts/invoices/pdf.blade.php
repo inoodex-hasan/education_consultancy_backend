@@ -74,11 +74,11 @@
                     </tr>
                     <tr>
                         <td style="padding: 8px; border: 1px solid #47389D; width: 30%;">Name:</td>
-                        <td style="padding: 8px; border: 1px solid #47389D;">{{$payment->student->first_name}} {{$payment->student->last_name}}</td>
+                        <td style="padding: 8px; border: 1px solid #47389D;">{{$invoice->student->first_name}} {{$invoice->student->last_name}}</td>
                     </tr>
                     <tr>
                         <td style="padding: 8px; border: 1px solid #47389D;">Phone:</td>
-                        <td style="padding: 8px; border: 1px solid #47389D;">{{$payment->student->phone}}</td>
+                        <td style="padding: 8px; border: 1px solid #47389D;">{{$invoice->student->phone}}</td>
                     </tr>
                 </table>
             </td>
@@ -86,8 +86,8 @@
     <h1 style="font-size: 40px; margin: 0;">Invoice</h1>
 
     <div style="text-align: left; margin-top: 10px;">
-        <p style="font-size: 16px; margin: 5px 0;">Date:{{ $payment->date?->format('Y-m-d') ?? $payment->created_at->format('Y-m-d') }} </p>
-        <p style="font-size: 16px; margin: 0;">Invoice No: {{ $payment->invoice->invoice_number }} </p>
+        <p style="font-size: 16px; margin: 5px 0;">Date:{{ $invoice->date->format('Y-m-d') }} </p>
+        <p style="font-size: 16px; margin: 0;">Invoice No: {{ $invoice->invoice_number }} </p>
     </div>
 </td>
             <!-- <td style="width: 45%; text-align: right; vertical-align: top;">
@@ -110,14 +110,16 @@
     </tr>
 </thead>
         <tbody>
+            @foreach($invoice->items as $item)
             <tr style="text-align: center;">
-                <td style="padding: 10px; border: 1px solid #47389D;">1</td>
-                <td style="padding: 10px; border: 1px solid #47389D;">{{$payment->invoice->notes}}</td>
-                <td style="padding: 10px; border: 1px solid #47389D;">{{$payment->invoice->total_amount}}</td>
-                <td style="padding: 10px; border: 1px solid #47389D;">1</td>
-                <td style="padding: 10px; border: 1px solid #47389D;">{{$payment->invoice->total_amount}}</td>
+                <td style="padding: 10px; border: 1px solid #47389D;">{{ $loop->index + 1 }}</td>
+                <td style="padding: 10px; border: 1px solid #47389D;">{{$item->description}}</td>
+                <td style="padding: 10px; border: 1px solid #47389D;">{{$item->unit_price}}</td>
+                <td style="padding: 10px; border: 1px solid #47389D;">{{$item->quantity}}</td>
+                <td style="padding: 10px; border: 1px solid #47389D;">{{$item->total}}</td>
                 <td style="padding: 10px; border: 1px solid #47389D;">BDT</td>
             </tr>
+            @endforeach
             <tr>
                 <td colspan="3" rowspan="5" style="border: 1px solid #47389D; vertical-align: top; padding: 15px;">
                     <h3 style="font-size: 18px; margin-bottom: 8px;">Payment Method:</h3>
@@ -128,33 +130,33 @@
                     <p style="margin: 2px 0;">Routing Number : 060263629</p>
                 </td>
                 <td style="padding: 8px; border: 1px solid #47389D;">Sub Total</td>
-                <td style="padding: 8px; border: 1px solid #47389D;">{{$payment->invoice->total_amount}}</td>
+                <td style="padding: 8px; border: 1px solid #47389D;">{{$invoice->total_amount}}</td>
                 <td style="padding: 8px; border: 1px solid #47389D;">BDT</td>
             </tr>
             <tr>
                 <td style="padding: 8px; border: 1px solid #47389D;">Paid:</td>
-                <td style="padding: 8px; border: 1px solid #47389D;">{{ number_format($payment->amount, 2, '.', '') }}</td>
+                <td style="padding: 8px; border: 1px solid #47389D;">{{$invoice->paid ?? '0.00'}}</td>
                 <td style="padding: 8px; border: 1px solid #47389D;">BDT</td>
             </tr>
             <tr>
                 <td style="padding: 8px; border: 1px solid #47389D;">Due:</td>
-                <td style="padding: 8px; border: 1px solid #47389D;">{{ number_format($remainingBalance, 2, '.', '') }}</td>
+                <td style="padding: 8px; border: 1px solid #47389D;">{{$invoice->total_amount ?? '0.00'}}</td>
                 <td style="padding: 8px; border: 1px solid #47389D;">BDT</td>
             </tr>
             <tr>
                 <td style="padding: 8px; border: 1px solid #47389D;">Total Paid:</td>
-                <td style="padding: 8px; border: 1px solid #47389D;">{{ number_format($totalPaid, 2, '.', '') }}</td>
+                <td style="padding: 8px; border: 1px solid #47389D;">{{$invoice->paid ?? '0.00'}}</td>
                 <td style="padding: 8px; border: 1px solid #47389D;">BDT</td>
             </tr>
             <tr>
                 <td style="padding: 8px; border: 1px solid #47389D;">Total Due:</td>
-                <td style="padding: 8px; border: 1px solid #47389D;">{{ number_format($remainingBalance, 2, '.', '') }}</td>
+                <td style="padding: 8px; border: 1px solid #47389D;">{{$invoice->total_amount ?? '0.00'}}</td>
                 <td style="padding: 8px; border: 1px solid #47389D;">BDT</td>
             </tr>
         </tbody>
     </table>
 
-    <h2 class="text-gold" style="font-size: 18px; margin-top: 20px;">Note: {{ in_array($payment->status, ['completed', 'paid', 'success']) ? 'PAID' : 'UNPAID' }}</h2>
+    <h2 class="text-gold" style="font-size: 18px; margin-top: 20px;">Note: {{ $invoice->status === 'paid' ? 'PAID' : 'UNPAID' }}</h2>
 
     <table style="margin-top: 80px; width: 100%;">
         <tr>
@@ -198,7 +200,7 @@
         <table style="width: 100%; margin-top: 10px;" cellpadding="0" cellspacing="0">
             <tr>
                 <td class="bg-blue" style="height: 8px; width: 50%;"></td>
-                <td class="bg-gold" style="height: 8px; width: 50%;"></td>
+                <td class="bg-gold" style="height: 30px; width: 50%;"></td>
             </tr>
         </table>
     </div>

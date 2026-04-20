@@ -254,7 +254,7 @@
                         if (data.balance <= 0) {
                             amountInput.value = '0.00';
                             amountInput.disabled = true;
-                            submitBtn.textContent = 'Payment Completed';
+                            submitBtn.textContent = 'Save Payment';
 
                             // Visual feedback for completed status
                             infoBalance.classList.remove('text-danger');

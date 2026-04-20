@@ -11,6 +11,9 @@ use App\Models\ChartOfAccount;
 use App\Models\Application;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Models\Course;
+use App\Models\CourseIntake;
+use Mpdf\Mpdf;
 
 class InvoiceController extends Controller
 {
@@ -212,4 +215,24 @@ class InvoiceController extends Controller
 
         return redirect()->back()->with('success', 'Invoice deleted successfully.');
     }
+
+    public function downloadPdf(Invoice $invoice)
+    {
+    $invoice->load(['student', 'university', 'university.country', 'course', 'intake', 'items']);
+
+    $mpdf = new Mpdf([
+    'mode' => 'utf-8',
+    'format' => 'A4',
+    'margin_top' => 10,
+    'margin_bottom' => 10,
+    ]);
+
+    $html = view('admin.accounts.invoices.pdf', compact('invoice'))->render();
+
+    $mpdf->WriteHTML($html);
+
+    return response($mpdf->Output('', 'S'))
+        ->header('Content-Type', 'application/pdf')
+        ->header('Content-Disposition', 'attachment; filename="Invoice_' . $invoice->invoice_number . '.pdf"');
+}
 }

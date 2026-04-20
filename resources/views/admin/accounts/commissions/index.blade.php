@@ -15,9 +15,9 @@
                     <input type="text" name="search" value="{{ request('search') }}" placeholder="Search by employee, student, application..."
                         class="form-input w-full" />
                 </div>
-                <div class="w-full md:w-40">
-                    <select name="status" class="form-select w-full">
-                        <option value="">All Status</option>
+                <div class="w-32 shrink-0">
+                    <select name="status" class="form-select w-full text-sm">
+                        <option value="">All</option>
                         <option value="pending" {{ request('status') === 'pending' ? 'selected' : '' }}>Pending</option>
                         <option value="paid" {{ request('status') === 'paid' ? 'selected' : '' }}>Paid</option>
                     </select>

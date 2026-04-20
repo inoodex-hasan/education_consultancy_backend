@@ -140,8 +140,8 @@
                                 <a href="{{ route('admin.students.show', $app->student->id) }}"
                                     class="btn btn-sm btn-outline-info">View</a>
                                 @canany(['*application'])
-                                <a href="{{ route('admin.applications.download-pdf', $app->id) }}"
-                                    class="btn btn-sm btn-outline-success">PDF</a>
+                                <!-- <a href="{{ route('admin.applications.download-pdf', $app->id) }}"
+                                    class="btn btn-sm btn-outline-success">PDF</a> -->
                                 <a href="{{ route('admin.applications.edit', $app->id) }}"
                                     class="btn btn-sm btn-outline-primary">Edit</a>
                                 <form action="{{ route('admin.applications.destroy', $app->id) }}" method="POST"

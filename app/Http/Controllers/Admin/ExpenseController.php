@@ -32,22 +32,12 @@ class ExpenseController extends Controller
             });
         }
 
-        // Timeframe filter: daily, monthly, yearly
-        if ($timeframe = $request->get('timeframe')) {
-            switch ($timeframe) {
-                case 'daily':
-                    $query->whereDate('expense_date', today());
-                    break;
-
-                case 'monthly':
-                    $query->whereMonth('expense_date', now()->month)
-                        ->whereYear('expense_date', now()->year);
-                    break;
-
-                case 'yearly':
-                    $query->whereYear('expense_date', now()->year);
-                    break;
-            }
+        // Date range filter
+        if ($startDate = $request->get('start_date')) {
+            $query->whereDate('expense_date', '>=', $startDate);
+        }
+        if ($endDate = $request->get('end_date')) {
+            $query->whereDate('expense_date', '<=', $endDate);
         }
 
         $expenses = $query->latest()->paginate(15)->withQueryString();
@@ -141,6 +131,40 @@ class ExpenseController extends Controller
 
         $pdf = Pdf::loadView('admin.expenses.pdf', compact('expense'));
         return $pdf->download('expense-' . $expense->id . '.pdf');
+    }
+
+    public function report(Request $request)
+    {
+        $this->authorize('*accountant');
+
+        $query = Expense::with(['creator', 'chartOfAccount']);
+
+        // Apply same filters as index
+        if ($search = $request->get('search')) {
+            $query->where(function ($q) use ($search) {
+                $q->where('description', 'like', "%{$search}%")
+                    ->orWhere('payment_method', 'like', "%{$search}%");
+            });
+        }
+
+        if ($category = $request->get('category')) {
+            $query->whereHas('chartOfAccount', function ($q) use ($category) {
+                $q->where('name', 'like', "%{$category}%");
+            });
+        }
+
+        if ($startDate = $request->get('start_date')) {
+            $query->whereDate('expense_date', '>=', $startDate);
+        }
+        if ($endDate = $request->get('end_date')) {
+            $query->whereDate('expense_date', '<=', $endDate);
+        }
+
+        $expenses = $query->orderBy('expense_date', 'desc')->get();
+        $totalAmount = $expenses->sum('amount');
+
+        $pdf = Pdf::loadView('admin.expenses.report', compact('expenses', 'totalAmount', 'request'));
+        return $pdf->download('expenses-report-' . now()->format('Y-m-d') . '.pdf');
     }
 
     private function validateExpense(Request $request): array

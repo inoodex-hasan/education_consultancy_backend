@@ -320,6 +320,20 @@
                             </div>
                         </div>
 
+                        {{-- EMGS Score --}}
+                        <div class="form-group">
+                            <label for="emgs_score">EMGS Score</label>
+                            <input type="number" name="emgs_score" id="emgs_score"
+                                class="form-input {{ !$canEdit ? 'bg-gray-100 dark:bg-black/20' : '' }}"
+                                value="{{ old('emgs_score', $application->emgs_score) }}" {{ !$canEdit ? 'disabled' : '' }}>
+                            @if (!$canEdit)
+                                <input type="hidden" name="emgs_score" value="{{ old('emgs_score', $application->emgs_score) }}">
+                            @endif
+                            @error('emgs_score')
+                                <span class="text-danger text-sm">{{ $message }}</span>
+                            @enderror
+                        </div>
+
                         {{-- Internal Notes --}}
                         <div class="form-group md:col-span-2">
                             <label for="internal_notes">Internal Notes</label>

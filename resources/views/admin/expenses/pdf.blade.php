@@ -1,143 +1,186 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Expense Details - #{{ $expense->id }}</title>
+    <title>Expense Report - #{{ $expense->id }}</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            color: #333;
-            margin: 20px;
+        @page {
+            margin: 0.5in;
+            footer: html_DocFooter;
         }
 
-        .header {
-            text-align: center;
-            margin-bottom: 30px;
-            border-bottom: 2px solid #333;
+        body {
+            font-family: 'Helvetica', 'Arial', sans-serif;
+            color: #2c3e50;
+            line-height: 1.5;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Header Styling */
+        .header-table {
+            width: 100%;
+            border-bottom: 2px solid #47389D;
+            margin-bottom: 20px;
             padding-bottom: 10px;
         }
 
-        .header h1 {
-            margin: 0;
-            font-size: 24px;
-        }
-
-        .section {
-            margin-bottom: 20px;
-        }
-
-        .section-title {
-            font-size: 14px;
+        .report-title {
+            font-size: 24pt;
             font-weight: bold;
-            color: #fff;
-            background-color: #333;
+            color: #47389D;
+            text-transform: uppercase;
+        }
+
+        /* Summary Box */
+        .summary-table {
+            width: 100%;
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
+            margin-bottom: 30px;
+        }
+
+        .summary-label {
+            font-size: 10pt;
+            color: #7f8c8d;
+            padding: 15px 20px 5px 20px;
+        }
+
+        .summary-value {
+            font-size: 18pt;
+            font-weight: bold;
+            color: #2c3e50;
+            padding: 0 20px 15px 20px;
+        }
+
+        .amount-highlight {
+            color: #e91e63;
+            font-size: 22pt;
+        }
+
+        /* Section Layout */
+        .section-header {
+            background-color: #47389D;
+            color: #ffffff;
+            font-size: 11pt;
+            font-weight: bold;
             padding: 8px 12px;
+            margin-top: 20px;
+        }
+
+        .details-table {
+            width: 100%;
+            border-collapse: collapse;
             margin-bottom: 10px;
         }
 
-        .detail-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 8px 0;
-            border-bottom: 1px solid #ddd;
+        .details-table td {
+            padding: 10px 12px;
+            border-bottom: 1px solid #edf2f7;
+            font-size: 10.5pt;
         }
 
-        .detail-label {
+        .label-cell {
             font-weight: bold;
-            width: 40%;
+            color: #4a5568;
+            width: 35%;
+            background-color: #fcfcfc;
         }
 
-        .detail-value {
-            width: 60%;
+        .value-cell {
+            width: 65%;
             text-align: right;
         }
 
-        .amount {
-            font-size: 16px;
-            font-weight: bold;
-            color: #e91e63;
+        /* Notes Box */
+        .notes-container {
+            border-left: 4px solid #C2A56D;
+            background-color: #fffdf7;
+            padding: 15px;
+            margin-top: 10px;
+            font-style: italic;
         }
 
-        .footer {
-            margin-top: 30px;
+        .footer-content {
             text-align: center;
-            font-size: 12px;
-            color: #666;
+            font-size: 9pt;
+            color: #a0aec0;
+            border-top: 1px solid #edf2f7;
+            padding-top: 10px;
         }
     </style>
 </head>
 
 <body>
-    <div class="header">
-        <h1>Expense Details</h1>
-        <p>Expense ID: #{{ $expense->id }}</p>
-    </div>
+    <table class="header-table">
+        <tr>
+            <td class="report-title">Expense Report</td>
+            <td style="text-align: right; vertical-align: bottom; color: #718096;">
+                ID: #{{ $expense->id }}
+            </td>
+        </tr>
+    </table>
 
-    <div class="section">
-        <div class="section-title">Basic Information</div>
-        <div class="detail-row">
-            <div class="detail-label">Description:</div>
-            <div class="detail-value">{{ $expense->description }}</div>
-        </div>
-        <div class="detail-row">
-            <div class="detail-label">Expense Date:</div>
-            <div class="detail-value">{{ $expense->expense_date->format('M d, Y') }}</div>
-        </div>
-        <div class="detail-row">
-            <div class="detail-label">Category:</div>
-            <div class="detail-value">{{ $expense->category ?: 'General' }}</div>
-        </div>
-    </div>
+    <table class="summary-table">
+        <tr>
+            <td class="summary-label">TOTAL AMOUNT</td>
+            <td class="summary-label" style="text-align: right;">EXPENSE DATE</td>
+        </tr>
+        <tr>
+            <td class="summary-value amount-highlight">
+                {{ number_format($expense->amount, 2) }} <span style="font-size: 12pt;">BDT</span>
+            </td>
+            <td class="summary-value" style="text-align: right;">
+                {{ $expense->expense_date->format('M d, Y') }}
+            </td>
+        </tr>
+    </table>
 
-    <div class="section">
-        <div class="section-title">Payment Details</div>
-        <div class="detail-row">
-            <div class="detail-label">Amount:</div>
-            <div class="detail-value amount">{{ number_format($expense->amount, 2) }}</div>
-        </div>
-        <div class="detail-row">
-            <div class="detail-label">Payment Method:</div>
-            <div class="detail-value">{{ $expense->payment_method ?: '-' }}</div>
-        </div>
+    <div class="section-header">Basic Information</div>
+    <table class="details-table">
+        <tr>
+            <td class="label-cell">Description</td>
+            <td class="value-cell">{{ $expense->description }}</td>
+        </tr>
+        <tr>
+            <td class="label-cell">Category</td>
+            <td class="value-cell">{{ $expense->category ?: 'General' }}</td>
+        </tr>
+    </table>
+
+    <div class="section-header">Payment & Audit</div>
+    <table class="details-table">
+        <tr>
+            <td class="label-cell">Payment Method</td>
+            <td class="value-cell">{{ $expense->payment_method ?: 'N/A' }}</td>
+        </tr>
         @if ($expense->office_account)
-            <div class="detail-row">
-                <div class="detail-label">Account:</div>
-                <div class="detail-value">{{ $expense->office_account->account_name }}</div>
-            </div>
+        <tr>
+            <td class="label-cell">Account Name</td>
+            <td class="value-cell">{{ $expense->office_account->account_name }}</td>
+        </tr>
         @endif
-    </div>
+        <tr>
+            <td class="label-cell">Recorded By</td>
+            <td class="value-cell">{{ $expense->creator->name ?? 'System' }}</td>
+        </tr>
+        <tr>
+            <td class="label-cell">Record Created</td>
+            <td class="value-cell">{{ $expense->created_at->format('M d, Y') }}</td>
+        </tr>
+    </table>
 
     @if ($expense->notes)
-        <div class="section">
-            <div class="section-title">Notes</div>
-            <div class="detail-row">
-                <div class="detail-value">{{ $expense->notes }}</div>
-            </div>
+        <div class="section-header">Notes & Comments</div>
+        <div class="notes-container">
+            {{ $expense->notes }}
         </div>
     @endif
 
-    <div class="section">
-        <div class="section-title">Record Information</div>
-        <div class="detail-row">
-            <div class="detail-label">Recorded By:</div>
-            <div class="detail-value">{{ $expense->creator->name ?? 'System' }}</div>
+    <htmlpagefooter name="DocFooter">
+        <div class="footer-content">
+            Computer generated document • Generated on {{ now()->format('M d, Y H:i A') }}
         </div>
-        <div class="detail-row">
-            <div class="detail-label">Created Date:</div>
-            <div class="detail-value">{{ $expense->created_at->format('M d, Y H:i A') }}</div>
-        </div>
-        @if ($expense->updated_at !== $expense->created_at)
-            <div class="detail-row">
-                <div class="detail-label">Last Updated:</div>
-                <div class="detail-value">{{ $expense->updated_at->format('M d, Y H:i A') }}</div>
-            </div>
-        @endif
-    </div>
-
-    <div class="footer">
-        <p>This is a computer-generated document. Generated on {{ now()->format('M d, Y H:i A') }}</p>
-    </div>
+    </htmlpagefooter>
 </body>
-
 </html>

@@ -147,6 +147,7 @@ class ApplicationController extends Controller
             'admission_fee_status' => 'nullable|boolean',
             'final_payment_status' => 'nullable|boolean',
             'emgs_payment_status' => 'nullable|boolean',
+            'emgs_score' => 'nullable|integer|min:0|max:100',
         ]);
 
         $application->update($validated);

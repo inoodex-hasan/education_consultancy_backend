@@ -9,15 +9,15 @@
         </div>
 
         <div class="mb-5">
-            <form method="GET" class="flex gap-4 mb-4">
+            <form method="GET" class="flex flex-col md:flex-row gap-4 mb-4">
                 <input type="text" name="search" value="{{ request('search') }}" placeholder="Search by employee, student, application..."
                     class="form-input flex-1" />
-                <select name="status" class="form-select">
+                <select name="status" class="form-select w-full md:w-40">
                     <option value="">All Status</option>
                     <option value="pending" {{ request('status') === 'pending' ? 'selected' : '' }}>Pending</option>
                     <option value="paid" {{ request('status') === 'paid' ? 'selected' : '' }}>Paid</option>
                 </select>
-                <button type="submit" class="btn btn-primary">Search</button>
+                <button type="submit" class="btn btn-primary whitespace-nowrap">Search</button>
             </form>
 
             <div class="table-responsive">

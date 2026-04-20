@@ -15,7 +15,80 @@
         </a>
     </div>
 
-    <div class="panel mt-6">
+    {{-- Filter Section --}}
+    <div class="panel mt-4">
+        <form method="GET" action="{{ route('admin.journal-entries.index') }}">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4">
+                {{-- Start Date --}}
+                <div>
+                    <label class="text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1 block">Start Date</label>
+                    <input type="date" name="start_date" value="{{ request('start_date') }}"
+                        class="form-input w-full text-sm">
+                </div>
+
+                {{-- End Date --}}
+                <div>
+                    <label class="text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1 block">End Date</label>
+                    <input type="date" name="end_date" value="{{ request('end_date') }}"
+                        class="form-input w-full text-sm">
+                </div>
+
+                {{-- Reference Number --}}
+                <div>
+                    <label class="text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1 block">Reference No</label>
+                    <input type="text" name="reference_number" value="{{ request('reference_number') }}"
+                        placeholder="Search reference..." class="form-input w-full text-sm">
+                </div>
+
+                {{-- Period --}}
+                <div>
+                    <label class="text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1 block">Period</label>
+                    <select name="period_id" class="form-select w-full text-sm">
+                        <option value="">All Periods</option>
+                        @foreach($periods as $period)
+                            <option value="{{ $period->id }}" {{ request('period_id') == $period->id ? 'selected' : '' }}>
+                                {{ $period->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+
+                {{-- Student Name --}}
+                <div>
+                    <label class="text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1 block">Student Name</label>
+                    <input type="text" name="student_name" value="{{ request('student_name') }}"
+                        placeholder="Search student..." class="form-input w-full text-sm">
+                </div>
+
+                {{-- Status --}}
+                <div>
+                    <label class="text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1 block">Status</label>
+                    <select name="status" class="form-select w-full text-sm">
+                        <option value="">All Status</option>
+                        <option value="posted" {{ request('status') == 'posted' ? 'selected' : '' }}>Posted</option>
+                        <option value="draft" {{ request('status') == 'draft' ? 'selected' : '' }}>Draft</option>
+                        <option value="reversed" {{ request('status') == 'reversed' ? 'selected' : '' }}>Reversed</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="flex justify-end gap-2 mt-4">
+                <a href="{{ route('admin.journal-entries.index') }}" class="btn btn-outline-secondary btn-sm">
+                    Reset
+                </a>
+                <button type="submit" class="btn btn-primary btn-sm">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-1">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                    Filter
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <div class="panel mt-4">
         <div class="table-responsive">
             <table class="table-hover w-full table-auto">
                 <thead>

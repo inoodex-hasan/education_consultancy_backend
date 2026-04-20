@@ -47,7 +47,7 @@
 
     @if ($logoSrc)
         <div class="watermark">
-            <img src="{{ $logoSrc }}" style="width: 100%; opacity: 0.1;">
+            <img src="{{ $logoSrc }}" style="width: 100%;">
         </div>
     @endif
 
@@ -74,48 +74,40 @@
                     </tr>
                     <tr>
                         <td style="padding: 8px; border: 1px solid #47389D; width: 30%;">Name:</td>
-                        <td style="padding: 8px; border: 1px solid #47389D;">{{$payment->student->first_name}} {{$payment->student->last_name}}</td>
+                        <td style="padding: 8px; border: 1px solid #47389D;"></td>
                     </tr>
                     <tr>
                         <td style="padding: 8px; border: 1px solid #47389D;">Phone:</td>
-                        <td style="padding: 8px; border: 1px solid #47389D;">{{$payment->student->phone}}</td>
+                        <td style="padding: 8px; border: 1px solid #47389D;"></td>
                     </tr>
                 </table>
             </td>
             <td style="width: 45%; text-align: right; vertical-align: top;">
-    <h1 style="font-size: 40px; margin: 0;">Invoice</h1>
-
-    <div style="text-align: left; margin-top: 10px;">
-        <p style="font-size: 16px; margin: 5px 0;">Date:{{ $payment->date?->format('Y-m-d') ?? $payment->created_at->format('Y-m-d') }} </p>
-        <p style="font-size: 16px; margin: 0;">Invoice No: {{ $payment->invoice->invoice_number }} </p>
-    </div>
-</td>
-            <!-- <td style="width: 45%; text-align: right; vertical-align: top;">
-                <h1 style="font-size: 40px; margin: 0; ">Invoice</h1>
-                <p style="font-size: 16px; margin: 5px 0; text-align: left">Date: </p>
-                <p style="font-size: 16px; margin: 0; text-align: left">Invoice No: </p>
-            </td> -->
+                <h1 style="font-size: 40px; margin: 0;">Invoice</h1>
+                <p style="font-size: 16px; margin: 5px 0;">Date: </p>
+                <p style="font-size: 16px; margin: 0;">Invoice No: </p>
+            </td>
         </tr>
     </table>
 
     <table style="margin-top: 25px; border: 1px solid #47389D;">
-    <thead>
-    <tr style="background-color: #47389D;">
-        <th style="padding: 10px; font-weight: 400; color: #ffffff; border: 1pt solid #47389D;">Sr No.</th>
-        <th style="padding: 10px; font-weight: 400; color: #ffffff; border: 1pt solid #47389D;">Purpose:</th>
-        <th style="padding: 10px; font-weight: 400; color: #ffffff; border: 1pt solid #47389D;">Fee</th>
-        <th style="padding: 10px; font-weight: 400; color: #ffffff; border: 1pt solid #47389D;">Qty</th>
-        <th style="padding: 10px; font-weight: 400; color: #ffffff; border: 1pt solid #47389D;">Total</th>
-        <th style="padding: 10px; font-weight: 400; color: #ffffff; border: 1pt solid #47389D;">Currency</th>
-    </tr>
-</thead>
+        <thead>
+            <tr class="bg-blue" style="color: #ffffff;">
+                <th style="padding: 10px; border: 1px solid #47389D;">Sr No.</th>
+                <th style="padding: 10px; border: 1px solid #47389D;">Purpose</th>
+                <th style="padding: 10px; border: 1px solid #47389D;">Fee</th>
+                <th style="padding: 10px; border: 1px solid #47389D;">Qty</th>
+                <th style="padding: 10px; border: 1px solid #47389D;">Total</th>
+                <th style="padding: 10px; border: 1px solid #47389D;">Currency</th>
+            </tr>
+        </thead>
         <tbody>
             <tr style="text-align: center;">
                 <td style="padding: 10px; border: 1px solid #47389D;">1</td>
-                <td style="padding: 10px; border: 1px solid #47389D;">{{$payment->invoice->notes}}</td>
-                <td style="padding: 10px; border: 1px solid #47389D;">{{$payment->invoice->total_amount}}</td>
+                <td style="padding: 10px; border: 1px solid #47389D;">Service Fee</td>
+                <td style="padding: 10px; border: 1px solid #47389D;">0.00</td>
                 <td style="padding: 10px; border: 1px solid #47389D;">1</td>
-                <td style="padding: 10px; border: 1px solid #47389D;">{{$payment->invoice->total_amount}}</td>
+                <td style="padding: 10px; border: 1px solid #47389D;">0.00</td>
                 <td style="padding: 10px; border: 1px solid #47389D;">BDT</td>
             </tr>
             <tr>
@@ -128,33 +120,33 @@
                     <p style="margin: 2px 0;">Routing Number : 060263629</p>
                 </td>
                 <td style="padding: 8px; border: 1px solid #47389D;">Sub Total</td>
-                <td style="padding: 8px; border: 1px solid #47389D;">{{$payment->invoice->total_amount}}</td>
-                <td style="padding: 8px; border: 1px solid #47389D;">BDT</td>
+                <td style="padding: 8px; border: 1px solid #47389D;"></td>
+                <td style="padding: 8px; border: 1px solid #47389D;"></td>
             </tr>
             <tr>
                 <td style="padding: 8px; border: 1px solid #47389D;">Paid:</td>
-                <td style="padding: 8px; border: 1px solid #47389D;">{{ number_format($payment->amount, 2, '.', '') }}</td>
-                <td style="padding: 8px; border: 1px solid #47389D;">BDT</td>
+                <td style="padding: 8px; border: 1px solid #47389D;"></td>
+                <td style="padding: 8px; border: 1px solid #47389D;"></td>
             </tr>
             <tr>
                 <td style="padding: 8px; border: 1px solid #47389D;">Due:</td>
-                <td style="padding: 8px; border: 1px solid #47389D;">{{ number_format($remainingBalance, 2, '.', '') }}</td>
-                <td style="padding: 8px; border: 1px solid #47389D;">BDT</td>
+                <td style="padding: 8px; border: 1px solid #47389D;"></td>
+                <td style="padding: 8px; border: 1px solid #47389D;"></td>
             </tr>
             <tr>
                 <td style="padding: 8px; border: 1px solid #47389D;">Total Paid:</td>
-                <td style="padding: 8px; border: 1px solid #47389D;">{{ number_format($totalPaid, 2, '.', '') }}</td>
-                <td style="padding: 8px; border: 1px solid #47389D;">BDT</td>
+                <td style="padding: 8px; border: 1px solid #47389D;"></td>
+                <td style="padding: 8px; border: 1px solid #47389D;"></td>
             </tr>
             <tr>
                 <td style="padding: 8px; border: 1px solid #47389D;">Total Due:</td>
-                <td style="padding: 8px; border: 1px solid #47389D;">{{ number_format($remainingBalance, 2, '.', '') }}</td>
-                <td style="padding: 8px; border: 1px solid #47389D;">BDT</td>
+                <td style="padding: 8px; border: 1px solid #47389D;"></td>
+                <td style="padding: 8px; border: 1px solid #47389D;"></td>
             </tr>
         </tbody>
     </table>
 
-    <h2 class="text-gold" style="font-size: 18px; margin-top: 20px;">Note: {{ in_array($payment->status, ['completed', 'paid', 'success']) ? 'PAID' : 'UNPAID' }}</h2>
+    <h2 class="text-gold" style="font-size: 18px; margin-top: 20px;">Note:</h2>
 
     <table style="margin-top: 80px; width: 100%;">
         <tr>
@@ -164,7 +156,7 @@
         </tr>
     </table>
 
-    <div style="margin-top: 150px;">
+    <div style="margin-top: 50px;">
         <table style="width: 100%;">
             <tr>
                 <td style="width: 15%; vertical-align: bottom;">
@@ -172,21 +164,21 @@
                         <img src="{{ $qrSrc }}" style="width: 70px; height: 70px;">
                     @endif
                 </td>
-                <td style="width: 100%;">
-                    <table style="width: 100%; font-size: 12px;">
+                <td style="width: 85%;">
+                    <table style="width: 100%; font-size: 10px;">
                         <tr>
                             <td>
-                                <strong style="font-size: 12px;">Dhaka Office</strong><br>
+                                <strong style="font-size: 11px;">Dhaka Office</strong><br>
                                 Haq Tower (Opposite of BRB Hospital)<br>
                                 Floor 6, Panthapath, Dhaka-1209
                             </td>
                             <td>
-                                <strong style="font-size: 12px;">Chattogram Office</strong><br>
+                                <strong style="font-size: 11px;">Chattogram Office</strong><br>
                                 Ridima Tower (Shahjalal Bank Building)<br>
                                 Level-4, Chawkbazar, Chattogram
                             </td>
                             <td style="text-align: right;">
-                                <strong style="font-size: 12px;">+88 01880-942457</strong><br>
+                                <strong style="font-size: 11px;">+88 01880-942457</strong><br>
                                 insafimmigration@gmail.com
                             </td>
                         </tr>
@@ -198,7 +190,7 @@
         <table style="width: 100%; margin-top: 10px;" cellpadding="0" cellspacing="0">
             <tr>
                 <td class="bg-blue" style="height: 8px; width: 50%;"></td>
-                <td class="bg-gold" style="height: 8px; width: 50%;"></td>
+                <td class="bg-gold" style="height: 30px; width: 50%;"></td>
             </tr>
         </table>
     </div>

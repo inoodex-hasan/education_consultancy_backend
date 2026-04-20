@@ -56,6 +56,9 @@
                                 <a href="{{ route('admin.invoices.show', $invoice) }}"
                                     class="btn btn-sm btn-outline-primary">View</a>
 
+                                <a href="{{ route('admin.invoices.download-pdf', $invoice) }}"
+                                    class="btn btn-sm btn-outline-success">PDF</a>
+
                                 <a href="{{ route('admin.invoices.edit', $invoice) }}"
                                     class="btn btn-sm btn-outline-warning">Edit</a>
 

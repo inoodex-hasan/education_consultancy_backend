@@ -37,6 +37,7 @@ class Application extends Model
         'admission_fee_status',
         'final_payment_status',
         'emgs_payment_status',
+        'emgs_score',
     ];
 
     protected $casts = [

@@ -19,7 +19,7 @@
                     <select name="application_id" id="application_id" class="form-select" required>
                         <option value="">Select Application</option>
                         @foreach(\App\Models\Application::with('student')->latest()->get() as $app)
-                            <option value="{{ $app->id }}" {{ old('application_id') == $app->id ? 'selected' : '' }}>
+                            <option value="{{ $app->id }}" data-created-by="{{ $app->created_by }}" {{ old('application_id') == $app->id ? 'selected' : '' }}>
                                 {{ $app->application_id }} - {{ $app->student->full_name ?? 'No Student' }}
                             </option>
                         @endforeach
@@ -40,6 +40,7 @@
                             </option>
                         @endforeach
                     </select>
+                    <p class="text-xs text-gray-500 mt-1">Auto-selected from application creator</p>
                     @error('user_id')
                         <span class="text-red-500 text-sm">{{ $message }}</span>
                     @enderror
@@ -85,3 +86,23 @@
         </form>
     </div>
 @endsection
+
+@push('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const applicationSelect = document.getElementById('application_id');
+            const userSelect = document.getElementById('user_id');
+
+            applicationSelect.addEventListener('change', function() {
+                const selectedOption = this.options[this.selectedIndex];
+                const createdById = selectedOption.getAttribute('data-created-by');
+
+                if (createdById) {
+                    userSelect.value = createdById;
+                } else {
+                    userSelect.value = '';
+                }
+            });
+        });
+    </script>
+@endpush
