@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Application;
 use App\Models\VfsChecklist;
+use App\Models\VfsChecklistTemplate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -69,27 +70,214 @@ class VfsChecklistController extends Controller
 
     public function show(Application $application)
     {
-        // Auto-create default checklist items if none exist
+        // Get country's ID from application's university
+        $countryId = $application->university?->country_id;
+
+        // Auto-create checklist items from templates if none exist
         if ($application->vfsChecklist()->count() === 0) {
-            $items = collect(self::DEFAULT_CHECKLIST)->map(function ($item) use ($application) {
-                return [
+            $this->createChecklistFromTemplates($application, $countryId);
+        }
+
+        // Get active template names filtered by country (global + country-specific)
+        $activeTemplateNames = VfsChecklistTemplate::getActiveItems($countryId);
+
+        $checklistItems = $application->vfsChecklist()
+            ->with('checkedBy')
+            ->whereIn('checklist_item', $activeTemplateNames)
+            ->orderBy('id')
+            ->get();
+
+        return view('admin.vfs-checklist.show', compact('application', 'checklistItems', 'countryId'));
+    }
+
+    private function createChecklistFromTemplates(Application $application, ?int $countryId = null): void
+    {
+        $templates = VfsChecklistTemplate::where('is_active', true);
+
+        // Filter by country: get global items + country-specific items
+        if ($countryId) {
+            $templates->where(function ($q) use ($countryId) {
+                $q->whereNull('country_id')
+                    ->orWhere('country_id', $countryId);
+            });
+        } else {
+            $templates->whereNull('country_id');
+        }
+
+        $templates = $templates->orderBy('sort_order')->get();
+
+        // If no templates exist, use default checklist (global only)
+        if ($templates->isEmpty()) {
+            $templates = collect(self::DEFAULT_CHECKLIST)->map(function ($item, $index) {
+                return (object) [
+                    'item_name' => $item,
+                    'sort_order' => $index,
+                    'country_id' => null,
+                ];
+            });
+        }
+
+        $items = $templates->map(function ($template) use ($application) {
+            return [
+                'application_id' => $application->id,
+                'checklist_item' => $template->item_name,
+                'is_checked' => false,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ];
+        });
+
+        VfsChecklist::insert($items->toArray());
+    }
+
+    public function resetToTemplates(Application $application)
+    {
+        $countryId = $application->university?->country_id;
+
+        // Delete existing items
+        $application->vfsChecklist()->delete();
+
+        // Create from templates with country filter
+        $this->createChecklistFromTemplates($application, $countryId);
+
+        return redirect()->route('admin.vfs-checklist.show', $application)
+            ->with('success', 'Checklist reset to country-specific templates.');
+    }
+
+    public function syncWithTemplates(Application $application)
+    {
+        $countryId = $application->university?->country_id;
+        $existingItems = $application->vfsChecklist()->pluck('checklist_item')->toArray();
+
+        $activeTemplates = VfsChecklistTemplate::where('is_active', true);
+
+        // Filter by country: get global items + country-specific items
+        if ($countryId) {
+            $activeTemplates->where(function ($q) use ($countryId) {
+                $q->whereNull('country_id')
+                    ->orWhere('country_id', $countryId);
+            });
+        } else {
+            $activeTemplates->whereNull('country_id');
+        }
+
+        $activeTemplates = $activeTemplates->orderBy('sort_order')->get();
+
+        $newItems = [];
+        foreach ($activeTemplates as $template) {
+            if (!in_array($template->item_name, $existingItems)) {
+                $newItems[] = [
                     'application_id' => $application->id,
-                    'checklist_item' => $item,
+                    'checklist_item' => $template->item_name,
                     'is_checked' => false,
                     'created_at' => now(),
                     'updated_at' => now(),
                 ];
-            });
-
-            VfsChecklist::insert($items->toArray());
+            }
         }
 
-        $checklistItems = $application->vfsChecklist()
-            ->with('checkedBy')
-            ->orderBy('id')
+        if (!empty($newItems)) {
+            VfsChecklist::insert($newItems);
+            $message = count($newItems) . ' new item(s) added from templates.';
+        } else {
+            $message = 'No new items to add. Checklist is up to date.';
+        }
+
+        return redirect()->route('admin.vfs-checklist.show', $application)
+            ->with('success', $message);
+    }
+
+    // Template Management
+    public function templates()
+    {
+        $templates = VfsChecklistTemplate::with('country')
+            ->orderBy('sort_order')
+            ->orderBy('item_name')
             ->get();
 
-        return view('admin.vfs-checklist.show', compact('application', 'checklistItems'));
+        $countries = \App\Models\Country::where('status', '1')
+            ->orderBy('name')
+            ->get(['id', 'name']);
+
+        return view('admin.vfs-checklist.list', compact('templates', 'countries'));
+    }
+
+    public function storeTemplate(Request $request)
+    {
+        $request->validate([
+            'item_name' => 'required|string|max:255|unique:vfs_checklist_templates,item_name',
+            'country_id' => 'nullable|exists:countries,id',
+        ]);
+
+        $maxOrder = VfsChecklistTemplate::max('sort_order') ?? 0;
+
+        VfsChecklistTemplate::create([
+            'item_name' => $request->item_name,
+            'country_id' => $request->country_id,
+            'sort_order' => $maxOrder + 1,
+            'is_active' => true,
+        ]);
+
+        return redirect()->route('admin.vfs-checklist.templates')
+            ->with('success', 'Template item added successfully.');
+    }
+
+    public function updateTemplate(Request $request, VfsChecklistTemplate $template)
+    {
+        $request->validate([
+            'item_name' => 'required|string|max:255|unique:vfs_checklist_templates,item_name,' . $template->id,
+            'country_id' => 'nullable|exists:countries,id',
+            'is_active' => 'boolean',
+        ]);
+
+        $template->update([
+            'item_name' => $request->item_name,
+            'country_id' => $request->country_id,
+            'is_active' => $request->boolean('is_active', $template->is_active),
+        ]);
+
+        return redirect()->route('admin.vfs-checklist.templates')
+            ->with('success', 'Template item updated successfully.');
+    }
+
+    public function deleteTemplate(VfsChecklistTemplate $template)
+    {
+        $template->delete();
+
+        return redirect()->route('admin.vfs-checklist.templates')
+            ->with('success', 'Template item deleted.');
+    }
+
+    public function reorderTemplates(Request $request)
+    {
+        $request->validate([
+            'order' => 'required|array',
+            'order.*' => 'integer|exists:vfs_checklist_templates,id',
+        ]);
+
+        foreach ($request->order as $index => $id) {
+            VfsChecklistTemplate::where('id', $id)->update(['sort_order' => $index]);
+        }
+
+        return response()->json(['success' => true]);
+    }
+
+    public function seedDefaults()
+    {
+        $existing = VfsChecklistTemplate::pluck('item_name')->toArray();
+
+        foreach (self::DEFAULT_CHECKLIST as $index => $item) {
+            if (!in_array($item, $existing)) {
+                VfsChecklistTemplate::create([
+                    'item_name' => $item,
+                    'sort_order' => $index,
+                    'is_active' => true,
+                ]);
+            }
+        }
+
+        return redirect()->route('admin.vfs-checklist.templates')
+            ->with('success', 'Default checklist items seeded successfully.');
     }
 
     public function storeItem(Request $request, Application $application)

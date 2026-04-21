@@ -33,6 +33,36 @@ class ApplicationController extends Controller
             $query->where('status', $status);
         }
 
+        // Offer Letter filter
+        if ($offerLetter = $request->get('offer_letter')) {
+            $query->where('offer_letter_received', $offerLetter === '1');
+        }
+
+        // Visa Status filter
+        if ($visaStatus = $request->get('visa_status')) {
+            $query->where('visa_status', $visaStatus);
+        }
+
+        // EMGS Score filter
+        if ($emgsScore = $request->get('emgs_score')) {
+            $query->where('emgs_score', $emgsScore);
+        }
+
+        // Security Deposit filter
+        if ($securityDeposit = $request->get('security_deposit')) {
+            $query->where('security_deposit_status', $securityDeposit === '1');
+        }
+
+        // CVU Fee filter
+        if ($cvuFee = $request->get('cvu_fee')) {
+            $query->where('cvu_fee_status', $cvuFee === '1');
+        }
+
+        // Final Payment filter
+        if ($finalPayment = $request->get('final_payment')) {
+            $query->where('final_payment_status', $finalPayment === '1');
+        }
+
         $applications = $query->latest()->paginate(15)->withQueryString();
 
         return view('admin.applications.index', compact('applications'));

@@ -206,14 +206,14 @@ Route::prefix('dashboard/journal-entries')->name('admin.journal-entries.')->grou
 
 // Invoices
 Route::prefix('dashboard/invoices')->name('admin.invoices.')->group(function () {
-    Route::get('/', [App\Http\Controllers\Admin\InvoiceController::class, 'index'])->name('index')->middleware('can:*consultant|*application|*accountant');
-    Route::get('/create', [App\Http\Controllers\Admin\InvoiceController::class, 'create'])->name('create')->middleware('can:*consultant|*application|*accountant');
-    Route::post('/', [App\Http\Controllers\Admin\InvoiceController::class, 'store'])->name('store')->middleware('can:*consultant|*application|*accountant');
-    Route::get('{invoice}/edit', [App\Http\Controllers\Admin\InvoiceController::class, 'edit'])->name('edit')->middleware('can:*application|*accountant');
-    Route::put('{invoice}', [App\Http\Controllers\Admin\InvoiceController::class, 'update'])->name('update')->middleware('can:*application|*accountant');
-    Route::get('{invoice}', [App\Http\Controllers\Admin\InvoiceController::class, 'show'])->name('show')->middleware('can:*consultant|*application|*accountant');
+    Route::get('/', [App\Http\Controllers\Admin\InvoiceController::class, 'index'])->name('index')->middleware('can:*consultant|*accountant');
+    Route::get('/create', [App\Http\Controllers\Admin\InvoiceController::class, 'create'])->name('create')->middleware('can:*consultant|*accountant');
+    Route::post('/', [App\Http\Controllers\Admin\InvoiceController::class, 'store'])->name('store')->middleware('can:*consultant|*accountant');
+    Route::get('{invoice}/edit', [App\Http\Controllers\Admin\InvoiceController::class, 'edit'])->name('edit')->middleware('can:*accountant');
+    Route::put('{invoice}', [App\Http\Controllers\Admin\InvoiceController::class, 'update'])->name('update')->middleware('can:*accountant');
+    Route::get('{invoice}', [App\Http\Controllers\Admin\InvoiceController::class, 'show'])->name('show')->middleware('can:*consultant|*accountant');
     Route::delete('{invoice}', [App\Http\Controllers\Admin\InvoiceController::class, 'destroy'])->name('destroy')->middleware('can:*accountant');
-    Route::get('/{invoice}/pdf', [App\Http\Controllers\Admin\InvoiceController::class, 'downloadPdf'])->name('download-pdf')->middleware('can:*consultant|*application|*accountant');
+    Route::get('/{invoice}/pdf', [App\Http\Controllers\Admin\InvoiceController::class, 'downloadPdf'])->name('download-pdf')->middleware('can:*consultant|*accountant');
 });
 
 Route::prefix('dashboard/bank-reconciliations')->name('admin.bank-reconciliations.')->middleware(['auth'])->group(function () {
@@ -230,8 +230,16 @@ Route::prefix('dashboard/bank-reconciliations')->name('admin.bank-reconciliation
 // VFS Checklist
 Route::prefix('dashboard/vfs-checklist')->name('admin.vfs-checklist.')->group(function () {
     Route::get('/', [App\Http\Controllers\Admin\VfsChecklistController::class, 'index'])->name('index')->middleware('can:*application');
+    Route::get('/templates', [App\Http\Controllers\Admin\VfsChecklistController::class, 'templates'])->name('templates')->middleware('can:*application');
+    Route::post('/templates', [App\Http\Controllers\Admin\VfsChecklistController::class, 'storeTemplate'])->name('store-template')->middleware('can:*application');
+    Route::put('/templates/{template}', [App\Http\Controllers\Admin\VfsChecklistController::class, 'updateTemplate'])->name('update-template')->middleware('can:*application');
+    Route::delete('/templates/{template}', [App\Http\Controllers\Admin\VfsChecklistController::class, 'deleteTemplate'])->name('delete-template')->middleware('can:*application');
+    Route::post('/templates/reorder', [App\Http\Controllers\Admin\VfsChecklistController::class, 'reorderTemplates'])->name('reorder-templates')->middleware('can:*application');
+    Route::post('/templates/seed', [App\Http\Controllers\Admin\VfsChecklistController::class, 'seedDefaults'])->name('seed-templates')->middleware('can:*application');
     Route::get('/{application}', [App\Http\Controllers\Admin\VfsChecklistController::class, 'show'])->name('show')->middleware('can:*application');
     Route::post('/{application}/items', [App\Http\Controllers\Admin\VfsChecklistController::class, 'storeItem'])->name('store-item')->middleware('can:*application');
+    Route::post('/{application}/reset-templates', [App\Http\Controllers\Admin\VfsChecklistController::class, 'resetToTemplates'])->name('reset-templates')->middleware('can:*application');
+    Route::post('/{application}/sync-templates', [App\Http\Controllers\Admin\VfsChecklistController::class, 'syncWithTemplates'])->name('sync-templates')->middleware('can:*application');
     Route::post('/items/{item}/toggle', [App\Http\Controllers\Admin\VfsChecklistController::class, 'toggleItem'])->name('toggle-item')->middleware('can:*application');
     Route::put('/items/{item}/notes', [App\Http\Controllers\Admin\VfsChecklistController::class, 'updateNotes'])->name('update-notes')->middleware('can:*application');
     Route::delete('/items/{item}', [App\Http\Controllers\Admin\VfsChecklistController::class, 'deleteItem'])->name('delete-item')->middleware('can:*application');

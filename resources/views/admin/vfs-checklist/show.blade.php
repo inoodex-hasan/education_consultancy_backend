@@ -10,14 +10,28 @@
                 {{ $application->application_id }} |
                 {{ $application->student->first_name }} {{ $application->student->last_name }} |
                 {{ $application->university?->name ?? 'No University' }}
+                @if($application->university?->country)
+                    | <span class="text-info">{{ $application->university->country->name }}</span>
+                @endif
             </p>
         </div>
-        <a href="{{ route('admin.vfs-checklist.index') }}" class="btn btn-secondary">Back to List</a>
+        <div class="flex gap-2">
+            <a href="{{ route('admin.vfs-checklist.templates') }}" class="btn btn-outline-primary">Manage List</a>
+            <form action="{{ route('admin.vfs-checklist.sync-templates', $application) }}" method="POST" class="inline">
+                @csrf
+                <button type="submit" class="btn btn-warning">Sync List</button>
+            </form>
+            <!-- <form action="{{ route('admin.vfs-checklist.reset-templates', $application) }}" method="POST" class="inline" onsubmit="return confirm('This will delete ALL current items and recreate from templates. Continue?');">
+                @csrf
+                <button type="submit" class="btn btn-danger">Reset</button>
+            </form> -->
+            <a href="{{ route('admin.vfs-checklist.index') }}" class="btn btn-secondary">Back to List</a>
+        </div>
     </div>
 
-    @if (session('success'))
+    <!-- @if (session('success'))
         <div class="mt-4 p-4 border border-success bg-success/5 text-success rounded">{{ session('success') }}</div>
-    @endif
+    @endif -->
 
     <div class="mt-6">
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6" x-data="vfsChecklist()">

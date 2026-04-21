@@ -323,9 +323,14 @@
                         {{-- EMGS Score --}}
                         <div class="form-group">
                             <label for="emgs_score">EMGS Score</label>
-                            <input type="number" name="emgs_score" id="emgs_score"
-                                class="form-input {{ !$canEdit ? 'bg-gray-100 dark:bg-black/20' : '' }}"
-                                value="{{ old('emgs_score', $application->emgs_score) }}" {{ !$canEdit ? 'disabled' : '' }}>
+                            <select name="emgs_score" id="emgs_score"
+                                class="form-select {{ !$canEdit ? 'bg-gray-100 dark:bg-black/20' : '' }}"
+                                {{ !$canEdit ? 'disabled' : '' }}>
+                                <option value="">Select Score</option>
+                                @foreach([10, 20, 30, 40, 50, 60, 70, 80, 90, 100] as $score)
+                                    <option value="{{ $score }}" {{ old('emgs_score', $application->emgs_score) == $score ? 'selected' : '' }}>{{ $score }}%</option>
+                                @endforeach
+                            </select>
                             @if (!$canEdit)
                                 <input type="hidden" name="emgs_score" value="{{ old('emgs_score', $application->emgs_score) }}">
                             @endif

@@ -394,6 +394,7 @@
                     @endcanany
                 </ul>
             </li>
+             @can('*consultant')
             <li class="menu nav-item relative">
                 <a href="javascript:;" class="nav-link">
                     <div class="flex items-center">
@@ -419,16 +420,17 @@
                     </div>
                 </a>
                 <ul class="sub-menu">
-                    @canany(['*consultant', '*application'])
+                    @canany(['*consultant'])
                         <li><a href="{{ route('admin.invoices.create') }}">Generate Invoice</a></li>
                         <li><a href="{{ route('admin.invoices.index') }}">Invoice List</a></li>
                     @endcanany
                 </ul>
             </li>
+            @endcan
         @endcanany
         @can('*application')
             <li class="menu nav-item relative">
-                <a href="{{ route('admin.vfs-checklist.index') }}" class="nav-link">
+                <a href="javascript:;" class="nav-link">
                     <div class="flex items-center">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
                             xmlns="http://www.w3.org/2000/svg" class="shrink-0">
@@ -441,7 +443,18 @@
                         </svg>
                         <span class="px-1">VFS Checklist</span>
                     </div>
+                    <div class="right_arrow">
+                        <svg class="h-4 w-4 rotate-90" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path d="M9 5L15 12L9 19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                stroke-linejoin="round" />
+                        </svg>
+                    </div>
                 </a>
+                <ul class="sub-menu">
+                    <li><a href="{{ route('admin.vfs-checklist.index') }}">Checklist List</a></li>
+                    <li><a href="{{ route('admin.vfs-checklist.templates') }}">Manage List</a></li>
+                </ul>
             </li>
         @endcan
     @endif

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Apr 20, 2026 at 07:37 AM
+-- Generation Time: Apr 21, 2026 at 12:55 PM
 -- Server version: 8.4.3
 -- PHP Version: 8.3.26
 
@@ -191,10 +191,9 @@ CREATE TABLE `cache` (
 --
 
 INSERT INTO `cache` (`key`, `value`, `expiration`) VALUES
-('admin-dashboard-cache-tyro:user-4:privileges', 'a:4:{i:0;s:11:\"*accountant\";i:1;s:8:\"*payment\";i:2;s:10:\"*comission\";i:3;s:8:\"*invoice\";}', 1776668203),
-('admin-dashboard-cache-tyro:user-4:roles', 'a:1:{i:0;s:10:\"accountant\";}', 1776668203),
-('admin-dashboard-cache-tyro:user-6:privileges', 'a:1:{i:0;s:12:\"*application\";}', 1776670314),
-('admin-dashboard-cache-tyro:user-6:roles', 'a:1:{i:0;s:11:\"application\";}', 1776670314);
+('admin-dashboard-cache-tyro:user-1:roles', 'a:1:{i:0;s:5:\"admin\";}', 1776679958),
+('admin-dashboard-cache-tyro:user-6:privileges', 'a:1:{i:0;s:12:\"*application\";}', 1776776205),
+('admin-dashboard-cache-tyro:user-6:roles', 'a:1:{i:0;s:11:\"application\";}', 1776776205);
 
 -- --------------------------------------------------------
 
@@ -717,7 +716,9 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (88, '2026_04_15_040630_create_vfs_checklists_table', 46),
 (89, '2026_04_15_180449_drop_commissions_table', 47),
 (90, '2026_04_15_180930_create_commissions_table', 47),
-(91, '2026_04_20_035455_add_emgs_score_to_applications_table', 48);
+(91, '2026_04_20_035455_add_emgs_score_to_applications_table', 48),
+(92, '2026_04_21_000000_create_vfs_checklist_templates_table', 49),
+(93, '2026_04_21_000001_add_country_to_vfs_checklist_templates', 50);
 
 -- --------------------------------------------------------
 
@@ -1003,7 +1004,7 @@ CREATE TABLE `sessions` (
 --
 
 INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES
-('nhHQpK4u66J8s1w44Fd60xTgaa1dHn1D9nYEsHNy', 6, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36', 'YTo1OntzOjY6Il90b2tlbiI7czo0MDoiWHQxSmZFSE91RVB1bnpGVldlNGg1blJQTnZoSlVGcjhBR1Z2ZnBvOCI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czoxMDoidHlyby1sb2dpbiI7YToxOntzOjc6ImNhcHRjaGEiO2E6MDp7fX1zOjk6Il9wcmV2aW91cyI7YToyOntzOjM6InVybCI7czo0NzoiaHR0cDovLzEyNy4wLjAuMTo4MDAwL2Rhc2hib2FyZC9hcHBsaWNhdGlvbnMvMTEiO3M6NToicm91dGUiO3M6MjM6ImFkbWluLmFwcGxpY2F0aW9ucy5zaG93Ijt9czo1MDoibG9naW5fd2ViXzU5YmEzNmFkZGMyYjJmOTQwMTU4MGYwMTRjN2Y1OGVhNGUzMDk4OWQiO2k6Njt9', 1776670291);
+('vbL8tVMbcNIVEeCGABlvyPgOppx2s8qpOurkXaqR', 6, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36', 'YTo1OntzOjY6Il90b2tlbiI7czo0MDoieVdjbHVFQlZMbkRJRU5waEhzMTZRamtSY2VJbnpkbHJwVHJvQXEwQiI7czo5OiJfcHJldmlvdXMiO2E6Mjp7czozOiJ1cmwiO3M6NTU6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9kYXNoYm9hcmQvdmZzLWNoZWNrbGlzdC90ZW1wbGF0ZXMiO3M6NToicm91dGUiO3M6Mjk6ImFkbWluLnZmcy1jaGVja2xpc3QudGVtcGxhdGVzIjt9czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czoxMDoidHlyby1sb2dpbiI7YToxOntzOjc6ImNhcHRjaGEiO2E6MDp7fX1zOjUwOiJsb2dpbl93ZWJfNTliYTM2YWRkYzJiMmY5NDAxNTgwZjAxNGM3ZjU4ZWE0ZTMwOTg5ZCI7aTo2O30=', 1776776112);
 
 -- --------------------------------------------------------
 
@@ -1312,7 +1313,10 @@ INSERT INTO `tyro_audit_logs` (`id`, `user_id`, `event`, `auditable_type`, `audi
 (163, 4, 'user.logout', 'App\\Models\\User', 4, NULL, '{\"email\": \"accountant@example.com\"}', '{\"ip\": \"127.0.0.1\", \"is_console\": false, \"user_agent\": \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36\"}', '2026-04-20 06:44:42'),
 (164, 4, 'user.login', 'App\\Models\\User', 4, NULL, '{\"email\": \"accountant@example.com\"}', '{\"ip\": \"127.0.0.1\", \"is_console\": false, \"user_agent\": \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36\"}', '2026-04-20 06:45:32'),
 (165, 4, 'user.logout', 'App\\Models\\User', 4, NULL, '{\"email\": \"accountant@example.com\"}', '{\"ip\": \"127.0.0.1\", \"is_console\": false, \"user_agent\": \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36\"}', '2026-04-20 06:55:52'),
-(166, 6, 'user.login', 'App\\Models\\User', 6, NULL, '{\"email\": \"application@example.com\"}', '{\"ip\": \"127.0.0.1\", \"is_console\": false, \"user_agent\": \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36\"}', '2026-04-20 06:56:00');
+(166, 6, 'user.login', 'App\\Models\\User', 6, NULL, '{\"email\": \"application@example.com\"}', '{\"ip\": \"127.0.0.1\", \"is_console\": false, \"user_agent\": \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36\"}', '2026-04-20 06:56:00'),
+(167, 1, 'user.login', 'App\\Models\\User', 1, NULL, '{\"email\": \"hello@inoodex.com\"}', '{\"ip\": \"127.0.0.1\", \"is_console\": false, \"user_agent\": \"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:149.0) Gecko/20100101 Firefox/149.0\"}', '2026-04-20 08:17:54'),
+(168, 1, 'user.login', 'App\\Models\\User', 1, NULL, '{\"email\": \"hello@inoodex.com\"}', '{\"ip\": \"127.0.0.1\", \"is_console\": false, \"user_agent\": \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36\"}', '2026-04-20 09:23:40'),
+(169, 6, 'user.login', 'App\\Models\\User', 6, NULL, '{\"email\": \"application@example.com\"}', '{\"ip\": \"127.0.0.1\", \"is_console\": false, \"user_agent\": \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36\"}', '2026-04-21 10:20:00');
 
 -- --------------------------------------------------------
 
@@ -1426,6 +1430,88 @@ CREATE TABLE `vfs_checklists` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `vfs_checklists`
+--
+
+INSERT INTO `vfs_checklists` (`id`, `application_id`, `checklist_item`, `is_checked`, `checked_by`, `checked_at`, `notes`, `created_at`, `updated_at`) VALUES
+(106, 11, 'VFS Appointment', 0, NULL, NULL, NULL, '2026-04-21 06:42:16', '2026-04-21 06:42:16'),
+(107, 11, 'Visa Application', 0, NULL, NULL, NULL, '2026-04-21 06:42:16', '2026-04-21 06:42:16'),
+(108, 11, 'Photo 35X45', 0, NULL, NULL, NULL, '2026-04-21 06:42:16', '2026-04-21 06:42:16'),
+(109, 11, 'Passport', 0, NULL, NULL, NULL, '2026-04-21 06:42:16', '2026-04-21 06:42:16'),
+(110, 11, 'Academic Certificates (Education Board and ministry attestation)', 0, NULL, NULL, NULL, '2026-04-21 06:42:16', '2026-04-21 06:42:16'),
+(111, 11, 'Academic Transcripts (Education Board and ministry attestation)', 0, NULL, NULL, NULL, '2026-04-21 06:42:16', '2026-04-21 06:42:16'),
+(112, 11, 'English Proficiency (If any)', 0, NULL, NULL, NULL, '2026-04-21 06:42:16', '2026-04-21 06:42:16'),
+(113, 11, 'CV', 0, NULL, NULL, NULL, '2026-04-21 06:42:16', '2026-04-21 06:42:16'),
+(114, 11, 'Motivation Letter', 0, NULL, NULL, NULL, '2026-04-21 06:42:16', '2026-04-21 06:42:16'),
+(115, 11, 'Final Offer Letter and college others documents', 0, NULL, NULL, NULL, '2026-04-21 06:42:16', '2026-04-21 06:42:16'),
+(116, 11, 'Accommodation', 0, NULL, NULL, NULL, '2026-04-21 06:42:16', '2026-04-21 06:42:16'),
+(117, 11, 'Birth Certificate (Notarize and attested)', 0, NULL, NULL, NULL, '2026-04-21 06:42:16', '2026-04-21 06:42:16'),
+(118, 11, 'Insurance', 0, NULL, NULL, NULL, '2026-04-21 06:42:16', '2026-04-21 06:42:16'),
+(119, 11, 'Flight Booking', 0, NULL, NULL, NULL, '2026-04-21 06:42:16', '2026-04-21 06:42:16'),
+(120, 11, 'Student Bank ATM Card', 0, NULL, NULL, NULL, '2026-04-21 06:42:16', '2026-04-21 06:42:16'),
+(121, 11, 'Sponsor NID (Translation and notarize)', 0, NULL, NULL, NULL, '2026-04-21 06:42:16', '2026-04-21 06:42:16'),
+(122, 11, 'Applicant NID (Translation and notarize)', 0, NULL, NULL, NULL, '2026-04-21 06:42:16', '2026-04-21 06:42:16'),
+(123, 11, 'Sponsor Income Source (Trade License or Job Certificate) (Translation and notarize)', 0, NULL, NULL, NULL, '2026-04-21 06:42:16', '2026-04-21 06:42:16'),
+(124, 11, 'TIN certificate', 0, NULL, NULL, NULL, '2026-04-21 06:42:16', '2026-04-21 06:42:16'),
+(125, 11, 'TAX certificate 2 years', 0, NULL, NULL, NULL, '2026-04-21 06:42:16', '2026-04-21 06:42:16'),
+(126, 11, 'Bank Statement', 0, NULL, NULL, NULL, '2026-04-21 06:42:16', '2026-04-21 06:42:16'),
+(127, 11, 'Sponsor Bank ATM Card', 0, NULL, NULL, NULL, '2026-04-21 06:42:16', '2026-04-21 06:42:16'),
+(128, 11, 'Applicants ATM Card', 0, NULL, NULL, NULL, '2026-04-21 06:42:16', '2026-04-21 06:42:16'),
+(129, 11, 'Bank Account Cheque Book copy', 0, NULL, NULL, NULL, '2026-04-21 06:42:16', '2026-04-21 06:42:16'),
+(130, 11, 'Deposit Slip (If possible)', 0, NULL, NULL, NULL, '2026-04-21 06:42:16', '2026-04-21 06:42:16'),
+(131, 11, 'Financial Declaration Affidavit', 0, NULL, NULL, NULL, '2026-04-21 06:42:16', '2026-04-21 06:42:16'),
+(132, 11, 'test', 0, NULL, NULL, NULL, '2026-04-21 06:42:16', '2026-04-21 06:42:16');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `vfs_checklist_templates`
+--
+
+CREATE TABLE `vfs_checklist_templates` (
+  `id` bigint UNSIGNED NOT NULL,
+  `item_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `country_id` bigint UNSIGNED DEFAULT NULL,
+  `sort_order` int NOT NULL DEFAULT '0',
+  `is_active` tinyint(1) NOT NULL DEFAULT '1',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `vfs_checklist_templates`
+--
+
+INSERT INTO `vfs_checklist_templates` (`id`, `item_name`, `country_id`, `sort_order`, `is_active`, `created_at`, `updated_at`) VALUES
+(1, 'VFS Appointment', NULL, 0, 1, '2026-04-21 05:24:49', '2026-04-21 06:55:11'),
+(2, 'Visa Application', 4, 1, 1, '2026-04-21 05:24:49', '2026-04-21 05:25:34'),
+(3, 'Photo 35X45', 5, 2, 1, '2026-04-21 05:24:49', '2026-04-21 05:25:34'),
+(4, 'Passport', 4, 3, 1, '2026-04-21 05:24:49', '2026-04-21 05:25:34'),
+(5, 'Academic Certificates (Education Board and ministry attestation)', 5, 4, 1, '2026-04-21 05:24:49', '2026-04-21 05:25:34'),
+(6, 'Academic Transcripts (Education Board and ministry attestation)', 4, 5, 1, '2026-04-21 05:24:49', '2026-04-21 05:25:34'),
+(7, 'English Proficiency (If any)', 5, 6, 1, '2026-04-21 05:24:49', '2026-04-21 05:25:34'),
+(8, 'CV', 4, 7, 1, '2026-04-21 05:24:49', '2026-04-21 05:25:34'),
+(9, 'Motivation Letter', 5, 8, 1, '2026-04-21 05:24:49', '2026-04-21 05:25:34'),
+(10, 'Final Offer Letter and college others documents', 4, 9, 1, '2026-04-21 05:24:49', '2026-04-21 05:25:34'),
+(11, 'Accommodation', 5, 10, 1, '2026-04-21 05:24:49', '2026-04-21 05:25:34'),
+(12, 'Birth Certificate (Notarize and attested)', 4, 11, 1, '2026-04-21 05:24:49', '2026-04-21 05:25:34'),
+(13, 'Insurance', 4, 12, 1, '2026-04-21 05:24:49', '2026-04-21 05:25:34'),
+(14, 'Flight Booking', 5, 13, 1, '2026-04-21 05:24:49', '2026-04-21 05:25:34'),
+(15, 'Student Bank ATM Card', 4, 14, 1, '2026-04-21 05:24:49', '2026-04-21 05:25:34'),
+(16, 'Sponsor NID (Translation and notarize)', 4, 15, 1, '2026-04-21 05:24:49', '2026-04-21 05:25:34'),
+(17, 'Applicant NID (Translation and notarize)', 4, 16, 1, '2026-04-21 05:24:49', '2026-04-21 05:25:34'),
+(18, 'Sponsor Income Source (Trade License or Job Certificate) (Translation and notarize)', 5, 17, 1, '2026-04-21 05:24:49', '2026-04-21 05:25:34'),
+(19, 'TIN certificate', 5, 18, 1, '2026-04-21 05:24:49', '2026-04-21 05:25:34'),
+(20, 'TAX certificate 2 years', 5, 19, 1, '2026-04-21 05:24:49', '2026-04-21 05:25:34'),
+(21, 'Bank Statement', 5, 20, 1, '2026-04-21 05:24:49', '2026-04-21 05:25:34'),
+(22, 'Sponsor Bank ATM Card', 4, 21, 1, '2026-04-21 05:24:49', '2026-04-21 05:25:34'),
+(23, 'Applicants ATM Card', 4, 22, 1, '2026-04-21 05:24:49', '2026-04-21 05:25:34'),
+(24, 'Bank Account Cheque Book copy', 5, 23, 1, '2026-04-21 05:24:49', '2026-04-21 05:25:34'),
+(25, 'Deposit Slip (If possible)', 5, 24, 1, '2026-04-21 05:24:49', '2026-04-21 05:25:34'),
+(26, 'Financial Declaration Affidavit', 4, 25, 1, '2026-04-21 05:24:49', '2026-04-21 05:25:34'),
+(32, 'test', 4, 26, 1, '2026-04-21 06:31:54', '2026-04-21 06:31:54');
 
 --
 -- Indexes for dumped tables
@@ -1806,6 +1892,13 @@ ALTER TABLE `vfs_checklists`
   ADD KEY `vfs_checklists_checked_by_foreign` (`checked_by`);
 
 --
+-- Indexes for table `vfs_checklist_templates`
+--
+ALTER TABLE `vfs_checklist_templates`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `vfs_checklist_templates_country_id_foreign` (`country_id`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -1951,7 +2044,7 @@ ALTER TABLE `marketing_videos`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=92;
+  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=94;
 
 --
 -- AUTO_INCREMENT for table `office_accounts`
@@ -2023,7 +2116,7 @@ ALTER TABLE `taxes`
 -- AUTO_INCREMENT for table `tyro_audit_logs`
 --
 ALTER TABLE `tyro_audit_logs`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=167;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=170;
 
 --
 -- AUTO_INCREMENT for table `universities`
@@ -2047,7 +2140,13 @@ ALTER TABLE `user_roles`
 -- AUTO_INCREMENT for table `vfs_checklists`
 --
 ALTER TABLE `vfs_checklists`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=133;
+
+--
+-- AUTO_INCREMENT for table `vfs_checklist_templates`
+--
+ALTER TABLE `vfs_checklist_templates`
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
 
 --
 -- Constraints for dumped tables
@@ -2266,6 +2365,12 @@ ALTER TABLE `user_roles`
 ALTER TABLE `vfs_checklists`
   ADD CONSTRAINT `vfs_checklists_application_id_foreign` FOREIGN KEY (`application_id`) REFERENCES `applications` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `vfs_checklists_checked_by_foreign` FOREIGN KEY (`checked_by`) REFERENCES `users` (`id`);
+
+--
+-- Constraints for table `vfs_checklist_templates`
+--
+ALTER TABLE `vfs_checklist_templates`
+  ADD CONSTRAINT `vfs_checklist_templates_country_id_foreign` FOREIGN KEY (`country_id`) REFERENCES `countries` (`id`) ON DELETE SET NULL;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

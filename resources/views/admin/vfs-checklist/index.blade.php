@@ -35,10 +35,14 @@
                     </tr>
                 </thead>
                 <tbody>
+                    @php
+                        $activeTemplateNames = \App\Models\VfsChecklistTemplate::where('is_active', true)->pluck('item_name')->toArray();
+                    @endphp
                     @forelse($applications as $app)
                         @php
-                            $totalItems = $app->vfsChecklist->count();
-                            $checkedItems = $app->vfsChecklist->where('is_checked', true)->count();
+                            $activeItems = $app->vfsChecklist->whereIn('checklist_item', $activeTemplateNames);
+                            $totalItems = $activeItems->count();
+                            $checkedItems = $activeItems->where('is_checked', true)->count();
                             $progress = $totalItems > 0 ? round(($checkedItems / $totalItems) * 100, 0) : 0;
                         @endphp
                         <tr>

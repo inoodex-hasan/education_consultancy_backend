@@ -25,9 +25,9 @@
     <div class="mb-5 flex flex-col gap-5 md:flex-row md:items-center">
         <form action="{{ route('admin.applications.index') }}" method="GET"
             class="flex flex-1 flex-col gap-5 md:flex-row md:items-center w-full">
-            <div class="relative flex-1">
+            <div class="relative w-full md:w-auto" style="width: 450px;">
                 <input type="text" name="search" value="{{ request('search') }}"
-                    placeholder="Search Application ID or Student Name..." class="form-input ltr:pr-11 rtl:pl-11" />
+                    placeholder="Search..." class="form-input ltr:pr-11 rtl:pl-11" />
                 <button type="submit"
                     class="absolute inset-y-0 flex items-center hover:text-primary ltr:right-4 rtl:left-4">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -37,17 +37,55 @@
                 </button>
             </div>
             <div class="flex gap-2">
-                <select name="status" class="form-select w-auto md:w-auto pr-10">
+                <select name="status" class="form-select w-auto pr-10">
                     <option value="">Status</option>
                     <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Pending</option>
                     <option value="applied" {{ request('status') == 'applied' ? 'selected' : '' }}>Applied</option>
                     <option value="rejected" {{ request('status') == 'rejected' ? 'selected' : '' }}>Rejected</option>
-                    <option value="withdrawn" {{ request('status') == 'withdrawn' ? 'selected' : '' }}>Withdrawn
-                    </option>
-                    <option value="visa_processing" {{ request('status') == 'visa_processing' ? 'selected' : '' }}>Visa
-                        Processing</option>
+                    <option value="withdrawn" {{ request('status') == 'withdrawn' ? 'selected' : '' }}>Withdrawn</option>
+                    <option value="visa_processing" {{ request('status') == 'visa_processing' ? 'selected' : '' }}>Visa Processing</option>
                     <option value="enrolled" {{ request('status') == 'enrolled' ? 'selected' : '' }}>Enrolled</option>
                 </select>
+
+                <select name="offer_letter" class="form-select min-w-[150px]">
+                    <option value="">Offer Letter</option>
+                    <option value="1" {{ request('offer_letter') == '1' ? 'selected' : '' }}>Received</option>
+                    <option value="0" {{ request('offer_letter') == '0' ? 'selected' : '' }}>Not Received</option>
+                </select>
+
+                <select name="visa_status" class="form-select w-auto pr-10">
+                    <option value="">Visa</option>
+                    <option value="not_applied" {{ request('visa_status') == 'not_applied' ? 'selected' : '' }}>Not Applied</option>
+                    <option value="pending" {{ request('visa_status') == 'pending' ? 'selected' : '' }}>Pending</option>
+                    <option value="approved" {{ request('visa_status') == 'approved' ? 'selected' : '' }}>Approved</option>
+                    <option value="rejected" {{ request('visa_status') == 'rejected' ? 'selected' : '' }}>Rejected</option>
+                </select>
+
+                <select name="emgs_score" class="form-select min-w-[150px]">
+                    <option value="">EMGS Score</option>
+                    @foreach([10, 20, 30, 40, 50, 60, 70, 80, 90, 100] as $score)
+                        <option value="{{ $score }}" {{ request('emgs_score') == $score ? 'selected' : '' }}>{{ $score }}%</option>
+                    @endforeach
+                </select>
+
+                <select name="security_deposit" class="form-select min-w-[200px]">
+                    <option value="">Security Deposit Fee</option>
+                    <option value="1" {{ request('security_deposit') == '1' ? 'selected' : '' }}>Paid</option>
+                    <option value="0" {{ request('security_deposit') == '0' ? 'selected' : '' }}>Pending</option>
+                </select>
+
+                <select name="cvu_fee" class="form-select w-auto pr-10">
+                    <option value="">CVU Fee</option>
+                    <option value="1" {{ request('cvu_fee') == '1' ? 'selected' : '' }}>Paid</option>
+                    <option value="0" {{ request('cvu_fee') == '0' ? 'selected' : '' }}>Pending</option>
+                </select>
+
+                <!-- <select name="final_payment" class="form-select w-auto pr-10">
+                    <option value="">Final Pay</option>
+                    <option value="1" {{ request('final_payment') == '1' ? 'selected' : '' }}>Paid</option>
+                    <option value="0" {{ request('final_payment') == '0' ? 'selected' : '' }}>Pending</option>
+                </select> -->
+
                 <button type="submit" class="btn btn-primary">Filter</button>
                 <a href="{{ route('admin.applications.index') }}" class="btn btn-outline-danger">Reset</a>
             </div>
