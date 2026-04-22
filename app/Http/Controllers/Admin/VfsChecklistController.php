@@ -141,7 +141,7 @@ class VfsChecklistController extends Controller
         $this->createChecklistFromTemplates($application, $countryId);
 
         return redirect()->route('admin.vfs-checklist.show', $application)
-            ->with('success', 'Checklist reset to country-specific templates.');
+            ->with('success', 'Checklist reset to country-specific List.');
     }
 
     public function syncWithTemplates(Application $application)
@@ -178,7 +178,7 @@ class VfsChecklistController extends Controller
 
         if (!empty($newItems)) {
             VfsChecklist::insert($newItems);
-            $message = count($newItems) . ' new item(s) added from templates.';
+            $message = count($newItems) . ' new item(s) added from List.';
         } else {
             $message = 'No new items to add. Checklist is up to date.';
         }
@@ -219,7 +219,7 @@ class VfsChecklistController extends Controller
         ]);
 
         return redirect()->route('admin.vfs-checklist.templates')
-            ->with('success', 'Template item added successfully.');
+            ->with('success', 'List item added successfully.');
     }
 
     public function updateTemplate(Request $request, VfsChecklistTemplate $template)
@@ -237,7 +237,7 @@ class VfsChecklistController extends Controller
         ]);
 
         return redirect()->route('admin.vfs-checklist.templates')
-            ->with('success', 'Template item updated successfully.');
+            ->with('success', 'List item updated successfully.');
     }
 
     public function deleteTemplate(VfsChecklistTemplate $template)
@@ -245,7 +245,7 @@ class VfsChecklistController extends Controller
         $template->delete();
 
         return redirect()->route('admin.vfs-checklist.templates')
-            ->with('success', 'Template item deleted.');
+            ->with('success', 'List item deleted.');
     }
 
     public function reorderTemplates(Request $request)
@@ -277,7 +277,7 @@ class VfsChecklistController extends Controller
         }
 
         return redirect()->route('admin.vfs-checklist.templates')
-            ->with('success', 'Default checklist items seeded successfully.');
+            ->with('success', 'Default checklist items added successfully.');
     }
 
     public function storeItem(Request $request, Application $application)
