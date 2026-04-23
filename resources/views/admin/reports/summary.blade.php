@@ -6,7 +6,7 @@
     <div class="flex flex-wrap items-center justify-between gap-4">
         <h2 class="text-xl font-semibold uppercase">Financial Summary</h2>
         <div class="flex gap-2">
-            <a href="{{ route('admin.reports.download-pdf', ['month' => $month, 'year' => $year, 'account_id' => $accountId, 'transaction_type' => $transactionType]) }}"
+            <a href="{{ route('admin.reports.download-pdf', ['month' => $month, 'year' => $year, 'account_id' => $accountId, 'transaction_type' => $transactionType, 'start_date' => request('start_date'), 'end_date' => request('end_date')]) }}"
                 class="btn btn-primary gap-2">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5">
@@ -22,27 +22,35 @@
     <div class="panel mt-6">
         <form action="{{ route('admin.reports.summary') }}" method="GET" class="mb-5 flex flex-wrap items-center gap-4">
             <div class="flex items-center gap-2">
-                <label for="month" class="mb-0">Month:</label>
+                <label for="start_date" class="mb-0">From:</label>
+                <input type="date" name="start_date" id="start_date" value="{{ request('start_date') }}" class="form-input w-40">
+            </div>
+            <div class="flex items-center gap-2">
+                <label for="end_date" class="mb-0">To:</label>
+                <input type="date" name="end_date" id="end_date" value="{{ request('end_date') }}" class="form-input w-40">
+            </div>
+            <div class="flex items-center gap-2">
+                <label for="month" class="mb-0 text-gray-400">Or Month:</label>
                 <select name="month" id="month" class="form-select w-32">
+                    <option value="">Month</option>
                     @foreach (range(1, 12) as $m)
-                        <option value="{{ sprintf('%02d', $m) }}" {{ $month == sprintf('%02d', $m) ? 'selected' : '' }}>
+                        <option value="{{ sprintf('%02d', $m) }}" {{ $month == sprintf('%02d', $m) && !request('start_date') ? 'selected' : '' }}>
                             {{ date('F', mktime(0, 0, 0, $m, 1)) }}
                         </option>
                     @endforeach
                 </select>
             </div>
             <div class="flex items-center gap-2">
-                <label for="year" class="mb-0">Year:</label>
                 <select name="year" id="year" class="form-select w-32">
                     @foreach (range(date('Y') - 2, date('Y') + 1) as $y)
-                        <option value="{{ $y }}" {{ $year == $y ? 'selected' : '' }}>{{ $y }}</option>
+                        <option value="{{ $y }}" {{ $year == $y && !request('start_date') ? 'selected' : '' }}>{{ $y }}</option>
                     @endforeach
                 </select>
             </div>
             <div class="flex items-center gap-2">
                 <label for="account_id" class="mb-0">Account:</label>
                 <select name="account_id" id="account_id" class="form-select w-40">
-                    <option value="">All Accounts</option>
+                    <option value="">Accounts</option>
                     @foreach ($accounts as $account)
                         <option value="{{ $account->id }}" {{ $accountId == $account->id ? 'selected' : '' }}>
                             {{ $account->account_name }}
@@ -53,13 +61,14 @@
             <div class="flex items-center gap-2">
                 <label for="transaction_type" class="mb-0">Type:</label>
                 <select name="transaction_type" id="transaction_type" class="form-select w-40">
-                    <option value="">All Types</option>
+                    <option value="">Types</option>
                     <option value="income" {{ $transactionType == 'income' ? 'selected' : '' }}>Income</option>
                     <option value="expense" {{ $transactionType == 'expense' ? 'selected' : '' }}>Expense</option>
                     <option value="transfer" {{ $transactionType == 'transfer' ? 'selected' : '' }}>Transfer</option>
                 </select>
             </div>
             <button type="submit" class="btn btn-secondary">Filter</button>
+            <a href="{{ route('admin.reports.summary') }}" class="btn btn-outline-danger">Reset</a>
         </form>
 
         <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
@@ -71,7 +80,7 @@
                     <div class="text-3xl font-bold">BDT {{ number_format($summary['total_income'], 2) }}</div>
                 </div>
                 <div class="mt-5 text-sm">
-                    {{ $summary['income_count'] }} payments this month
+                    {{ $summary['income_count'] }} payments for selected period
                 </div>
             </div>
 
@@ -83,7 +92,7 @@
                     <div class="text-3xl font-bold">BDT {{ number_format($summary['total_expense'], 2) }}</div>
                 </div>
                 <div class="mt-5 text-sm">
-                    {{ $summary['expense_count'] }} transactions this month
+                    {{ $summary['expense_count'] }} transactions for selected period
                 </div>
             </div>
 
@@ -95,7 +104,7 @@
                     <div class="text-3xl font-bold">BDT {{ number_format($summary['total_transfer'], 2) }}</div>
                 </div>
                 <div class="mt-5 text-sm">
-                    {{ $summary['transfer_count'] }} movements this month
+                    {{ $summary['transfer_count'] }} movements for selected period
                 </div>
             </div>
 

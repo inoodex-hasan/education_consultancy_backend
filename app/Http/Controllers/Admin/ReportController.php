@@ -17,15 +17,23 @@ class ReportController extends Controller
 
     public function summary(Request $request)
     {
+        $startDateParam = $request->get('start_date');
+        $endDateParam = $request->get('end_date');
 
-        $month = $request->get('month', date('m'));
-        $year = $request->get('year', date('Y'));
+        if ($startDateParam && $endDateParam) {
+            $startDate = Carbon::parse($startDateParam)->startOfDay();
+            $endDate = Carbon::parse($endDateParam)->endOfDay();
+            $month = $startDate->format('m');
+            $year = $startDate->format('Y');
+        } else {
+            $month = $request->get('month', date('m'));
+            $year = $request->get('year', date('Y'));
+            $startDate = Carbon::createFromDate($year, $month, 1)->startOfMonth();
+            $endDate = $startDate->copy()->endOfMonth();
+        }
 
         $accountId = $request->get('account_id');
         $transactionType = $request->get('transaction_type'); // 'income', 'expense', 'transfer'
-
-        $startDate = Carbon::createFromDate($year, $month, 1)->startOfMonth();
-        $endDate = $startDate->copy()->endOfMonth();
 
         $accounts = \App\Models\OfficeAccount::orderBy('account_name')->get();
 
@@ -75,7 +83,7 @@ class ReportController extends Controller
             'by_method' => $expenses->groupBy('payment_method')->map->sum('amount'),
         ];
 
-        return view('admin.reports.summary', compact('summary', 'month', 'year', 'expenses', 'transfers', 'budgets', 'payments', 'accounts', 'accountId', 'transactionType'));
+        return view('admin.reports.summary', compact('summary', 'month', 'year', 'expenses', 'transfers', 'budgets', 'payments', 'accounts', 'accountId', 'transactionType', 'startDate', 'endDate'));
     }
 
     public function balanceSheet(Request $request)
@@ -158,15 +166,23 @@ class ReportController extends Controller
 
     public function downloadPdf(Request $request)
     {
+        $startDateParam = $request->get('start_date');
+        $endDateParam = $request->get('end_date');
 
-        $month = $request->get('month', date('m'));
-        $year = $request->get('year', date('Y'));
+        if ($startDateParam && $endDateParam) {
+            $startDate = Carbon::parse($startDateParam)->startOfDay();
+            $endDate = Carbon::parse($endDateParam)->endOfDay();
+            $reportDate = $startDate->format('d M Y') . ' - ' . $endDate->format('d M Y');
+        } else {
+            $month = $request->get('month', date('m'));
+            $year = $request->get('year', date('Y'));
+            $startDate = Carbon::createFromDate($year, $month, 1)->startOfMonth();
+            $endDate = $startDate->copy()->endOfMonth();
+            $reportDate = $startDate->format('F Y');
+        }
 
         $accountId = $request->get('account_id');
         $transactionType = $request->get('transaction_type');
-
-        $startDate = Carbon::createFromDate($year, $month, 1)->startOfMonth();
-        $endDate = $startDate->copy()->endOfMonth();
 
         $expensesQuery = Expense::with(['creator', 'chartOfAccount'])->whereBetween('expense_date', [$startDate, $endDate]);
         $paymentsQuery = Payment::whereBetween('payment_date', [$startDate, $endDate])
@@ -200,7 +216,6 @@ class ReportController extends Controller
         $transfers = $transfersQuery->get();
 
         $settings = Setting::pluck('value', 'key')->all();
-        $reportDate = $startDate->format('F Y');
 
         $pdf = Pdf::loadView('admin.reports.pdf', compact('expenses', 'payments', 'transfers', 'settings', 'reportDate'))
             ->setPaper('a4', 'portrait');
