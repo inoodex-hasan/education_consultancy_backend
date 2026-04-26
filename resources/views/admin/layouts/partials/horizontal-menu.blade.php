@@ -328,7 +328,25 @@
                 </ul>
             </li>
         @endcan
-    @endif  
+    @endif
+
+    <!-- Documents - Separate Menu -->
+    @if (auth()->check() && auth()->user()->hasRole('digital-marketing'))
+        @can('*digital_marketing')
+            <li class="menu nav-item relative">
+                <a href="{{ route('admin.marketing.documents.index') }}" class="nav-link">
+                    <div class="flex items-center">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="shrink-0">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" stroke="currentColor" stroke-width="2"/>
+                            <polyline points="14 2 14 8 20 8" stroke="currentColor" stroke-width="2"/>
+                            <path d="M9 15l2 2 4-4" stroke="currentColor" stroke-width="2"/>
+                        </svg>
+                        <span class="px-1">Documents</span>
+                    </div>
+                </a>
+            </li>
+        @endcan
+    @endif
 
     @if (auth()->check() &&
             (auth()->user()->hasRole('consultant') ||

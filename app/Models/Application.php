@@ -138,4 +138,9 @@ class Application extends Model
     {
         return $this->hasMany(Commission::class);
     }
+
+    public function documents()
+    {
+        return $this->hasMany(MarketingDocument::class);
+    }
 }

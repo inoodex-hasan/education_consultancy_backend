@@ -292,6 +292,40 @@
         </div>
     @endif
 
+    {{-- Documents Summary --}}
+    <div class="panel mt-6">
+        <div class="flex items-center justify-between mb-4">
+            <h5 class="text-lg font-semibold dark:text-white-light uppercase">Documents (SOP, CV, Cover Letter)</h5>
+            @can('*digital_marketing')
+                <a href="{{ route('admin.marketing.documents.index', ['application_id' => $application->id]) }}" class="btn btn-sm btn-outline-primary">
+                    Manage Documents
+                </a>
+            @endcan
+        </div>
+
+        @php
+            $docTypes = ['sop' => 'SOP', 'cv' => 'CV', 'cl' => 'Cover Letter'];
+            $docStatus = [];
+            foreach ($application->documents as $doc) {
+                $docStatus[$doc->document_type] = $doc;
+            }
+        @endphp
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            @foreach($docTypes as $type => $label)
+                @php
+                    $doc = $docStatus[$type] ?? null;
+                    $status = $doc ? $doc->getStatusLabel() : 'Not Set';
+                    $statusClass = $doc ? $doc->getStatusClass() : 'badge-outline-dark';
+                @endphp
+                <div class="flex items-center justify-between p-3 border rounded-lg">
+                    <span class="font-semibold">{{ $label }}</span>
+                    <span class="badge {{ $statusClass }}">{{ $status }}</span>
+                </div>
+            @endforeach
+        </div>
+    </div>
+
     {{-- Meta Info --}}
     <div class="panel mt-6">
         <div class="text-sm text-gray-500">

@@ -164,6 +164,12 @@ Route::prefix('dashboard/marketing')->name('admin.marketing.')->group(function (
         Route::put('{poster}', [App\Http\Controllers\Admin\MarketingPosterController::class, 'update'])->name('update');
         Route::delete('{poster}', [App\Http\Controllers\Admin\MarketingPosterController::class, 'destroy'])->name('destroy');
     });
+
+    // Documents (SOP, CV, CL) - Single page management
+    Route::prefix('documents')->name('documents.')->middleware('can:*digital_marketing')->group(function () {
+        Route::get('/', [App\Http\Controllers\Admin\MarketingDocumentController::class, 'index'])->name('index');
+        Route::post('/', [App\Http\Controllers\Admin\MarketingDocumentController::class, 'store'])->name('store');
+    });
 });
 
 // Expense Management

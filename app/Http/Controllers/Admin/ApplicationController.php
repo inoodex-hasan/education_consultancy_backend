@@ -127,7 +127,7 @@ class ApplicationController extends Controller
 
     public function show(Application $application)
     {
-        $application->load(['student', 'university', 'university.country', 'course', 'intake', 'creator', 'payments.collector', 'commissions.user']);
+        $application->load(['student', 'university', 'university.country', 'course', 'intake', 'creator', 'payments.collector', 'commissions.user', 'documents.creator']);
 
         return view('admin.applications.show', compact('application'));
     }
