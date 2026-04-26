@@ -163,10 +163,10 @@ CREATE TABLE `cache` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 INSERT INTO `cache` (`key`, `value`, `expiration`) VALUES
-('admin-dashboard-cache-tyro:user-3:privileges',	'a:2:{i:0;s:11:\"*consultant\";i:1;s:8:\"*invoice\";}',	1777102554),
-('admin-dashboard-cache-tyro:user-3:roles',	'a:1:{i:0;s:10:\"consultant\";}',	1777102554),
-('admin-dashboard-cache-tyro:user-4:privileges',	'a:4:{i:0;s:11:\"*accountant\";i:1;s:8:\"*payment\";i:2;s:10:\"*comission\";i:3;s:8:\"*invoice\";}',	1777116494),
-('admin-dashboard-cache-tyro:user-4:roles',	'a:1:{i:0;s:10:\"accountant\";}',	1777116494);
+('admin-dashboard-cache-tyro:user-3:privileges',	'a:2:{i:0;s:11:\"*consultant\";i:1;s:8:\"*invoice\";}',	1777119947),
+('admin-dashboard-cache-tyro:user-3:roles',	'a:1:{i:0;s:10:\"consultant\";}',	1777119947),
+('admin-dashboard-cache-tyro:user-4:privileges',	'a:4:{i:0;s:11:\"*accountant\";i:1;s:8:\"*payment\";i:2;s:10:\"*comission\";i:3;s:8:\"*invoice\";}',	1777119891),
+('admin-dashboard-cache-tyro:user-4:roles',	'a:1:{i:0;s:10:\"accountant\";}',	1777119891);
 
 DROP TABLE IF EXISTS `cache_locks`;
 CREATE TABLE `cache_locks` (
@@ -202,10 +202,13 @@ INSERT INTO `chart_of_accounts` (`id`, `parent_id`, `code`, `name`, `type`, `is_
 (4,	NULL,	'51004',	'Utilities',	'expense',	1,	0,	'2026-04-07 23:31:47',	'2026-04-07 23:31:47'),
 (5,	NULL,	'51005',	'Office Supplies',	'expense',	1,	0,	'2026-04-07 23:31:47',	'2026-04-07 23:31:47'),
 (6,	NULL,	'41001',	'Student Fees',	'revenue',	1,	0,	'2026-04-07 23:31:47',	'2026-04-07 23:31:47'),
-(7,	NULL,	'10001',	'Furnitures',	'asset',	1,	0,	'2026-04-12 05:19:04',	'2026-04-12 21:25:25'),
-(9,	NULL,	'20001',	'Cash In Hand',	'asset',	1,	0,	'2026-04-13 00:49:29',	'2026-04-13 01:26:08'),
+(7,	NULL,	'10001',	'Current Asset',	'asset',	1,	0,	'2026-04-12 05:19:04',	'2026-04-25 06:17:36'),
+(9,	NULL,	'10002',	'Cash In Hand',	'asset',	1,	0,	'2026-04-13 00:49:29',	'2026-04-25 06:18:11'),
 (10,	NULL,	'20002',	'Bank',	'asset',	1,	0,	'2026-04-15 05:57:02',	'2026-04-15 05:57:02'),
-(11,	NULL,	'20003',	'MFS (bKash)',	'asset',	1,	0,	'2026-04-15 05:58:08',	'2026-04-15 05:58:08');
+(11,	NULL,	'20003',	'MFS (bKash)',	'asset',	1,	0,	'2026-04-15 05:58:08',	'2026-04-15 05:58:08'),
+(12,	NULL,	'10003',	'Fixed Asset',	'asset',	1,	0,	'2026-04-25 06:18:28',	'2026-04-25 06:18:28'),
+(13,	NULL,	'30001',	'Current Liability',	'liability',	1,	0,	'2026-04-25 06:19:08',	'2026-04-25 06:19:08'),
+(14,	NULL,	'30002',	'Long Term Liability',	'liability',	1,	0,	'2026-04-25 06:19:51',	'2026-04-25 06:19:51');
 
 DROP TABLE IF EXISTS `commissions`;
 CREATE TABLE `commissions` (
@@ -468,6 +471,9 @@ CREATE TABLE `journal_entries` (
   CONSTRAINT `journal_entries_period_id_foreign` FOREIGN KEY (`period_id`) REFERENCES `accounting_periods` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+INSERT INTO `journal_entries` (`id`, `period_id`, `application_id`, `date`, `reference_number`, `note`, `status`, `created_by`, `created_at`, `updated_at`) VALUES
+(5,	1,	11,	'2026-04-25',	'JV-20260425-4A9F',	NULL,	'posted',	4,	'2026-04-25 05:49:21',	'2026-04-25 05:49:21'),
+(6,	1,	NULL,	'2026-04-25',	'JV-20260425-A12F',	NULL,	'posted',	4,	'2026-04-25 06:06:44',	'2026-04-25 06:06:44');
 
 DROP TABLE IF EXISTS `journal_entry_items`;
 CREATE TABLE `journal_entry_items` (
@@ -486,6 +492,11 @@ CREATE TABLE `journal_entry_items` (
   CONSTRAINT `journal_entry_items_journal_entry_id_foreign` FOREIGN KEY (`journal_entry_id`) REFERENCES `journal_entries` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+INSERT INTO `journal_entry_items` (`id`, `journal_entry_id`, `chart_of_account_id`, `debit`, `credit`, `description`, `created_at`, `updated_at`) VALUES
+(9,	5,	6,	5000.00,	0.00,	'security fee from student',	'2026-04-25 05:49:21',	'2026-04-25 05:49:21'),
+(10,	5,	9,	0.00,	5000.00,	'student fee from student',	'2026-04-25 05:49:21',	'2026-04-25 05:49:21'),
+(11,	6,	3,	12000.00,	0.00,	'provide salary',	'2026-04-25 06:06:44',	'2026-04-25 06:06:44'),
+(12,	6,	9,	0.00,	12000.00,	'salary from office cash',	'2026-04-25 06:06:44',	'2026-04-25 06:06:44');
 
 DROP TABLE IF EXISTS `leads`;
 CREATE TABLE `leads` (
@@ -762,8 +773,7 @@ CREATE TABLE `payments` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 INSERT INTO `payments` (`id`, `student_id`, `application_id`, `invoice_id`, `amount`, `payment_type`, `payment_date`, `collected_by`, `receipt_number`, `payment_status`, `office_account_id`, `journal_entry_id`, `created_at`, `updated_at`, `notes`) VALUES
-(24,	7,	11,	4,	2500.00,	'partial',	'2026-04-20 00:00:00',	4,	'REC-20260420-0001',	'pending',	2,	NULL,	'2026-04-19 23:17:09',	'2026-04-19 23:17:09',	'partial paid'),
-(25,	7,	11,	4,	2500.00,	'final',	'2026-04-20 00:00:00',	4,	'REC-20260420-0002',	'completed',	3,	NULL,	'2026-04-19 23:32:42',	'2026-04-19 23:32:42',	NULL);
+(26,	7,	11,	4,	7000.00,	'final',	'2026-04-25 00:00:00',	4,	'REC-20260425-0001',	'completed',	3,	NULL,	'2026-04-25 05:48:21',	'2026-04-25 05:48:21',	NULL);
 
 DROP TABLE IF EXISTS `personal_access_tokens`;
 CREATE TABLE `personal_access_tokens` (
@@ -916,8 +926,7 @@ CREATE TABLE `sessions` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES
-('BVTJkaqTGquHogkTglGqEzbPTpYoC02MI9nVzeTa',	4,	'127.0.0.1',	'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36',	'YTo1OntzOjY6Il90b2tlbiI7czo0MDoiR1dIUkdzcDJUaHlYN05VdjFVTGsxU0lrZGNlM0w2YUdmVk5MdnoxYyI7czo5OiJfcHJldmlvdXMiO2E6Mjp7czozOiJ1cmwiO3M6MzE6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9kYXNoYm9hcmQiO3M6NToicm91dGUiO3M6MjA6InR5cm8tZGFzaGJvYXJkLmluZGV4Ijt9czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czoxMDoidHlyby1sb2dpbiI7YToxOntzOjc6ImNhcHRjaGEiO2E6MDp7fX1zOjUwOiJsb2dpbl93ZWJfNTliYTM2YWRkYzJiMmY5NDAxNTgwZjAxNGM3ZjU4ZWE0ZTMwOTg5ZCI7aTo0O30=',	1777116275),
-('yANbR47fKS5FwJ2woMu9jEtuDtWjR0CWsBIN3bzp',	3,	'127.0.0.1',	'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36',	'YTo1OntzOjY6Il90b2tlbiI7czo0MDoiVW1UOG54R0lIcmJqdktnRGxNczlNWXM4ZnU5QVhqOGJXV2dzQnRSRyI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czoxMDoidHlyby1sb2dpbiI7YToxOntzOjc6ImNhcHRjaGEiO2E6MDp7fX1zOjk6Il9wcmV2aW91cyI7YToyOntzOjM6InVybCI7czo0NzoiaHR0cDovLzEyNy4wLjAuMTo4MDAwL2Rhc2hib2FyZC9hcHBsaWNhdGlvbnMvMTEiO3M6NToicm91dGUiO3M6MjM6ImFkbWluLmFwcGxpY2F0aW9ucy5zaG93Ijt9czo1MDoibG9naW5fd2ViXzU5YmEzNmFkZGMyYjJmOTQwMTU4MGYwMTRjN2Y1OGVhNGUzMDk4OWQiO2k6Mzt9',	1777102317);
+('Dx7VSxvK8dmdNt8IpzTkSy60w7XAcs3nXCHposml',	3,	'127.0.0.1',	'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36',	'YTo1OntzOjY6Il90b2tlbiI7czo0MDoiMEZVcFgwV2NsbE9iQ3dDbUYyYUMzMGh3R3ZFcVFBSkNqdFBzTlBYTiI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czoxMDoidHlyby1sb2dpbiI7YToxOntzOjc6ImNhcHRjaGEiO2E6MDp7fX1zOjk6Il9wcmV2aW91cyI7YToyOntzOjM6InVybCI7czo0NjoiaHR0cDovLzEyNy4wLjAuMTo4MDAwL2Rhc2hib2FyZC9teS1jb21taXNzaW9ucyI7czo1OiJyb3V0ZSI7czoyMDoibXktY29tbWlzc2lvbnMuaW5kZXgiO31zOjUwOiJsb2dpbl93ZWJfNTliYTM2YWRkYzJiMmY5NDAxNTgwZjAxNGM3ZjU4ZWE0ZTMwOTg5ZCI7aTozO30=',	1777119665);
 
 DROP TABLE IF EXISTS `settings`;
 CREATE TABLE `settings` (
@@ -1242,7 +1251,13 @@ INSERT INTO `tyro_audit_logs` (`id`, `user_id`, `event`, `auditable_type`, `audi
 (182,	4,	'user.login',	'App\\Models\\User',	4,	NULL,	'{\"email\": \"accountant@example.com\"}',	'{\"ip\": \"127.0.0.1\", \"is_console\": false, \"user_agent\": \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36\"}',	'2026-04-25 07:11:30'),
 (183,	4,	'user.logout',	'App\\Models\\User',	4,	NULL,	'{\"email\": \"accountant@example.com\"}',	'{\"ip\": \"127.0.0.1\", \"is_console\": false, \"user_agent\": \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36\"}',	'2026-04-25 07:30:42'),
 (184,	3,	'user.login',	'App\\Models\\User',	3,	NULL,	'{\"email\": \"consultant@example.com\"}',	'{\"ip\": \"127.0.0.1\", \"is_console\": false, \"user_agent\": \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36\"}',	'2026-04-25 07:30:52'),
-(185,	4,	'user.login',	'App\\Models\\User',	4,	NULL,	'{\"email\": \"accountant@example.com\"}',	'{\"ip\": \"127.0.0.1\", \"is_console\": false, \"user_agent\": \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36\"}',	'2026-04-25 11:03:35');
+(185,	4,	'user.login',	'App\\Models\\User',	4,	NULL,	'{\"email\": \"accountant@example.com\"}',	'{\"ip\": \"127.0.0.1\", \"is_console\": false, \"user_agent\": \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36\"}',	'2026-04-25 11:03:35'),
+(186,	4,	'user.logout',	'App\\Models\\User',	4,	NULL,	'{\"email\": \"accountant@example.com\"}',	'{\"ip\": \"127.0.0.1\", \"is_console\": false, \"user_agent\": \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36\"}',	'2026-04-25 11:46:51'),
+(187,	3,	'user.login',	'App\\Models\\User',	3,	NULL,	'{\"email\": \"consultant@example.com\"}',	'{\"ip\": \"127.0.0.1\", \"is_console\": false, \"user_agent\": \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36\"}',	'2026-04-25 11:47:08'),
+(188,	3,	'user.logout',	'App\\Models\\User',	3,	NULL,	'{\"email\": \"consultant@example.com\"}',	'{\"ip\": \"127.0.0.1\", \"is_console\": false, \"user_agent\": \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36\"}',	'2026-04-25 11:47:31'),
+(189,	4,	'user.login',	'App\\Models\\User',	4,	NULL,	'{\"email\": \"accountant@example.com\"}',	'{\"ip\": \"127.0.0.1\", \"is_console\": false, \"user_agent\": \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36\"}',	'2026-04-25 11:47:39'),
+(190,	4,	'user.logout',	'App\\Models\\User',	4,	NULL,	'{\"email\": \"accountant@example.com\"}',	'{\"ip\": \"127.0.0.1\", \"is_console\": false, \"user_agent\": \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36\"}',	'2026-04-25 12:20:36'),
+(191,	3,	'user.login',	'App\\Models\\User',	3,	NULL,	'{\"email\": \"consultant@example.com\"}',	'{\"ip\": \"127.0.0.1\", \"is_console\": false, \"user_agent\": \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36\"}',	'2026-04-25 12:20:45');
 
 DROP TABLE IF EXISTS `universities`;
 CREATE TABLE `universities` (
@@ -1412,4 +1427,4 @@ INSERT INTO `vfs_checklists` (`id`, `application_id`, `checklist_item`, `is_chec
 (131,	11,	'Financial Declaration Affidavit',	0,	NULL,	NULL,	NULL,	'2026-04-21 06:42:16',	'2026-04-21 06:42:16'),
 (132,	11,	'test',	0,	NULL,	NULL,	NULL,	'2026-04-21 06:42:16',	'2026-04-21 06:42:16');
 
--- 2026-04-25 11:25:32 UTC
+-- 2026-04-25 12:21:28 UTC

@@ -11,23 +11,20 @@ class MarketingCampaign extends Model
 
     protected $fillable = [
         'name',
+        'start_date',
+        'end_date',
         'boosting_status',
         'created_by',
         'notes',
     ];
 
+    protected $casts = [
+        'start_date' => 'date',
+        'end_date' => 'date',
+    ];
+
     public function creator()
     {
         return $this->belongsTo(User::class, 'created_by');
-    }
-
-    public function videos()
-    {
-        return $this->hasMany(MarketingVideo::class, 'campaign_id');
-    }
-
-    public function posters()
-    {
-        return $this->hasMany(MarketingPoster::class, 'campaign_id');
     }
 }

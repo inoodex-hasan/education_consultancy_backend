@@ -25,6 +25,18 @@
                     @error('name')<span class="text-danger text-xs italic">{{ $message }}</span>@enderror
                 </div>
                 <div>
+                    <label for="start_date" class="text-sm font-bold">Start Date</label>
+                    <input type="date" name="start_date" id="start_date" value="{{ old('start_date', $campaign->start_date?->format('Y-m-d')) }}"
+                        class="form-input" />
+                    @error('start_date')<span class="text-danger text-xs italic">{{ $message }}</span>@enderror
+                </div>
+                <div>
+                    <label for="end_date" class="text-sm font-bold">End Date</label>
+                    <input type="date" name="end_date" id="end_date" value="{{ old('end_date', $campaign->end_date?->format('Y-m-d')) }}"
+                        class="form-input" />
+                    @error('end_date')<span class="text-danger text-xs italic">{{ $message }}</span>@enderror
+                </div>
+                <div>
                     <label for="boosting_status" class="text-sm font-bold">Boosting Status</label>
                     <select name="boosting_status" id="boosting_status" class="form-select">
                         <option value="off" {{ old('boosting_status', $campaign->boosting_status) == 'off' ? 'selected' : '' }}>OFF</option>
@@ -34,7 +46,7 @@
                     @error('boosting_status')<span class="text-danger text-xs italic">{{ $message }}</span>@enderror
                 </div>
                 <div class="md:col-span-2">
-                    <label for="notes" class="text-sm font-bold">Strategy / Notes</label>
+                    <label for="notes" class="text-sm font-bold">Notes</label>
                     <textarea name="notes" id="notes" rows="4"
                         class="form-textarea">{{ old('notes', $campaign->notes) }}</textarea>
                     @error('notes')<span class="text-danger text-xs italic">{{ $message }}</span>@enderror

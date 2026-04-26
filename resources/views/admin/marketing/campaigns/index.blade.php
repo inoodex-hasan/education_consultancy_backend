@@ -5,7 +5,7 @@
 @section('content')
     <div class="flex flex-wrap items-center justify-between gap-4">
         <h2 class="text-xl font-semibold uppercase">Marketing Campaigns</h2>
-        @can('*marketing')
+        @can('*digital_marketing')
             <div class="flex w-full flex-wrap items-center justify-end gap-4 sm:w-auto">
                 <a href="{{ route('admin.marketing.campaigns.create') }}" class="btn btn-primary gap-2">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -38,7 +38,7 @@
                 </div>
                 <div class="flex gap-2">
                     <select name="boosting_status" class="form-select w-auto md:w-auto pr-10">
-                        <option value="">Boosting Status</option>
+                        <option value=""> Status</option>
                         <option value="on" {{ request('boosting_status') == 'on' ? 'selected' : '' }}>Boosting ON</option>
                         <option value="off" {{ request('boosting_status') == 'off' ? 'selected' : '' }}>Boosting OFF</option>
                     </select>
@@ -53,7 +53,8 @@
                     <thead>
                         <tr>
                             <th>Campaign Name</th>
-                            <th>Assets Overview</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
                             <th>Created By</th>
                             <th>Boosting</th>
                             <th class="text-center">Action</th>
@@ -64,32 +65,21 @@
                             <tr>
                                 <td>
                                     <div class="font-bold text-lg text-primary">{{ $campaign->name }}</div>
-                                    <div class="text-xs text-white-dark">Started: {{ $campaign->created_at->format('M d, Y') }}</div>
+                                    <div class="text-xs text-white-dark">Created: {{ $campaign->created_at->format('M d, Y') }}</div>
                                 </td>
                                 <td>
-                                    <div class="flex items-center gap-3">
-                                        <div class="flex items-center gap-1 px-2 py-1 bg-info/10 text-info rounded border border-info/20 text-xs font-bold">
-                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                                <polygon points="23 7 16 12 23 17 23 7"></polygon>
-                                                <rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect>
-                                            </svg>
-                                            {{ $campaign->videos_count }}
-                                        </div>
-                                        <div class="flex items-center gap-1 px-2 py-1 bg-success/10 text-success rounded border border-success/20 text-xs font-bold">
-                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                                                <circle cx="8.5" cy="8.5" r="1.5"></circle>
-                                                <polyline points="21 15 16 10 5 21"></polyline>
-                                            </svg>
-                                            {{ $campaign->posters_count }}
-                                        </div>
-                                    </div>
+                                    <span class="text-sm">{{ $campaign->start_date?->format('M d, Y') ?? '-' }}</span>
+                                </td>
+                                <td>
+                                    <span class="text-sm {{ $campaign->end_date && $campaign->end_date < now() ? 'text-danger' : '' }}">
+                                        {{ $campaign->end_date?->format('M d, Y') ?? '-' }}
+                                    </span>
                                 </td>
                                 <td>
                                     <div class="flex items-center gap-2">
-                                        <div class="h-8 w-8 rounded-full bg-slate-200 flex items-center justify-center text-xs font-bold text-slate-600 uppercase">
+                                        <!-- <div class="h-8 w-8 rounded-full bg-slate-200 flex items-center justify-center text-xs font-bold text-slate-600 uppercase">
                                             {{ substr($campaign->creator->name ?? 'U', 0, 1) }}
-                                        </div>
+                                        </div> -->
                                         <span class="text-sm">{{ $campaign->creator->name ?? 'System' }}</span>
                                     </div>
                                 </td>
@@ -115,7 +105,7 @@
                                 <td class="text-center">
                                     <div class="flex items-center justify-center gap-2">
                                         <a href="{{ route('admin.marketing.campaigns.show', $campaign->id) }}"
-                                            class="btn btn-sm btn-outline-info">Manage Assets</a>
+                                            class="btn btn-sm btn-outline-info">View</a>
 
                                         <a href="{{ route('admin.marketing.campaigns.edit', $campaign->id) }}"
                                             class="btn btn-sm btn-outline-primary">Edit</a>
@@ -131,14 +121,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="5" class="text-center py-10">
-                                    <div class="flex flex-col items-center justify-center text-white-dark">
-                                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
-                                            <path d="M21 16V8C21 6.89543 20.1046 6 19 6H5C3.89543 6 3 6.89543 3 8V16C3 17.1046 3.89543 18 5 18H19C20.1046 18 21 17.1046 21 16Z" />
-                                            <path d="M7 11V13M10 10V14M13 11V13" />
-                                        </svg>
-                                        <p class="mt-2 font-semibold">No campaigns found.</p>
-                                    </div>
+                                <td colspan="6" class="text-center py-10 text-white-dark">No campaigns found.</td>
                                 </td>
                             </tr>
                         @endforelse

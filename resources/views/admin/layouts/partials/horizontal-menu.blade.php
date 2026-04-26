@@ -260,8 +260,8 @@
         </li>
     @endif
 
-    @if (auth()->check() && (auth()->user()->hasRole('marketing') || auth()->user()->hasRole('consultant')))
-        <!-- Marketing -->
+    @if (auth()->check() && auth()->user()->hasRole('marketing'))
+        <!-- Marketing - Digital Marketing Only -->
         @canany(['*marketing'])
             <li class="menu nav-item relative group">
                 <a href="javascript:;" class="nav-link">
@@ -292,7 +292,13 @@
                     @endcanany
 
                 </ul>
-            </li>
+            </li
+        @endcanany
+    @endif
+
+    @if (auth()->check() && auth()->user()->hasRole('digital-marketing'))
+        <!-- Digital Marketing -->
+        @can('*digital_marketing')
             <li class="menu nav-item relative">
                 <a href="javascript:;" class="nav-link">
                     <div class="flex items-center">
@@ -314,15 +320,15 @@
                     </div>
                 </a>
                 <ul class="sub-menu">
-                    @can('*marketing')
-                        <li><a href="{{ route('admin.marketing.campaigns.index') }}">Campaign List</a></li>
-                        <li><a href="{{ route('admin.marketing.campaigns.index') }}?type=video">Video Assets</a></li>
-                        <li><a href="{{ route('admin.marketing.campaigns.index') }}?type=poster">Poster Assets</a></li>
+                    @can('*digital_marketing')
+                        <li><a href="{{ route('admin.marketing.campaigns.index') }}">Campaigns</a></li>
+                        <li><a href="{{ route('admin.marketing.videos.index') }}">Videos</a></li>
+                        <li><a href="{{ route('admin.marketing.posters.index') }}">Posters</a></li>
                     @endcan
                 </ul>
             </li>
-        @endcanany
-    @endif
+        @endcan
+    @endif  
 
     @if (auth()->check() &&
             (auth()->user()->hasRole('consultant') ||

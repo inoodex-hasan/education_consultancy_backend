@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\{MarketingCampaign, MarketingVideo, MarketingPoster};
+use App\Models\MarketingCampaign;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
@@ -13,9 +13,7 @@ class MarketingCampaignController extends Controller
 
     public function index(Request $request)
     {
-        $query = MarketingCampaign::withCount(['videos', 'posters'])
-            ->with('creator')
-            ->latest();
+        $query = MarketingCampaign::with('creator')->latest();
 
         if ($search = $request->get('search')) {
             $query->where('name', 'like', "%{$search}%");
@@ -39,6 +37,8 @@ class MarketingCampaignController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
+            'start_date' => 'nullable|date',
+            'end_date' => 'nullable|date|after_or_equal:start_date',
             'boosting_status' => ['required', Rule::in(['on', 'off'])],
             'notes' => 'nullable|string',
         ]);
@@ -54,7 +54,7 @@ class MarketingCampaignController extends Controller
 
     public function show(MarketingCampaign $campaign)
     {
-        $campaign->load(['videos', 'posters', 'creator']);
+        $campaign->load('creator');
         return view('admin.marketing.campaigns.show', compact('campaign'));
     }
 
@@ -67,6 +67,8 @@ class MarketingCampaignController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
+            'start_date' => 'nullable|date',
+            'end_date' => 'nullable|date|after_or_equal:start_date',
             'boosting_status' => ['required', Rule::in(['on', 'off'])],
             'notes' => 'nullable|string',
         ]);
@@ -94,40 +96,4 @@ class MarketingCampaignController extends Controller
         ]);
     }
 
-    // Asset Management
-    public function storeVideo(Request $request, MarketingCampaign $campaign)
-    {
-        $validated = $request->validate([
-            'video_name' => 'required|string|max:255',
-            'status' => ['required', Rule::in(['not_edited', 'edited', 'upload', 'ready'])],
-        ]);
-
-        $campaign->videos()->create($validated);
-
-        return redirect()->back()->with('success', 'Video asset added.');
-    }
-
-    public function storePoster(Request $request, MarketingCampaign $campaign)
-    {
-        $validated = $request->validate([
-            'poster_name' => 'required|string|max:255',
-            'status' => ['required', Rule::in(['not_ready', 'ready', 'uploaded'])],
-        ]);
-
-        $campaign->posters()->create($validated);
-
-        return redirect()->back()->with('success', 'Poster asset added.');
-    }
-
-    public function destroyVideo(MarketingVideo $video)
-    {
-        $video->delete();
-        return redirect()->back()->with('success', 'Video asset removed.');
-    }
-
-    public function destroyPoster(MarketingPoster $poster)
-    {
-        $poster->delete();
-        return redirect()->back()->with('success', 'Poster asset removed.');
-    }
 }

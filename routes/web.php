@@ -137,7 +137,7 @@ Route::prefix('dashboard/marketing')->name('admin.marketing.')->group(function (
     Route::delete('leads/{lead}', [LeadController::class, 'destroy'])->name('leads.destroy')->middleware('can:*marketing');
 
     // Campaigns & Assets
-    Route::prefix('campaigns')->name('campaigns.')->middleware('can:*marketing')->group(function () {
+    Route::prefix('campaigns')->name('campaigns.')->middleware('can:*digital_marketing')->group(function () {
         Route::get('/', [App\Http\Controllers\Admin\MarketingCampaignController::class, 'index'])->name('index');
         Route::get('/create', [App\Http\Controllers\Admin\MarketingCampaignController::class, 'create'])->name('create');
         Route::post('/', [App\Http\Controllers\Admin\MarketingCampaignController::class, 'store'])->name('store');
@@ -147,11 +147,22 @@ Route::prefix('dashboard/marketing')->name('admin.marketing.')->group(function (
         Route::post('{campaign}/toggle-boosting', [App\Http\Controllers\Admin\MarketingCampaignController::class, 'toggleBoosting'])->name('toggle-boosting');
         Route::delete('{campaign}', [App\Http\Controllers\Admin\MarketingCampaignController::class, 'destroy'])->name('destroy');
 
-        // Assets
-        Route::post('{campaign}/videos', [App\Http\Controllers\Admin\MarketingCampaignController::class, 'storeVideo'])->name('store-video');
-        Route::post('{campaign}/posters', [App\Http\Controllers\Admin\MarketingCampaignController::class, 'storePoster'])->name('store-poster');
-        Route::delete('videos/{video}', [App\Http\Controllers\Admin\MarketingCampaignController::class, 'destroyVideo'])->name('destroy-video');
-        Route::delete('posters/{poster}', [App\Http\Controllers\Admin\MarketingCampaignController::class, 'destroyPoster'])->name('destroy-poster');
+    });
+
+    // Standalone Video Assets
+    Route::prefix('videos')->name('videos.')->middleware('can:*digital_marketing')->group(function () {
+        Route::get('/', [App\Http\Controllers\Admin\MarketingVideoController::class, 'index'])->name('index');
+        Route::post('/', [App\Http\Controllers\Admin\MarketingVideoController::class, 'store'])->name('store');
+        Route::put('{video}', [App\Http\Controllers\Admin\MarketingVideoController::class, 'update'])->name('update');
+        Route::delete('{video}', [App\Http\Controllers\Admin\MarketingVideoController::class, 'destroy'])->name('destroy');
+    });
+
+    // Standalone Poster Assets
+    Route::prefix('posters')->name('posters.')->middleware('can:*digital_marketing')->group(function () {
+        Route::get('/', [App\Http\Controllers\Admin\MarketingPosterController::class, 'index'])->name('index');
+        Route::post('/', [App\Http\Controllers\Admin\MarketingPosterController::class, 'store'])->name('store');
+        Route::put('{poster}', [App\Http\Controllers\Admin\MarketingPosterController::class, 'update'])->name('update');
+        Route::delete('{poster}', [App\Http\Controllers\Admin\MarketingPosterController::class, 'destroy'])->name('destroy');
     });
 });
 

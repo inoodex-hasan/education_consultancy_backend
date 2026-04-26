@@ -1748,16 +1748,16 @@
         },
         {
             "name": "hasinhayder/tyro-login",
-            "version": "v2.6.0",
+            "version": "v2.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/hasinhayder/tyro-login.git",
-                "reference": "b1cea062d22fa00f7154e5cd4328dbce9944a3b7"
+                "reference": "e98887f0d80dac12a171c1ca99b8989c8724a4f5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/hasinhayder/tyro-login/zipball/b1cea062d22fa00f7154e5cd4328dbce9944a3b7",
-                "reference": "b1cea062d22fa00f7154e5cd4328dbce9944a3b7",
+                "url": "https://api.github.com/repos/hasinhayder/tyro-login/zipball/e98887f0d80dac12a171c1ca99b8989c8724a4f5",
+                "reference": "e98887f0d80dac12a171c1ca99b8989c8724a4f5",
                 "shasum": ""
             },
             "require": {
@@ -1814,9 +1814,9 @@
             ],
             "support": {
                 "issues": "https://github.com/hasinhayder/tyro-login/issues",
-                "source": "https://github.com/hasinhayder/tyro-login/tree/v2.6.0"
+                "source": "https://github.com/hasinhayder/tyro-login/tree/v2.7.0"
             },
-            "time": "2026-04-19T14:13:25+00:00"
+            "time": "2026-04-24T19:19:11+00:00"
         },
         {
             "name": "laravel/framework",

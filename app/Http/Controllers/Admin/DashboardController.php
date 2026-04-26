@@ -12,6 +12,11 @@ class DashboardController extends Controller
 {
     public function index()
     {
+        // Redirect digital marketing users to campaigns page
+        if (auth()->check() && auth()->user()->hasRole('digital-marketing')) {
+            return redirect()->route('admin.marketing.campaigns.index');
+        }
+
         $userModel = config('tyro-dashboard.user_model', 'App\\Models\\User');
 
         $stats = [

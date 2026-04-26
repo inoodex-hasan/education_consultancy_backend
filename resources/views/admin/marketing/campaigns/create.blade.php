@@ -20,9 +20,21 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <div>
                     <label for="name">Campaign Name <span class="text-danger">*</span></label>
-                    <input type="text" name="name" id="name" value="{{ old('name') }}" placeholder="e.g. Summer Intake 2024 - FB Boosting" 
+                    <input type="text" name="name" id="name" value="{{ old('name') }}" placeholder="Enter campaign name"
                         class="form-input" required />
                     @error('name')<span class="text-danger text-xs">{{ $message }}</span>@enderror
+                </div>
+                <div>
+                    <label for="start_date">Start Date</label>
+                    <input type="date" name="start_date" id="start_date" value="{{ old('start_date') }}"
+                        class="form-input" />
+                    @error('start_date')<span class="text-danger text-xs">{{ $message }}</span>@enderror
+                </div>
+                <div>
+                    <label for="end_date">End Date</label>
+                    <input type="date" name="end_date" id="end_date" value="{{ old('end_date') }}"
+                        class="form-input" />
+                    @error('end_date')<span class="text-danger text-xs">{{ $message }}</span>@enderror
                 </div>
                 <div>
                     <label for="boosting_status">Initial Boosting Status</label>
@@ -33,7 +45,7 @@
                     @error('boosting_status')<span class="text-danger text-xs">{{ $message }}</span>@enderror
                 </div>
                 <div class="md:col-span-2">
-                    <label for="notes">Campaign Strategy / Notes</label>
+                    <label for="notes">Notes</label>
                     <textarea name="notes" id="notes" rows="3" class="form-textarea" placeholder="Describe the campaign target audience, budget, or platforms...">{{ old('notes') }}</textarea>
                     @error('notes')<span class="text-danger text-xs">{{ $message }}</span>@enderror
                 </div>
