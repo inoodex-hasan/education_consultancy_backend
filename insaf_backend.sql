@@ -83,7 +83,7 @@ CREATE TABLE `applications` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 INSERT INTO `applications` (`id`, `application_id`, `student_id`, `university_id`, `course_id`, `course_intake_id`, `tuition_fee`, `tuition_fee_status`, `service_charge_status`, `application_priority`, `internal_notes`, `documents_checklist`, `final_status`, `security_deposit_status`, `cvu_fee_status`, `admission_fee_status`, `final_payment_status`, `emgs_payment_status`, `emgs_score`, `total_fee`, `status`, `offer_letter_received`, `offer_letter_received_date`, `vfs_appointment`, `vfs_appointment_date`, `file_submission`, `file_submission_date`, `visa_status`, `visa_decision_date`, `visa_approval_date`, `notes`, `created_by`, `created_at`, `updated_at`) VALUES
-(11,	'APP-2026-00001',	7,	3,	4,	4,	NULL,	'pending',	'pending',	'normal',	NULL,	NULL,	'pending',	0,	0,	0,	0,	0,	NULL,	0.00,	'need_revision',	1,	'2026-04-20',	1,	'2026-04-20',	1,	'2026-04-20',	'not_applied',	NULL,	NULL,	NULL,	3,	'2026-04-15 02:17:11',	'2026-04-20 01:18:23');
+(12,	'APP-2026-00001',	8,	5,	5,	5,	NULL,	'pending',	'pending',	'normal',	NULL,	NULL,	'pending',	0,	0,	0,	0,	0,	NULL,	0.00,	'pending',	0,	NULL,	0,	NULL,	0,	NULL,	'not_applied',	NULL,	NULL,	'application created by admin',	1,	'2026-04-27 04:36:01',	'2026-04-27 04:36:01');
 
 DROP TABLE IF EXISTS `bank_reconciliation_items`;
 CREATE TABLE `bank_reconciliation_items` (
@@ -163,15 +163,7 @@ CREATE TABLE `cache` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 INSERT INTO `cache` (`key`, `value`, `expiration`) VALUES
-('admin-dashboard-cache-tyro:user-1:roles',	'a:1:{i:0;s:5:\"admin\";}',	1777178208),
-('admin-dashboard-cache-tyro:user-2:privileges',	'a:1:{i:0;s:10:\"*marketing\";}',	1777178737),
-('admin-dashboard-cache-tyro:user-2:roles',	'a:1:{i:0;s:9:\"marketing\";}',	1777178737),
-('admin-dashboard-cache-tyro:user-3:privileges',	'a:2:{i:0;s:11:\"*consultant\";i:1;s:8:\"*invoice\";}',	1777119947),
-('admin-dashboard-cache-tyro:user-3:roles',	'a:1:{i:0;s:10:\"consultant\";}',	1777119947),
-('admin-dashboard-cache-tyro:user-4:privileges',	'a:4:{i:0;s:11:\"*accountant\";i:1;s:8:\"*payment\";i:2;s:10:\"*comission\";i:3;s:8:\"*invoice\";}',	1777191582),
-('admin-dashboard-cache-tyro:user-4:roles',	'a:1:{i:0;s:10:\"accountant\";}',	1777191582),
-('admin-dashboard-cache-tyro:user-7:privileges',	'a:1:{i:0;s:18:\"*digital_marketing\";}',	1777202511),
-('admin-dashboard-cache-tyro:user-7:roles',	'a:1:{i:0;s:17:\"digital-marketing\";}',	1777202511);
+('admin-dashboard-cache-tyro:user-1:roles',	'a:1:{i:0;s:5:\"admin\";}',	1777290732);
 
 DROP TABLE IF EXISTS `cache_locks`;
 CREATE TABLE `cache_locks` (
@@ -242,8 +234,6 @@ CREATE TABLE `commissions` (
   CONSTRAINT `commissions_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-INSERT INTO `commissions` (`id`, `application_id`, `user_id`, `percentage`, `amount`, `proposed_amount`, `status`, `workflow_status`, `claimed_at`, `claim_notes`, `reviewed_by`, `reviewed_at`, `review_notes`, `notes`, `created_at`, `updated_at`) VALUES
-(1,	11,	3,	NULL,	0.00,	3000.00,	'pending',	'claimed',	'2026-04-25 01:09:23',	NULL,	NULL,	NULL,	NULL,	NULL,	'2026-04-25 01:09:23',	'2026-04-25 01:09:23');
 
 DROP TABLE IF EXISTS `countries`;
 CREATE TABLE `countries` (
@@ -259,7 +249,8 @@ CREATE TABLE `countries` (
 
 INSERT INTO `countries` (`id`, `name`, `code`, `currency`, `status`, `created_at`, `updated_at`) VALUES
 (4,	'Malta',	NULL,	NULL,	1,	'2026-04-14 23:35:04',	'2026-04-14 23:35:04'),
-(5,	'Malaysia',	NULL,	NULL,	1,	'2026-04-14 23:48:04',	'2026-04-14 23:48:04');
+(5,	'Malaysia',	NULL,	NULL,	1,	'2026-04-14 23:48:04',	'2026-04-14 23:48:04'),
+(6,	'Russia',	NULL,	NULL,	1,	'2026-04-27 03:58:15',	'2026-04-27 03:58:15');
 
 DROP TABLE IF EXISTS `course_intakes`;
 CREATE TABLE `course_intakes` (
@@ -279,7 +270,8 @@ CREATE TABLE `course_intakes` (
 
 INSERT INTO `course_intakes` (`id`, `course_id`, `intake_name`, `application_start_date`, `application_deadline`, `class_start_date`, `status`, `created_at`, `updated_at`) VALUES
 (3,	3,	'Summer 2026',	'2026-05-01',	'2026-05-31',	NULL,	1,	'2026-04-14 23:47:34',	'2026-04-14 23:47:34'),
-(4,	4,	'Summer 2026',	'2026-04-01',	'2026-04-30',	NULL,	1,	'2026-04-15 00:11:26',	'2026-04-15 00:11:56');
+(4,	4,	'Summer 2026',	'2026-04-01',	'2026-04-30',	NULL,	1,	'2026-04-15 00:11:26',	'2026-04-15 00:11:56'),
+(5,	5,	'Summer 2026',	'2026-05-01',	'2026-05-31',	NULL,	1,	'2026-04-27 04:02:11',	'2026-04-27 04:02:11');
 
 DROP TABLE IF EXISTS `courses`;
 CREATE TABLE `courses` (
@@ -299,7 +291,8 @@ CREATE TABLE `courses` (
 
 INSERT INTO `courses` (`id`, `university_id`, `name`, `degree_level`, `duration`, `tuition_fee`, `status`, `created_at`, `updated_at`) VALUES
 (3,	4,	'Law',	'Masters',	'6 Month',	NULL,	1,	'2026-04-14 23:42:41',	'2026-04-15 00:07:46'),
-(4,	3,	'Cyber Security',	'Masters',	'6 Month',	NULL,	1,	'2026-04-15 00:06:14',	'2026-04-15 00:07:32');
+(4,	3,	'Cyber Security',	'Masters',	'6 Month',	NULL,	1,	'2026-04-15 00:06:14',	'2026-04-15 00:07:32'),
+(5,	5,	'Physics',	'Masters',	'12',	NULL,	1,	'2026-04-27 04:01:46',	'2026-04-27 04:01:46');
 
 DROP TABLE IF EXISTS `expenses`;
 CREATE TABLE `expenses` (
@@ -394,8 +387,7 @@ CREATE TABLE `invoice_items` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 INSERT INTO `invoice_items` (`id`, `invoice_id`, `chart_of_account_id`, `description`, `quantity`, `unit_price`, `subtotal`, `tax_amount`, `total`, `created_at`, `updated_at`) VALUES
-(9,	4,	6,	'security fee from student',	1.00,	5000.00,	5000.00,	0.00,	5000.00,	'2026-04-19 23:46:07',	'2026-04-19 23:46:07'),
-(10,	4,	6,	'fee from student',	1.00,	2000.00,	2000.00,	0.00,	2000.00,	'2026-04-19 23:46:07',	'2026-04-19 23:46:07');
+(11,	5,	6,	'security deposit fee from student',	1.00,	5000.00,	5000.00,	0.00,	5000.00,	'2026-04-27 05:28:59',	'2026-04-27 05:28:59');
 
 DROP TABLE IF EXISTS `invoices`;
 CREATE TABLE `invoices` (
@@ -422,7 +414,7 @@ CREATE TABLE `invoices` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 INSERT INTO `invoices` (`id`, `student_id`, `application_id`, `university_id`, `invoice_number`, `date`, `due_date`, `total_amount`, `status`, `notes`, `created_at`, `updated_at`) VALUES
-(4,	7,	11,	3,	'INV-20260420-5CF7',	'2026-04-20',	'2026-04-27',	7000.00,	'draft',	'security deposit fee',	'2026-04-19 22:50:21',	'2026-04-19 23:46:07');
+(5,	8,	12,	5,	'INV-20260427-F287',	'2026-04-27',	'2026-04-30',	5000.00,	'draft',	'security fee',	'2026-04-27 05:28:59',	'2026-04-27 05:28:59');
 
 DROP TABLE IF EXISTS `job_batches`;
 CREATE TABLE `job_batches` (
@@ -477,7 +469,7 @@ CREATE TABLE `journal_entries` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 INSERT INTO `journal_entries` (`id`, `period_id`, `application_id`, `date`, `reference_number`, `note`, `status`, `created_by`, `created_at`, `updated_at`) VALUES
-(5,	1,	11,	'2026-04-25',	'JV-20260425-4A9F',	NULL,	'posted',	4,	'2026-04-25 05:49:21',	'2026-04-25 05:49:21'),
+(5,	1,	NULL,	'2026-04-25',	'JV-20260425-4A9F',	NULL,	'posted',	4,	'2026-04-25 05:49:21',	'2026-04-25 05:49:21'),
 (6,	1,	NULL,	'2026-04-25',	'JV-20260425-A12F',	NULL,	'posted',	4,	'2026-04-25 06:06:44',	'2026-04-25 06:06:44');
 
 DROP TABLE IF EXISTS `journal_entry_items`;
@@ -534,7 +526,7 @@ CREATE TABLE `leads` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 INSERT INTO `leads` (`id`, `student_name`, `email`, `phone`, `current_education`, `preferred_country`, `preferred_course`, `source`, `status`, `notes`, `last_contacted_at`, `next_follow_up_at`, `follow_up_history`, `created_by`, `consultant_id`, `created_at`, `updated_at`) VALUES
-(7,	'Md Hasan',	'hasan@example.com',	'01234567890',	'HSC',	4,	4,	'Phone',	'pending',	'will visit office',	NULL,	'2026-04-29 18:00:00',	'[{\"date\": \"2026-04-18\", \"notes\": \"not present here today\"}, {\"date\": \"2026-04-30\", \"notes\": \"will visit office\"}]',	2,	NULL,	'2026-04-15 00:20:21',	'2026-04-18 05:49:03');
+(8,	'Md Hasan',	'hasssaninoodex@gmail.com',	'01234567890',	'SSC',	6,	5,	'Phone',	'pending',	'will visit office',	NULL,	'2026-04-29 18:00:00',	'[{\"date\": \"2026-04-30\", \"notes\": \"will visit office\"}]',	1,	NULL,	'2026-04-27 04:13:59',	'2026-04-27 04:13:59');
 
 DROP TABLE IF EXISTS `marketing_campaigns`;
 CREATE TABLE `marketing_campaigns` (
@@ -573,10 +565,6 @@ CREATE TABLE `marketing_documents` (
   CONSTRAINT `marketing_documents_created_by_foreign` FOREIGN KEY (`created_by`) REFERENCES `users` (`id`) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-INSERT INTO `marketing_documents` (`id`, `application_id`, `document_name`, `document_type`, `status`, `notes`, `created_by`, `created_at`, `updated_at`) VALUES
-(1,	11,	'SOP',	'sop',	'ready',	NULL,	7,	'2026-04-26 03:26:58',	'2026-04-26 05:09:37'),
-(2,	11,	'CV',	'cv',	'received',	NULL,	7,	'2026-04-26 03:26:58',	'2026-04-26 05:09:37'),
-(3,	11,	'CL',	'cl',	'not_received',	NULL,	7,	'2026-04-26 03:26:58',	'2026-04-26 05:01:38');
 
 DROP TABLE IF EXISTS `marketing_posters`;
 CREATE TABLE `marketing_posters` (
@@ -702,7 +690,8 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (96,	'2026_04_26_110000_remove_campaign_id_from_marketing_videos',	53),
 (97,	'2026_04_26_110001_remove_campaign_id_from_marketing_posters',	53),
 (98,	'2026_04_26_120000_create_marketing_documents_table',	54),
-(99,	'2026_04_26_130000_create_marketing_documents_table',	55);
+(99,	'2026_04_26_130000_create_marketing_documents_table',	55),
+(100,	'2026_04_27_102940_add_plain_password_to_students_table',	56);
 
 DROP TABLE IF EXISTS `notifications`;
 CREATE TABLE `notifications` (
@@ -723,6 +712,8 @@ INSERT INTO `notifications` (`id`, `type`, `notifiable_type`, `notifiable_id`, `
 ('272cfc76-a9c4-42ed-a739-6e6fc772464d',	'App\\Notifications\\NewApplicationNotification',	'App\\Models\\User',	6,	'{\"application_id\":8,\"application_number\":\"APP-2026-00001\",\"student_name\":\"Md Hasan\",\"created_by\":\"Consultant\",\"message\":\"New application APP-2026-00001 created by Consultant\",\"link\":\"http:\\/\\/127.0.0.1:8000\\/dashboard\\/applications\\/8\\/edit\"}',	'2026-04-10 23:13:06',	'2026-02-22 10:56:38',	'2026-04-10 23:13:06'),
 ('3b9c3a71-77f6-42b1-a0c1-3fa6e9da4486',	'App\\Notifications\\NewLeadSubmitted',	'App\\Models\\User',	3,	'{\"lead_id\":6,\"student_name\":\"Hasan\",\"phone\":\"0120320020\",\"created_by\":\"Marketing\",\"message\":\"New lead submitted by Marketing\",\"link\":\"http:\\/\\/127.0.0.1:8000\\/dashboard\\/marketing\\/leads\\/6\"}',	'2026-02-22 10:56:19',	'2026-02-22 03:55:24',	'2026-02-22 10:56:19'),
 ('3d8759c4-3a76-4f5c-a99a-e1957c4f7282',	'App\\Notifications\\NewApplicationNotification',	'App\\Models\\User',	6,	'{\"application_id\":11,\"application_number\":\"APP-2026-00001\",\"student_name\":\"Md Hasan\",\"created_by\":\"Consultant\",\"message\":\"New application APP-2026-00001 created by Consultant\",\"link\":\"http:\\/\\/127.0.0.1:8000\\/dashboard\\/applications\\/11\\/edit\"}',	'2026-04-15 03:41:56',	'2026-04-15 02:17:11',	'2026-04-15 03:41:56'),
+('40594f0f-ca0c-443a-9fc1-f07f215bf713',	'App\\Notifications\\NewApplicationNotification',	'App\\Models\\User',	6,	'{\"application_id\":12,\"application_number\":\"APP-2026-00001\",\"student_name\":\"Md Hasan\",\"created_by\":\"Inoodex\",\"message\":\"New application APP-2026-00001 created by Inoodex\",\"link\":\"http:\\/\\/127.0.0.1:8000\\/dashboard\\/applications\\/12\\/edit\"}',	NULL,	'2026-04-27 04:36:01',	'2026-04-27 04:36:01'),
+('48ef3682-ba23-434a-9947-2e087b1b64e4',	'App\\Notifications\\NewLeadSubmitted',	'App\\Models\\User',	3,	'{\"lead_id\":8,\"student_name\":\"Md Hasan\",\"phone\":\"01234567890\",\"created_by\":\"Inoodex\",\"message\":\"New lead submitted by Inoodex\",\"link\":\"http:\\/\\/127.0.0.1:8000\\/dashboard\\/marketing\\/leads\\/8\"}',	NULL,	'2026-04-27 04:14:00',	'2026-04-27 04:14:00'),
 ('4919412a-a1be-4937-b3e5-477292752eaa',	'App\\Notifications\\NewLeadSubmitted',	'App\\Models\\User',	3,	'{\"lead_id\":4,\"student_name\":\"Ashraful Islam\",\"phone\":\"01195674368\",\"created_by\":\"Marketing\",\"message\":\"New lead submitted by Marketing\",\"link\":\"http:\\/\\/127.0.0.1:8000\\/dashboard\\/marketing\\/leads\\/4\"}',	'2026-02-18 05:00:58',	'2026-02-18 05:00:49',	'2026-02-18 05:00:58'),
 ('4aeba9c4-3e3a-4d9d-bbcd-83bb23f1bb8f',	'App\\Notifications\\NewApplicationNotification',	'App\\Models\\User',	6,	'{\"application_id\":10,\"application_number\":\"APP-2026-00001\",\"student_name\":\"Md Hasan\",\"created_by\":\"Consultant\",\"message\":\"New application APP-2026-00001 created by Consultant\",\"link\":\"http:\\/\\/127.0.0.1:8000\\/dashboard\\/applications\\/10\\/edit\"}',	'2026-04-10 23:13:06',	'2026-02-22 11:22:42',	'2026-04-10 23:13:06'),
 ('50ac2d91-74ed-455f-9787-95c679ac268a',	'App\\Notifications\\NewApplicationNotification',	'App\\Models\\User',	6,	'{\"application_id\":5,\"application_number\":\"APP-2026-00001\",\"student_name\":\"Md Hasan\",\"created_by\":\"Consultant\",\"message\":\"New application APP-2026-00001 created by Consultant\",\"link\":\"http:\\/\\/127.0.0.1:8000\\/dashboard\\/applications\\/5\\/edit\"}',	'2026-02-22 02:55:59',	'2026-02-22 00:03:14',	'2026-02-22 02:55:59'),
@@ -803,8 +794,6 @@ CREATE TABLE `payments` (
   CONSTRAINT `payments_student_id_foreign` FOREIGN KEY (`student_id`) REFERENCES `students` (`id`) ON DELETE RESTRICT
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-INSERT INTO `payments` (`id`, `student_id`, `application_id`, `invoice_id`, `amount`, `payment_type`, `payment_date`, `collected_by`, `receipt_number`, `payment_status`, `office_account_id`, `journal_entry_id`, `created_at`, `updated_at`, `notes`) VALUES
-(26,	7,	11,	4,	7000.00,	'final',	'2026-04-25 00:00:00',	4,	'REC-20260425-0001',	'completed',	3,	NULL,	'2026-04-25 05:48:21',	'2026-04-25 05:48:21',	NULL);
 
 DROP TABLE IF EXISTS `personal_access_tokens`;
 CREATE TABLE `personal_access_tokens` (
@@ -960,7 +949,7 @@ CREATE TABLE `sessions` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES
-('Kj4rvkg0SG7zVkmu22sUiwNbKYv3L9bVzTe3Dqb8',	7,	'127.0.0.1',	'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36',	'YTo1OntzOjY6Il90b2tlbiI7czo0MDoiTlB1N20xN1JnRkd2cUFQQ2pmaFByOWtha1R1WUkxUFcwdGFoY2xUbCI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czoxMDoidHlyby1sb2dpbiI7YToxOntzOjc6ImNhcHRjaGEiO2E6MDp7fX1zOjk6Il9wcmV2aW91cyI7YToyOntzOjM6InVybCI7czo1MToiaHR0cDovLzEyNy4wLjAuMTo4MDAwL2Rhc2hib2FyZC9tYXJrZXRpbmcvZG9jdW1lbnRzIjtzOjU6InJvdXRlIjtzOjMxOiJhZG1pbi5tYXJrZXRpbmcuZG9jdW1lbnRzLmluZGV4Ijt9czo1MDoibG9naW5fd2ViXzU5YmEzNmFkZGMyYjJmOTQwMTU4MGYwMTRjN2Y1OGVhNGUzMDk4OWQiO2k6Nzt9',	1777202211);
+('oVLhB5fdpkKF1ARC6WawZeYd3dGetfW3lskV9usu',	1,	'127.0.0.1',	'Mozilla/5.0 (Macintosh; Intel Mac OS X 11_0) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0 Safari/605.1.15',	'YTo2OntzOjY6Il90b2tlbiI7czo0MDoiZlY2YkdpbmwwNnl1MlRFVDVWVDQ4Z1pMZllnWTE5NUtXYlM3Tzl6ZCI7czo5OiJfcHJldmlvdXMiO2E6Mjp7czozOiJ1cmwiO3M6NDk6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9kYXNoYm9hcmQvc2FsYXJpZXMvZ2VuZXJhdGUiO3M6NToicm91dGUiO3M6MjM6ImFkbWluLnNhbGFyaWVzLmdlbmVyYXRlIjt9czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czozOiJ1cmwiO2E6MDp7fXM6MTA6InR5cm8tbG9naW4iO2E6MTp7czo3OiJjYXB0Y2hhIjthOjA6e319czo1MDoibG9naW5fd2ViXzU5YmEzNmFkZGMyYjJmOTQwMTU4MGYwMTRjN2Y1OGVhNGUzMDk4OWQiO2k6MTt9',	1777290626);
 
 DROP TABLE IF EXISTS `settings`;
 CREATE TABLE `settings` (
@@ -1024,6 +1013,7 @@ CREATE TABLE `students` (
   `translation_documents` json DEFAULT NULL,
   `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `plain_password` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `phone` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `sponsor_phone` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `address` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
@@ -1065,8 +1055,8 @@ CREATE TABLE `students` (
   CONSTRAINT `students_university_id_foreign` FOREIGN KEY (`university_id`) REFERENCES `universities` (`id`) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-INSERT INTO `students` (`id`, `first_name`, `last_name`, `father_name`, `mother_name`, `passport_number`, `passport_validity`, `translation_documents`, `email`, `password`, `phone`, `sponsor_phone`, `address`, `dob`, `ssc_result`, `hsc_result`, `ielts_score`, `subject`, `country_id`, `university_id`, `course_id`, `course_intake_id`, `current_stage`, `current_status`, `assigned_marketing_id`, `assigned_consultant_id`, `assigned_application_id`, `created_by`, `documents`, `created_at`, `updated_at`) VALUES
-(7,	'Md',	'Hasan',	'Md Rahim',	'Mrs Rahima',	'AB123456`',	'2030-01-01',	'[{\"name\": \"VFS CHECK LIST.pdf\", \"path\": \"documents/students/translations/15v1lUwyNhTvnlTP33qD68vYtHGoNF2jJehKE9dl.pdf\"}]',	'hasan@example.com',	'$2y$12$vZPjQ.bMKThLFVHNBnM/r.NkCBdH0af7LY4DBdfiEKIVqCg9BIDJS',	'01234567890',	'01200000000',	'Mirpur, Dhaka',	'2000-10-10',	NULL,	NULL,	NULL,	NULL,	4,	3,	4,	4,	NULL,	NULL,	NULL,	NULL,	NULL,	2,	'[{\"name\": \"sample.pdf\", \"path\": \"documents/students/znAM7aIUI4HQL00DpN6nSqr1ibahbGZCx3eDKSdK.pdf\"}]',	'2026-04-15 00:57:18',	'2026-04-15 01:40:07');
+INSERT INTO `students` (`id`, `first_name`, `last_name`, `father_name`, `mother_name`, `passport_number`, `passport_validity`, `translation_documents`, `email`, `password`, `plain_password`, `phone`, `sponsor_phone`, `address`, `dob`, `ssc_result`, `hsc_result`, `ielts_score`, `subject`, `country_id`, `university_id`, `course_id`, `course_intake_id`, `current_stage`, `current_status`, `assigned_marketing_id`, `assigned_consultant_id`, `assigned_application_id`, `created_by`, `documents`, `created_at`, `updated_at`) VALUES
+(8,	'Md',	'Hasan',	'Md Kamruzzaman',	'Kaniz Fatema',	'AB123456',	'2030-01-01',	'[{\"name\": \"VFS CHECK LIST.pdf\", \"path\": \"documents/students/translations/GMNpC0Cpm0eVERmY6UjY0fXv7qH7zPhHzJg2PXSe.pdf\"}]',	'hasssaninoodex@gmail.com',	'$2y$12$klxP1/MTQj3AZ8OG96xoe.8y9NLb/Ptai9SgX8NcjRpZw4AQt0epC',	'hasan@1234#',	'01200000000',	'01234567890',	'Mirpur, Dhaka',	'1990-01-01',	NULL,	NULL,	NULL,	NULL,	6,	5,	5,	5,	NULL,	NULL,	NULL,	NULL,	NULL,	1,	'[{\"name\": \"sample.pdf\", \"path\": \"documents/students/whNWgxo3toLD6SbGIG7qolI7sEUw4xh6b1fgIN6T.pdf\"}]',	'2026-04-27 04:25:40',	'2026-04-27 04:35:00');
 
 DROP TABLE IF EXISTS `taxes`;
 CREATE TABLE `taxes` (
@@ -1309,7 +1299,17 @@ INSERT INTO `tyro_audit_logs` (`id`, `user_id`, `event`, `auditable_type`, `audi
 (206,	4,	'user.logout',	'App\\Models\\User',	4,	NULL,	'{\"email\": \"accountant@example.com\"}',	'{\"ip\": \"127.0.0.1\", \"is_console\": false, \"user_agent\": \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36\"}',	'2026-04-26 08:14:53'),
 (207,	7,	'user.login',	'App\\Models\\User',	7,	NULL,	'{\"email\": \"digital_marketing@example.com\"}',	'{\"ip\": \"127.0.0.1\", \"is_console\": false, \"user_agent\": \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36\"}',	'2026-04-26 08:15:04'),
 (208,	7,	'user.logout',	'App\\Models\\User',	7,	NULL,	'{\"email\": \"digital_marketing@example.com\"}',	'{\"ip\": \"127.0.0.1\", \"is_console\": false, \"user_agent\": \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36\"}',	'2026-04-26 08:17:14'),
-(209,	7,	'user.login',	'App\\Models\\User',	7,	NULL,	'{\"email\": \"digital_marketing@example.com\"}',	'{\"ip\": \"127.0.0.1\", \"is_console\": false, \"user_agent\": \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36\"}',	'2026-04-26 08:17:31');
+(209,	7,	'user.login',	'App\\Models\\User',	7,	NULL,	'{\"email\": \"digital_marketing@example.com\"}',	'{\"ip\": \"127.0.0.1\", \"is_console\": false, \"user_agent\": \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36\"}',	'2026-04-26 08:17:31'),
+(210,	2,	'user.login',	'App\\Models\\User',	2,	NULL,	'{\"email\": \"marketing@example.com\"}',	'{\"ip\": \"127.0.0.1\", \"is_console\": false, \"user_agent\": \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36\"}',	'2026-04-27 03:49:20'),
+(211,	2,	'user.logout',	'App\\Models\\User',	2,	NULL,	'{\"email\": \"marketing@example.com\"}',	'{\"ip\": \"127.0.0.1\", \"is_console\": false, \"user_agent\": \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36\"}',	'2026-04-27 04:34:26'),
+(212,	2,	'user.login',	'App\\Models\\User',	2,	NULL,	'{\"email\": \"marketing@example.com\"}',	'{\"ip\": \"127.0.0.1\", \"is_console\": false, \"user_agent\": \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36\"}',	'2026-04-27 04:35:08'),
+(213,	2,	'user.logout',	'App\\Models\\User',	2,	NULL,	'{\"email\": \"marketing@example.com\"}',	'{\"ip\": \"127.0.0.1\", \"is_console\": false, \"user_agent\": \"Mozilla/5.0 (Macintosh; Intel Mac OS X 11_0) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0 Safari/605.1.15\"}',	'2026-04-27 05:17:09'),
+(214,	1,	'user.login',	'App\\Models\\User',	1,	NULL,	'{\"email\": \"hello@inoodex.com\"}',	'{\"ip\": \"127.0.0.1\", \"is_console\": false, \"user_agent\": \"Mozilla/5.0 (Macintosh; Intel Mac OS X 11_0) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0 Safari/605.1.15\"}',	'2026-04-27 05:20:47'),
+(215,	1,	'user.logout',	'App\\Models\\User',	1,	NULL,	'{\"email\": \"hello@inoodex.com\"}',	'{\"ip\": \"127.0.0.1\", \"is_console\": false, \"user_agent\": \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36\"}',	'2026-04-27 06:34:47'),
+(216,	5,	'user.login',	'App\\Models\\User',	5,	NULL,	'{\"email\": \"editor@example.com\"}',	'{\"ip\": \"127.0.0.1\", \"is_console\": false, \"user_agent\": \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36\"}',	'2026-04-27 06:44:13'),
+(217,	5,	'user.logout',	'App\\Models\\User',	5,	NULL,	'{\"email\": \"editor@example.com\"}',	'{\"ip\": \"127.0.0.1\", \"is_console\": false, \"user_agent\": \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36\"}',	'2026-04-27 07:19:29'),
+(218,	6,	'user.login',	'App\\Models\\User',	6,	NULL,	'{\"email\": \"application@example.com\"}',	'{\"ip\": \"127.0.0.1\", \"is_console\": false, \"user_agent\": \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36\"}',	'2026-04-27 07:19:40'),
+(219,	1,	'user.login',	'App\\Models\\User',	1,	NULL,	'{\"email\": \"hello@inoodex.com\"}',	'{\"ip\": \"127.0.0.1\", \"is_console\": false, \"user_agent\": \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36\"}',	'2026-04-27 09:57:49');
 
 DROP TABLE IF EXISTS `universities`;
 CREATE TABLE `universities` (
@@ -1331,7 +1331,8 @@ CREATE TABLE `universities` (
 
 INSERT INTO `universities` (`id`, `country_id`, `name`, `short_name`, `website`, `email`, `phone`, `address`, `status`, `created_at`, `updated_at`) VALUES
 (3,	4,	'University of Malta',	NULL,	'https://www.um.edu.mt/',	'info@um.edu.mt',	'+356 2340 2340',	'University of Malta, Msida MSD 2080, Malta',	1,	'2026-04-14 23:36:55',	'2026-04-14 23:36:55'),
-(4,	5,	'Universiti Malaya',	NULL,	'https://www.um.edu.my/',	'umcced@um.edu.my',	'+603-2246 3633',	'Level 9, Chancellery Universiti Malaya, Lingkungan Budi, 50603 Kuala Lumpur,',	1,	'2026-04-14 23:51:01',	'2026-04-14 23:51:01');
+(4,	5,	'Universiti Malaya',	NULL,	'https://www.um.edu.my/',	'umcced@um.edu.my',	'+603-2246 3633',	'Level 9, Chancellery Universiti Malaya, Lingkungan Budi, 50603 Kuala Lumpur,',	1,	'2026-04-14 23:51:01',	'2026-04-14 23:51:01'),
+(5,	6,	'Moscow State University',	NULL,	'https://msu.ru/en/',	'info@rector.msu.ru',	'+7 (495) 939-10-00',	NULL,	1,	'2026-04-27 04:01:04',	'2026-04-27 04:01:04');
 
 DROP TABLE IF EXISTS `user_roles`;
 CREATE TABLE `user_roles` (
@@ -1431,8 +1432,7 @@ INSERT INTO `vfs_checklist_templates` (`id`, `item_name`, `country_id`, `sort_or
 (23,	'Applicants ATM Card',	4,	22,	1,	'2026-04-21 05:24:49',	'2026-04-21 05:25:34'),
 (24,	'Bank Account Cheque Book copy',	5,	23,	1,	'2026-04-21 05:24:49',	'2026-04-21 05:25:34'),
 (25,	'Deposit Slip (If possible)',	5,	24,	1,	'2026-04-21 05:24:49',	'2026-04-21 05:25:34'),
-(26,	'Financial Declaration Affidavit',	4,	25,	1,	'2026-04-21 05:24:49',	'2026-04-21 05:25:34'),
-(32,	'test',	4,	26,	1,	'2026-04-21 06:31:54',	'2026-04-21 06:31:54');
+(26,	'Financial Declaration Affidavit',	4,	25,	1,	'2026-04-21 05:24:49',	'2026-04-21 05:25:34');
 
 DROP TABLE IF EXISTS `vfs_checklists`;
 CREATE TABLE `vfs_checklists` (
@@ -1453,32 +1453,31 @@ CREATE TABLE `vfs_checklists` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 INSERT INTO `vfs_checklists` (`id`, `application_id`, `checklist_item`, `is_checked`, `checked_by`, `checked_at`, `notes`, `created_at`, `updated_at`) VALUES
-(106,	11,	'VFS Appointment',	0,	NULL,	NULL,	NULL,	'2026-04-21 06:42:16',	'2026-04-21 06:42:16'),
-(107,	11,	'Visa Application',	0,	NULL,	NULL,	NULL,	'2026-04-21 06:42:16',	'2026-04-21 06:42:16'),
-(108,	11,	'Photo 35X45',	0,	NULL,	NULL,	NULL,	'2026-04-21 06:42:16',	'2026-04-21 06:42:16'),
-(109,	11,	'Passport',	0,	NULL,	NULL,	NULL,	'2026-04-21 06:42:16',	'2026-04-21 06:42:16'),
-(110,	11,	'Academic Certificates (Education Board and ministry attestation)',	0,	NULL,	NULL,	NULL,	'2026-04-21 06:42:16',	'2026-04-21 06:42:16'),
-(111,	11,	'Academic Transcripts (Education Board and ministry attestation)',	0,	NULL,	NULL,	NULL,	'2026-04-21 06:42:16',	'2026-04-21 06:42:16'),
-(112,	11,	'English Proficiency (If any)',	0,	NULL,	NULL,	NULL,	'2026-04-21 06:42:16',	'2026-04-21 06:42:16'),
-(113,	11,	'CV',	0,	NULL,	NULL,	NULL,	'2026-04-21 06:42:16',	'2026-04-21 06:42:16'),
-(114,	11,	'Motivation Letter',	0,	NULL,	NULL,	NULL,	'2026-04-21 06:42:16',	'2026-04-21 06:42:16'),
-(115,	11,	'Final Offer Letter and college others documents',	0,	NULL,	NULL,	NULL,	'2026-04-21 06:42:16',	'2026-04-21 06:42:16'),
-(116,	11,	'Accommodation',	0,	NULL,	NULL,	NULL,	'2026-04-21 06:42:16',	'2026-04-21 06:42:16'),
-(117,	11,	'Birth Certificate (Notarize and attested)',	0,	NULL,	NULL,	NULL,	'2026-04-21 06:42:16',	'2026-04-21 06:42:16'),
-(118,	11,	'Insurance',	0,	NULL,	NULL,	NULL,	'2026-04-21 06:42:16',	'2026-04-21 06:42:16'),
-(119,	11,	'Flight Booking',	0,	NULL,	NULL,	NULL,	'2026-04-21 06:42:16',	'2026-04-21 06:42:16'),
-(120,	11,	'Student Bank ATM Card',	0,	NULL,	NULL,	NULL,	'2026-04-21 06:42:16',	'2026-04-21 06:42:16'),
-(121,	11,	'Sponsor NID (Translation and notarize)',	0,	NULL,	NULL,	NULL,	'2026-04-21 06:42:16',	'2026-04-21 06:42:16'),
-(122,	11,	'Applicant NID (Translation and notarize)',	0,	NULL,	NULL,	NULL,	'2026-04-21 06:42:16',	'2026-04-21 06:42:16'),
-(123,	11,	'Sponsor Income Source (Trade License or Job Certificate) (Translation and notarize)',	0,	NULL,	NULL,	NULL,	'2026-04-21 06:42:16',	'2026-04-21 06:42:16'),
-(124,	11,	'TIN certificate',	0,	NULL,	NULL,	NULL,	'2026-04-21 06:42:16',	'2026-04-21 06:42:16'),
-(125,	11,	'TAX certificate 2 years',	0,	NULL,	NULL,	NULL,	'2026-04-21 06:42:16',	'2026-04-21 06:42:16'),
-(126,	11,	'Bank Statement',	0,	NULL,	NULL,	NULL,	'2026-04-21 06:42:16',	'2026-04-21 06:42:16'),
-(127,	11,	'Sponsor Bank ATM Card',	0,	NULL,	NULL,	NULL,	'2026-04-21 06:42:16',	'2026-04-21 06:42:16'),
-(128,	11,	'Applicants ATM Card',	0,	NULL,	NULL,	NULL,	'2026-04-21 06:42:16',	'2026-04-21 06:42:16'),
-(129,	11,	'Bank Account Cheque Book copy',	0,	NULL,	NULL,	NULL,	'2026-04-21 06:42:16',	'2026-04-21 06:42:16'),
-(130,	11,	'Deposit Slip (If possible)',	0,	NULL,	NULL,	NULL,	'2026-04-21 06:42:16',	'2026-04-21 06:42:16'),
-(131,	11,	'Financial Declaration Affidavit',	0,	NULL,	NULL,	NULL,	'2026-04-21 06:42:16',	'2026-04-21 06:42:16'),
-(132,	11,	'test',	0,	NULL,	NULL,	NULL,	'2026-04-21 06:42:16',	'2026-04-21 06:42:16');
+(133,	12,	'VFS Appointment',	0,	NULL,	NULL,	NULL,	'2026-04-27 05:29:13',	'2026-04-27 05:29:13'),
+(134,	12,	'Visa Application',	0,	NULL,	NULL,	NULL,	'2026-04-27 05:29:13',	'2026-04-27 05:29:13'),
+(135,	12,	'Photo 35X45',	0,	NULL,	NULL,	NULL,	'2026-04-27 05:29:13',	'2026-04-27 05:29:13'),
+(136,	12,	'Passport',	0,	NULL,	NULL,	NULL,	'2026-04-27 05:29:13',	'2026-04-27 05:29:13'),
+(137,	12,	'Academic Certificates (Education Board and ministry attestation)',	0,	NULL,	NULL,	NULL,	'2026-04-27 05:29:13',	'2026-04-27 05:29:13'),
+(138,	12,	'Academic Transcripts (Education Board and ministry attestation)',	0,	NULL,	NULL,	NULL,	'2026-04-27 05:29:13',	'2026-04-27 05:29:13'),
+(139,	12,	'English Proficiency (If any)',	0,	NULL,	NULL,	NULL,	'2026-04-27 05:29:13',	'2026-04-27 05:29:13'),
+(140,	12,	'CV',	0,	NULL,	NULL,	NULL,	'2026-04-27 05:29:13',	'2026-04-27 05:29:13'),
+(141,	12,	'Motivation Letter',	0,	NULL,	NULL,	NULL,	'2026-04-27 05:29:13',	'2026-04-27 05:29:13'),
+(142,	12,	'Final Offer Letter and college others documents',	0,	NULL,	NULL,	NULL,	'2026-04-27 05:29:13',	'2026-04-27 05:29:13'),
+(143,	12,	'Accommodation',	0,	NULL,	NULL,	NULL,	'2026-04-27 05:29:13',	'2026-04-27 05:29:13'),
+(144,	12,	'Birth Certificate (Notarize and attested)',	0,	NULL,	NULL,	NULL,	'2026-04-27 05:29:13',	'2026-04-27 05:29:13'),
+(145,	12,	'Insurance',	0,	NULL,	NULL,	NULL,	'2026-04-27 05:29:13',	'2026-04-27 05:29:13'),
+(146,	12,	'Flight Booking',	0,	NULL,	NULL,	NULL,	'2026-04-27 05:29:13',	'2026-04-27 05:29:13'),
+(147,	12,	'Student Bank ATM Card',	0,	NULL,	NULL,	NULL,	'2026-04-27 05:29:13',	'2026-04-27 05:29:13'),
+(148,	12,	'Sponsor NID (Translation and notarize)',	0,	NULL,	NULL,	NULL,	'2026-04-27 05:29:13',	'2026-04-27 05:29:13'),
+(149,	12,	'Applicant NID (Translation and notarize)',	0,	NULL,	NULL,	NULL,	'2026-04-27 05:29:13',	'2026-04-27 05:29:13'),
+(150,	12,	'Sponsor Income Source (Trade License or Job Certificate) (Translation and notarize)',	0,	NULL,	NULL,	NULL,	'2026-04-27 05:29:13',	'2026-04-27 05:29:13'),
+(151,	12,	'TIN certificate',	0,	NULL,	NULL,	NULL,	'2026-04-27 05:29:13',	'2026-04-27 05:29:13'),
+(152,	12,	'TAX certificate 2 years',	0,	NULL,	NULL,	NULL,	'2026-04-27 05:29:13',	'2026-04-27 05:29:13'),
+(153,	12,	'Bank Statement',	0,	NULL,	NULL,	NULL,	'2026-04-27 05:29:13',	'2026-04-27 05:29:13'),
+(154,	12,	'Sponsor Bank ATM Card',	0,	NULL,	NULL,	NULL,	'2026-04-27 05:29:13',	'2026-04-27 05:29:13'),
+(155,	12,	'Applicants ATM Card',	0,	NULL,	NULL,	NULL,	'2026-04-27 05:29:13',	'2026-04-27 05:29:13'),
+(156,	12,	'Bank Account Cheque Book copy',	0,	NULL,	NULL,	NULL,	'2026-04-27 05:29:13',	'2026-04-27 05:29:13'),
+(157,	12,	'Deposit Slip (If possible)',	0,	NULL,	NULL,	NULL,	'2026-04-27 05:29:13',	'2026-04-27 05:29:13'),
+(158,	12,	'Financial Declaration Affidavit',	0,	NULL,	NULL,	NULL,	'2026-04-27 05:29:13',	'2026-04-27 05:29:13');
 
--- 2026-04-26 11:17:28 UTC
+-- 2026-04-27 11:51:43 UTC

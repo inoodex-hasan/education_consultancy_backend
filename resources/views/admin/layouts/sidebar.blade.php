@@ -60,7 +60,7 @@
                 <!-- Editor -->
                 <li class="nav-item" x-data="{ open: false }">
                     <a href="javascript:;" @click="open = !open" class="group">
-                        <div class="flex items-center justify-between">
+                        <div class="flex items-center justify-between w-full">
                             <div class="flex items-center">
                                 <svg class="shrink-0" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25z" stroke="currentColor" stroke-width="1.5" fill="none" />
@@ -130,7 +130,7 @@
                 <!-- Data Collection -->
                 <li class="nav-item" x-data="{ open: false }">
                     <a href="javascript:;" @click="open = !open" class="group">
-                        <div class="flex items-center justify-between">
+                        <div class="flex items-center justify-between w-full">
                             <div class="flex items-center">
                                 <svg class="shrink-0" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <ellipse cx="12" cy="5" rx="9" ry="3" stroke="currentColor" stroke-width="2"/>
@@ -153,7 +153,7 @@
                 <!-- Digital Marketing -->
                 <li class="nav-item" x-data="{ open: false }">
                     <a href="javascript:;" @click="open = !open" class="group">
-                        <div class="flex items-center justify-between">
+                        <div class="flex items-center justify-between w-full">
                             <div class="flex items-center">
                                 <svg class="shrink-0" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M3 11V13M5 10L18 6V18L5 14V10Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
@@ -190,7 +190,7 @@
                 <!-- Consulting -->
                 <li class="nav-item" x-data="{ open: false }">
                     <a href="javascript:;" @click="open = !open" class="group">
-                        <div class="flex items-center justify-between">
+                        <div class="flex items-center justify-between w-full">
                             <div class="flex items-center">
                                 <svg class="shrink-0" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <circle cx="9" cy="8" r="3" stroke="currentColor" stroke-width="2" />
@@ -214,7 +214,7 @@
                 <!-- Application -->
                 <li class="nav-item" x-data="{ open: false }">
                     <a href="javascript:;" @click="open = !open" class="group">
-                        <div class="flex items-center justify-between">
+                        <div class="flex items-center justify-between w-full">
                             <div class="flex items-center">
                                 <svg class="shrink-0" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M19 21H5C3.89543 21 3 20.1046 3 19V5C3 3.89543 3.89543 3 5 3H19C20.1046 3 21 3.89543 21 5V19C21 20.1046 20.1046 21 19 21Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -238,7 +238,7 @@
                 <!-- Invoice -->
                 <li class="nav-item" x-data="{ open: false }">
                     <a href="javascript:;" @click="open = !open" class="group">
-                        <div class="flex items-center justify-between">
+                        <div class="flex items-center justify-between w-full">
                             <div class="flex items-center">
                                 <svg class="shrink-0" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M14 2H6C4.89543 2 4 2.89543 4 4V20C4 21.1046 4.89543 22 6 22H18C19.1046 22 20 21.1046 20 20V8L14 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
@@ -263,7 +263,7 @@
                 <!-- VFS Checklist -->
                 <li class="nav-item" x-data="{ open: false }">
                     <a href="javascript:;" @click="open = !open" class="group">
-                        <div class="flex items-center justify-between">
+                        <div class="flex items-center justify-between w-full">
                             <div class="flex items-center">
                                 <svg class="shrink-0" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M9 5H7C5.89543 5 5 5.89543 5 7V19C5 20.1046 5.89543 21 7 21H17C18.1046 21 19 20.1046 19 19V7C19 5.89543 18.1046 5 17 5H15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
@@ -286,7 +286,7 @@
                 <!-- My Commissions -->
                 <li class="nav-item" x-data="{ open: false }">
                     <a href="javascript:;" @click="open = !open" class="group">
-                        <div class="flex items-center justify-between">
+                        <div class="flex items-center justify-between w-full">
                             <div class="flex items-center">
                                 <svg class="shrink-0" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
@@ -308,7 +308,7 @@
                 <!-- Accounting -->
                 <li class="nav-item" x-data="{ open: false }">
                     <a href="javascript:;" @click="open = !open" class="group">
-                        <div class="flex items-center justify-between">
+                        <div class="flex items-center justify-between w-full">
                             <div class="flex items-center">
                                 <svg class="shrink-0" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -332,7 +332,7 @@
                 <!-- Payments -->
                 <li class="nav-item" x-data="{ open: false }">
                     <a href="javascript:;" @click="open = !open" class="group">
-                        <div class="flex items-center justify-between">
+                        <div class="flex items-center justify-between w-full">
                             <div class="flex items-center">
                                 <svg class="shrink-0" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <rect x="2" y="5" width="20" height="14" rx="2" stroke="currentColor" stroke-width="2"/>
@@ -354,7 +354,7 @@
                 <!-- Invoices -->
                 <!-- <li class="nav-item" x-data="{ open: false }">
                     <a href="javascript:;" @click="open = !open" class="group">
-                        <div class="flex items-center justify-between">
+                        <div class="flex items-center justify-between w-full">
                             <div class="flex items-center">
                                 <svg class="shrink-0" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M9 5H7C5.89543 5 5 5.89543 5 7V19C5 20.1046 5.89543 21 7 21H17C18.1046 21 19 20.1046 19 19V7C19 5.89543 18.1046 5 17 5H15M9 5C9 6.10457 9.89543 7 11 7H13C14.1046 7 15 6.10457 15 5M9 5C9 3.89543 9.89543 3 11 3H13C14.1046 3 15 3.89543 15 5M12 12H15M12 16H15M9 12H9.01M9 16H9.01" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
@@ -374,7 +374,7 @@
                 <!-- Operations -->
                 <li class="nav-item" x-data="{ open: false }">
                     <a href="javascript:;" @click="open = !open" class="group">
-                        <div class="flex items-center justify-between">
+                        <div class="flex items-center justify-between w-full">
                             <div class="flex items-center">
                                 <svg class="shrink-0" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/>
@@ -441,7 +441,7 @@
                 <!-- Commissions -->
                 <li class="nav-item" x-data="{ open: false }">
                     <a href="javascript:;" @click="open = !open" class="group">
-                        <div class="flex items-center justify-between">
+                        <div class="flex items-center justify-between w-full">
                             <div class="flex items-center">
                                 <svg class="shrink-0" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
@@ -465,7 +465,7 @@
                     <ul x-show="open" x-collapse class="mt-1 space-y-1 rounded-md bg-gray-100 p-2 dark:bg-[#1b2e4b]">
                         <li>
                             <a href="{{ route('admin.commissions.pending') }}" class="block rounded-md px-3 py-2 text-sm hover:bg-white hover:shadow-sm dark:hover:bg-[#0e1726]">
-                                <span class="flex items-center justify-between">
+                                <span class="flex items-center justify-between w-full">
                                     <span>Pending Review</span>
                                     @php
                                         $pendingReviewCount = \App\Models\Commission::claimed()->count() + \App\Models\Commission::underReview()->count();
@@ -484,7 +484,7 @@
                 <!-- Administration -->
                 <li class="nav-item" x-data="{ open: false }">
                     <a href="javascript:;" @click="open = !open" class="group">
-                        <div class="flex items-center justify-between">
+                        <div class="flex items-center justify-between w-full">
                             <div class="flex items-center">
                                 <svg class="shrink-0" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path opacity="0.5" d="M12 15a3 3 0 100-6 3 3 0 000 6z" fill="currentColor" />
@@ -507,7 +507,7 @@
                 <!-- Settings -->
                 <li class="nav-item" x-data="{ open: false }">
                     <a href="javascript:;" @click="open = !open" class="group">
-                        <div class="flex items-center justify-between">
+                        <div class="flex items-center justify-between w-full">
                             <div class="flex items-center">
                                 <svg class="shrink-0" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" stroke="currentColor" stroke-width="1.5" />
