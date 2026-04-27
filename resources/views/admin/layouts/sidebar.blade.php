@@ -352,7 +352,7 @@
                 </li>
 
                 <!-- Invoices -->
-                <li class="nav-item" x-data="{ open: false }">
+                <!-- <li class="nav-item" x-data="{ open: false }">
                     <a href="javascript:;" @click="open = !open" class="group">
                         <div class="flex items-center justify-between">
                             <div class="flex items-center">
@@ -369,7 +369,7 @@
                     <ul x-show="open" x-collapse class="mt-1 space-y-1 rounded-md bg-gray-100 p-2 dark:bg-[#1b2e4b]">
                         <li><a href="{{ route('admin.invoices.index') }}" class="block rounded-md px-3 py-2 text-sm hover:bg-white hover:shadow-sm dark:hover:bg-[#0e1726]">Student Invoices</a></li>
                     </ul>
-                </li>
+                </li> -->
 
                 <!-- Operations -->
                 <li class="nav-item" x-data="{ open: false }">

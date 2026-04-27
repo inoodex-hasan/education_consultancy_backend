@@ -63,7 +63,7 @@
 
                 <select name="emgs_score" class="form-select min-w-[150px]">
                     <option value="">EMGS Score</option>
-                    @foreach([10, 20, 30, 40, 50, 60, 70, 80, 90, 100] as $score)
+                    @foreach([5, 15, 32, 35, 70] as $score)
                         <option value="{{ $score }}" {{ request('emgs_score') == $score ? 'selected' : '' }}>{{ $score }}%</option>
                     @endforeach
                 </select>
