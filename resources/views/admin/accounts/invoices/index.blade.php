@@ -16,6 +16,42 @@
     </div>
 
     <div class="panel mt-6">
+        <div class="mb-5">
+            <form action="{{ route('admin.invoices.index') }}" method="GET" class="flex flex-col gap-3 w-full">
+                <div style="display: flex; align-items: center; gap: 8px; width: 100%; flex-wrap: wrap;">
+                    <div class="relative" style="flex: 2; min-width: 200px;">
+                        <input type="text" name="search" value="{{ request('search') }}"
+                            placeholder="Search invoice #, student, university..." class="form-input ltr:pr-11 rtl:pl-11" style="width: 100%;" />
+                        <button type="submit"
+                            class="absolute inset-y-0 flex items-center hover:text-primary ltr:right-4 rtl:left-4">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="11.5" cy="11.5" r="9.5" stroke="currentColor" stroke-width="1.5" opacity="0.5" />
+                                <path d="M18.5 18.5L22 22" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                            </svg>
+                        </button>
+                    </div>
+
+                    <select name="status" class="form-select" style="flex: 1; min-width: 150px;">
+                        <option value="">All Status</option>
+                        <option value="paid" {{ request('status') == 'paid' ? 'selected' : '' }}>Fully Paid</option>
+                        <option value="partial" {{ request('status') == 'partial' ? 'selected' : '' }}>Partial Paid</option>
+                        <option value="unpaid" {{ request('status') == 'unpaid' ? 'selected' : '' }}>Unpaid</option>
+                    </select>
+                </div>
+                <div style="display: flex; align-items: center; gap: 8px; width: 100%; flex-wrap: wrap;">
+                    <input type="date" name="date_from" value="{{ request('date_from') }}"
+                        placeholder="From Date" class="form-input" style="flex: 1; min-width: 150px;" />
+                    <input type="date" name="date_to" value="{{ request('date_to') }}"
+                        placeholder="To Date" class="form-input" style="flex: 1; min-width: 150px;" />
+
+                    <div style="flex: 2; min-width: 100px;"></div>
+
+                    <button type="submit" class="btn btn-primary" style="white-space: nowrap;">Filter</button>
+                    <a href="{{ route('admin.invoices.index') }}" class="btn btn-outline-danger" style="white-space: nowrap;">Reset</a>
+                </div>
+            </form>
+        </div>
+
         <div class="table-responsive">
             <table class="table-hover w-full table-auto">
                 <thead>

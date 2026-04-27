@@ -21,14 +21,45 @@ class InvoiceController extends Controller
     /**
      * Display a listing of the invoices.
      */
-    public function index()
+    public function index(Request $request)
     {
         $this->authorize('*consultant|*application|*accountant');
 
-        $invoices = Invoice::with(['student', 'application', 'university'])
-            ->orderBy('date', 'desc')
+        $query = Invoice::with(['student', 'application', 'university']);
+
+        // Search filter
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('invoice_number', 'like', "%{$search}%")
+                  ->orWhereHas('student', function ($sq) use ($search) {
+                      $sq->where('first_name', 'like', "%{$search}%")
+                         ->orWhere('last_name', 'like', "%{$search}%")
+                         ->orWhere('id_number', 'like', "%{$search}%");
+                  })
+                  ->orWhereHas('university', function ($uq) use ($search) {
+                      $uq->where('name', 'like', "%{$search}%");
+                  });
+            });
+        }
+
+        // Status filter
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        // Date range filter
+        if ($request->filled('date_from')) {
+            $query->whereDate('date', '>=', $request->date_from);
+        }
+        if ($request->filled('date_to')) {
+            $query->whereDate('date', '<=', $request->date_to);
+        }
+
+        $invoices = $query->orderBy('date', 'desc')
             ->orderBy('id', 'desc')
-            ->paginate(20);
+            ->paginate(20)
+            ->withQueryString();
 
         return view('admin.accounts.invoices.index', compact('invoices'));
     }
