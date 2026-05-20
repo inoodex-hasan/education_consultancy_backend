@@ -33,13 +33,13 @@
                 </div>
 
                 <div>
-                    <label class="form-label">Application Start Date<span class="text-danger">*</span></label>
+                    <label class="form-label">Application Start Date (Optional)</label>
                     <input type="date" name="application_start_date" class="form-input"
                         value="{{ old('application_start_date', $courseIntake->application_start_date ?? '') }}">
                 </div>
 
                 <div>
-                    <label class="form-label">Application Deadline<span class="text-danger">*</span></label>
+                    <label class="form-label">Application Deadline (Optional)</label>
                     <input type="date" name="application_deadline" class="form-input"
                         value="{{ old('application_deadline', $courseIntake->application_deadline ?? '') }}">
                 </div>
