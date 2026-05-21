@@ -136,10 +136,10 @@
                     <label for="course_intake_id">Preferred Intake</label>
                     <select name="course_intake_id" id="course_intake_id" class="form-select">
                         <option value="">Select Intake</option>
-                        @foreach ($intakes as $intake)
-                            <option value="{{ $intake->id }}"
-                                {{ old('course_intake_id', $student->course_intake_id) == $intake->id ? 'selected' : '' }}>
-                                {{ $intake->intake_name }}
+                        @foreach (['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'] as $month)
+                            <option value="{{ $month }}"
+                                {{ old('course_intake_id', optional($student->intake)->intake_name) === $month ? 'selected' : '' }}>
+                                {{ $month }}
                             </option>
                         @endforeach
                     </select>
@@ -308,6 +308,31 @@
             const universitySelect = document.getElementById('university_id');
             const courseSelect = document.getElementById('course_id');
             const intakeSelect = document.getElementById('course_intake_id');
+            const intakeMonths = [
+                'January',
+                'February',
+                'March',
+                'April',
+                'May',
+                'June',
+                'July',
+                'August',
+                'September',
+                'October',
+                'November',
+                'December',
+            ];
+
+            function resetIntakeMonths(selectedValue = '') {
+                intakeSelect.innerHTML = '<option value="">Select Intake</option>';
+                intakeMonths.forEach(month => {
+                    const option = document.createElement('option');
+                    option.value = month;
+                    option.textContent = month;
+                    option.selected = selectedValue === month;
+                    intakeSelect.appendChild(option);
+                });
+            }
 
             // Handle University selection
             universitySelect.addEventListener('change', function() {
@@ -322,7 +347,7 @@
 
                 // Reset and Load Courses
                 courseSelect.innerHTML = '<option value="">Select Course</option>';
-                intakeSelect.innerHTML = '<option value="">Select Intake</option>';
+                resetIntakeMonths();
 
                 if (universityId) {
                     fetch(`{{ route('admin.applications.get-courses') }}?university_id=${universityId}`)
@@ -352,22 +377,7 @@
 
             // Handle Course selection
             courseSelect.addEventListener('change', function() {
-                const courseId = this.value;
-                intakeSelect.innerHTML = '<option value="">Select Intake</option>';
-
-                if (courseId) {
-                    fetch(`{{ route('admin.applications.get-intakes') }}?course_id=${courseId}`)
-                        .then(response => response.json())
-                        .then(data => {
-                            data.forEach(intake => {
-                                const option = document.createElement('option');
-                                option.value = intake.id;
-                                option.textContent = intake.intake_name;
-                                intakeSelect.appendChild(option);
-                            });
-                        })
-                        .catch(error => console.error('Error loading intakes:', error));
-                }
+                resetIntakeMonths(intakeSelect.value);
             });
 
             // Handle Country selection (optional filter for Universities)
@@ -375,7 +385,7 @@
                 const countryId = this.value;
                 universitySelect.innerHTML = '<option value="">Select University</option>';
                 courseSelect.innerHTML = '<option value="">Select Course</option>';
-                intakeSelect.innerHTML = '<option value="">Select Intake</option>';
+                resetIntakeMonths();
 
                 if (countryId) {
                     fetch(`{{ route('admin.applications.get-universities') }}?country_id=${countryId}`)

@@ -61,6 +61,8 @@ class StudentController extends Controller
 
     public function store(Request $request)
     {
+        $this->normalizeCourseIntakeMonth($request);
+
         $validated = $this->validateStudent($request);
         $validated['created_by'] = auth()->id();
 
@@ -141,6 +143,8 @@ class StudentController extends Controller
 
     public function update(Request $request, Student $student)
     {
+        $this->normalizeCourseIntakeMonth($request);
+
         $validated = $this->validateStudent($request);
 
         $documents = $student->documents ?? [];
@@ -251,6 +255,45 @@ class StudentController extends Controller
             'translation_documents' => ['nullable', 'array'],
             'translation_documents.*' => ['nullable', 'file', 'mimes:pdf,doc,docx,jpg,jpeg,png', 'max:10240'], // 10MB limit
         ]);
+    }
+
+    private function normalizeCourseIntakeMonth(Request $request): void
+    {
+        $month = $request->input('course_intake_id');
+
+        if (!$request->filled('course_id') || !in_array($month, $this->intakeMonths(), true)) {
+            return;
+        }
+
+        $intake = CourseIntake::firstOrCreate(
+            [
+                'course_id' => $request->input('course_id'),
+                'intake_name' => $month,
+            ],
+            [
+                'status' => true,
+            ]
+        );
+
+        $request->merge(['course_intake_id' => $intake->id]);
+    }
+
+    private function intakeMonths(): array
+    {
+        return [
+            'January',
+            'February',
+            'March',
+            'April',
+            'May',
+            'June',
+            'July',
+            'August',
+            'September',
+            'October',
+            'November',
+            'December',
+        ];
     }
 
     public function getUniversities($country_id)
