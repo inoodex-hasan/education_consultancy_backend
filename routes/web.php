@@ -60,14 +60,14 @@ Route::prefix('dashboard/courses')->name('admin.courses.')->middleware('can:*edi
 });
 
 // CourseIntake Management
-Route::prefix('dashboard/course-intakes')->name('admin.course-intakes.')->middleware('can:*editor')->group(function () {
-    Route::get('/', [CourseIntakeController::class, 'index'])->name('index');
-    Route::get('/create', [CourseIntakeController::class, 'create'])->name('create');
-    Route::post('/', [CourseIntakeController::class, 'store'])->name('store');
-    Route::get('{courseIntake}/edit', [CourseIntakeController::class, 'edit'])->name('edit');
-    Route::put('{courseIntake}', [CourseIntakeController::class, 'update'])->name('update');
-    Route::delete('{courseIntake}', [CourseIntakeController::class, 'destroy'])->name('destroy');
-});
+// Route::prefix('dashboard/course-intakes')->name('admin.course-intakes.')->middleware('can:*editor')->group(function () {
+//     Route::get('/', [CourseIntakeController::class, 'index'])->name('index');
+//     Route::get('/create', [CourseIntakeController::class, 'create'])->name('create');
+//     Route::post('/', [CourseIntakeController::class, 'store'])->name('store');
+//     Route::get('{courseIntake}/edit', [CourseIntakeController::class, 'edit'])->name('edit');
+//     Route::put('{courseIntake}', [CourseIntakeController::class, 'update'])->name('update');
+//     Route::delete('{courseIntake}', [CourseIntakeController::class, 'destroy'])->name('destroy');
+// });
 
 // Student Management
 Route::prefix('dashboard/students')->name('admin.students.')->group(function () {

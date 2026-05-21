@@ -22,7 +22,12 @@ class LeadController extends Controller
      */
     public function index(Request $request)
     {
+        $canViewAllLeads = $this->canViewAllLeads();
         $query = Lead::with('creator');
+
+        if (!$canViewAllLeads) {
+            $query->where('created_by', Auth::id());
+        }
 
         // Filter by source
         if ($request->has('source') && $request->source != '') {
@@ -34,8 +39,8 @@ class LeadController extends Controller
             $query->where('status', $request->status);
         }
 
-        // Filter by collected_by (created_by)
-        if ($request->has('collected_by') && $request->collected_by != '') {
+        // Admin users can filter by the user who collected the lead.
+        if ($canViewAllLeads && $request->has('collected_by') && $request->collected_by != '') {
             $query->where('created_by', $request->collected_by);
         }
 
@@ -56,14 +61,17 @@ class LeadController extends Controller
         }
 
         // Order by follow-up date (closest first), nulls last
-        $leads = $query->orderByRaw('ISNULL(next_follow_up_at), next_follow_up_at ASC')->paginate(15);
+        $leads = $query->orderByRaw('ISNULL(next_follow_up_at), next_follow_up_at ASC')
+            ->paginate(15)
+            ->withQueryString();
 
-        // Get users with exact marketing role for filter dropdown
-        $collectors = User::whereHas('roles', function ($q) {
-            $q->where('name', 'marketing');
-        })->orderBy('name')->get(['id', 'name']);
+        $collectors = $canViewAllLeads
+            ? User::whereHas('roles', function ($q) {
+                $q->where('name', 'marketing');
+            })->orderBy('name')->get(['id', 'name'])
+            : collect();
 
-        return view('admin.marketing.leads.index', compact('leads', 'collectors'));
+        return view('admin.marketing.leads.index', compact('leads', 'collectors', 'canViewAllLeads'));
     }
 
     /**
@@ -112,6 +120,8 @@ class LeadController extends Controller
      */
     public function show(Lead $lead)
     {
+        $this->authorizeLeadOwner($lead);
+
         $lead->load(['creator', 'consultant', 'country', 'course']);
         return view('admin.marketing.leads.show', compact('lead'));
     }
@@ -121,6 +131,8 @@ class LeadController extends Controller
      */
     public function edit(Lead $lead)
     {
+        $this->authorizeLeadOwner($lead);
+
         $countries = Country::where('status', '1')->get();
         // pre-fetch universities if country is selected
         $universities = collect();
@@ -149,6 +161,8 @@ class LeadController extends Controller
      */
     public function update(Request $request, Lead $lead)
     {
+        $this->authorizeLeadOwner($lead);
+
         $validated = $request->validate([
             'student_name' => 'required|string|max:255',
             'phone' => 'required|string|max:20',
@@ -172,7 +186,26 @@ class LeadController extends Controller
      */
     public function destroy(Lead $lead)
     {
+        $this->authorizeLeadOwner($lead);
+
         return $this->safeDelete($lead, 'admin.marketing.leads.index', [], 'Lead deleted successfully.');
+    }
+
+    private function authorizeLeadOwner(Lead $lead): void
+    {
+        abort_if(!$this->canViewAllLeads() && $lead->created_by !== Auth::id(), 403);
+    }
+
+    private function canViewAllLeads(): bool
+    {
+        $user = Auth::user();
+
+        return $user && method_exists($user, 'hasRole')
+            && (
+                $user->hasRole('admin')
+                || $user->hasRole('super-admin')
+                || $user->hasRole('superadmin')
+            );
     }
 
     public function getUniversities(Request $request)

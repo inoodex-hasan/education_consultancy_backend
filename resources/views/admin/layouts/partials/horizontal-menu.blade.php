@@ -183,30 +183,6 @@
                     </ul>
                 </li>
 
-                {{-- Course Intake --}}
-                <li class="menu nav-item relative group">
-                    <a href="javascript:;" class="flex justify-between items-center w-full">
-                        Course Intake
-                        <svg class="h-3 w-3 rotate-90" viewBox="0 0 24 24" fill="none">
-                            <path d="M9 5L15 12L9 19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                                stroke-linejoin="round" />
-                        </svg>
-                    </a>
-
-                    {{-- Flyout submenu --}}
-                    <ul
-                        class="child-menu absolute ltr:left-full rtl:right-full top-0 ml-1 hidden min-w-[180px] bg-white shadow-lg rounded-md z-50 group-hover:block">
-
-                        <li><a href="{{ route('admin.course-intakes.create') }}"
-                                class="block px-4 py-2 hover:bg-gray-100">Add
-                                Course Intake</a></li>
-                        <li><a href="{{ route('admin.course-intakes.index') }}"
-                                class="block px-4 py-2 hover:bg-gray-100">Course
-                                Intake List</a></li>
-
-                    </ul>
-                </li>
-
             </ul>
         </li>
     @endif
