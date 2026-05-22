@@ -5,9 +5,6 @@
 @section('content')
     <!-- Breadcrumb -->
     @if (auth()->check() && auth()->user()->hasRole('admin'))
-        <!-- <ul class="flex space-x-2 rtl:space-x-reverse">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     </li>
-                                                                                                                                                                                                                                                                                                                                                                                                                                    </ul> -->
         <h5 class="text-xs font-semibold text-[#506690]">Administration</h5>
         <div class="pt-5">
             <!-- Stats Grid -->
@@ -70,7 +67,7 @@
         </div>
     @endif
 
-    @if(auth()->check() && auth()->user()->hasRole('editor'))
+    @if(auth()->check() && auth()->user()->hasRole('editor') || auth()->user()->hasRole('admin') || auth()->user()->hasRole('super-admin'))
         <h5 class="text-xs font-semibold text-[#506690] mt-6">Education Data</h5>
         <div class="pt-5 pb-6">
             <div class="grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
@@ -79,7 +76,7 @@
                     <div class="flex items-center">
                         <div class="shrink-0">
                             <div class="text-info">
-                                <svg width="60" height="60" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <svg width="60" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path
                                         d="M12 3C7.03 3 3 7.03 3 12C3 16.97 7.03 21 12 21C16.97 21 21 16.97 21 12C21 7.03 16.97 3 12 3Z"
                                         stroke="currentColor" stroke-width="1.5" />
@@ -102,7 +99,7 @@
                     <div class="flex items-center">
                         <div class="shrink-0">
                             <div class="text-info">
-                                <svg width="60" height="60" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <svg width="60" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
 
                                     <!-- University -->
                                     <path d="M3 10L12 4L21 10" stroke="#16A34A" stroke-width="1.8" stroke-linecap="round"
@@ -129,7 +126,7 @@
                     <div class="flex items-center">
                         <div class="shrink-0">
                             <div class="text-info">
-                                <svg width="60" height="60" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <svg width="60" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
 
                                     <!-- Book -->
                                     <path
@@ -153,6 +150,173 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    @endif
+    
+    @if (auth()->check() && auth()->user()->hasRole('admin') || auth()->user()->hasRole('super-admin'))
+        <h5 class="text-xs font-semibold text-[#506690] mt-6">Overall Overview</h5>
+        <div class="pt-5 pb-6">
+            <div class="grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
+                <!-- Total Leads -->
+                <div class="panel h-full sm:col-span-2 xl:col-span-1">
+                    <div class="flex items-center">
+                        <div class="shrink-0">
+                            <div class="text-warning">
+                                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+        x="2" y="5" width="20" height="14" rx="2" />
+    <circle stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+        cx="8" cy="12" r="2.5" />
+    <path stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+        d="M14 10h4M14 14h4" />
+</svg>
+                            </div>
+                        </div>
+                        <div class="w-full ltr:ml-3 rtl:mr-3">
+                            <p class="text-xl dark:text-white-light">{{ number_format($stats['total_leads'] ?? 0) }}</p>
+                            <h5 class="text-xs font-semibold text-[#506690]">Total Leads</h5>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Active Students -->
+                <div class="panel h-full sm:col-span-2 xl:col-span-1">
+                    <div class="flex items-center">
+                        <div class="shrink-0">
+                            <div class="text-info">
+                               <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+        d="M22 10l-10-5-10 5 10 5 10-5z" />
+    <path stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+        d="M6 12v5c3 3 9 3 12 0v-5" />
+    <line stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+        x1="22" y1="10" x2="22" y2="16" />
+</svg>
+                            </div>
+                        </div>
+                        <div class="w-full ltr:ml-3 rtl:mr-3">
+                            <p class="text-xl dark:text-white-light">{{ number_format($stats['total_students'] ?? 0) }}</p>
+                            <h5 class="text-xs font-semibold text-[#506690]">Active Students</h5>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Total Applications -->
+                <div class="panel h-full sm:col-span-2 xl:col-span-1">
+                    <div class="flex items-center">
+                        <div class="shrink-0">
+                            <div class="text-primary">
+                                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+                                        d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                                    <polyline stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+                                        points="14 2 14 8 20 8" />
+                                    <line stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                        x1="16" y1="13" x2="8" y2="13" />
+                                    <line stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                        x1="16" y1="17" x2="8" y2="17" />
+                                    <line stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                        x1="10" y1="9" x2="8" y2="9" />
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="w-full ltr:ml-3 rtl:mr-3">
+                            <p class="text-xl dark:text-white-light">{{ number_format($stats['total_applications'] ?? 0) }}</p>
+                            <h5 class="text-xs font-semibold text-[#506690]">Total Applications</h5>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pending Applications -->
+                <div class="panel h-full sm:col-span-2 xl:col-span-1">
+                    <div class="flex items-center">
+                        <div class="shrink-0">
+                            <div class="text-warning">
+                                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3" />
+                                    <path stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M12 20a8 8 0 100-16 8 8 0 000 16z" />
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="w-full ltr:ml-3 rtl:mr-3">
+                            <p class="text-xl dark:text-white-light">{{ number_format($stats['pending_applications'] ?? 0) }}</p>
+                            <h5 class="text-xs font-semibold text-[#506690]">Pending Applications</h5>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Total Invoices -->
+                <div class="panel h-full sm:col-span-2 xl:col-span-1">
+                    <div class="flex items-center">
+                        <div class="shrink-0">
+                            <div class="text-primary">
+                                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M7 8h10M7 12h10M7 16h6" />
+                                    <path stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M13 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V9l-6-7z" />
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="w-full ltr:ml-3 rtl:mr-3">
+                            <p class="text-xl dark:text-white-light">{{ number_format($stats['total_invoices'] ?? 0) }}</p>
+                            <h5 class="text-xs font-semibold text-[#506690]">Total Invoices</h5>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Total Payments -->
+                <div class="panel h-full sm:col-span-2 xl:col-span-1">
+                    <div class="flex items-center">
+                        <div class="shrink-0">
+                            <div class="text-success">
+                                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M3 7h18M3 11h18" />
+                                    <rect x="2" y="5" width="20" height="14" rx="2" stroke="currentColor" stroke-width="1.5" />
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="w-full ltr:ml-3 rtl:mr-3">
+                            <p class="text-xl dark:text-white-light">{{ number_format($stats['total_payments'] ?? 0) }}</p>
+                            <h5 class="text-xs font-semibold text-[#506690]">Total Payments</h5>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pending Payments -->
+                <div class="panel h-full sm:col-span-2 xl:col-span-1">
+                    <div class="flex items-center">
+                        <div class="shrink-0">
+                            <div class="text-success">
+                                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3" />
+                                    <path stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M12 20a8 8 0 100-16 8 8 0 000 16z" />
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="w-full ltr:ml-3 rtl:mr-3">
+                            <p class="text-xl dark:text-white-light">{{ number_format($stats['pending_payments'] ?? 0) }}</p>
+                            <h5 class="text-xs font-semibold text-[#506690]">Pending Payments</h5>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Total Revenue -->
+                <div class="panel h-full sm:col-span-2 xl:col-span-1">
+                <div class="flex items-center">
+                    <div class="shrink-0">
+                        <div class="text-warning">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="12" y1="1" x2="12" y2="23"></line>
+                                <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="w-full ltr:ml-3 rtl:mr-3">
+                        <p class="text-xl dark:text-white-light">{{ number_format($stats['total_revenue'] ?? 0, 2) }}</p>
+                        <h5 class="text-xs font-semibold text-[#506690]">Total Revenue</h5>
+                    </div>
+                </div>
+            </div>
             </div>
         </div>
     @endif
