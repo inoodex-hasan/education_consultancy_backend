@@ -53,11 +53,13 @@
                         <option value="Walk-in" {{ old('source', $lead->source) == 'Walk-in' ? 'selected' : '' }}>Walk-in
                         </option>
                     </select>
+                    @error('source') <span class="text-danger text-sm">{{ $message }}</span> @enderror
                 </div>
                 <div class="form-group">
                     <label for="current_education">Current Education</label>
                     <input type="text" name="current_education" id="current_education" class="form-input"
                         value="{{ old('current_education', $lead->current_education) }}" placeholder="e.g. HSC, Bachelor" />
+                    @error('current_education') <span class="text-danger text-sm">{{ $message }}</span> @enderror
                 </div>
                 <div class="form-group">
                     <label for="preferred_country">Preferred Country</label>
@@ -69,6 +71,7 @@
                             </option>
                         @endforeach
                     </select>
+                    @error('preferred_country') <span class="text-danger text-sm">{{ $message }}</span> @enderror
                 </div>
                 <div class="form-group">
                     <label for="preferred_university">Preferred University</label>
@@ -91,6 +94,7 @@
                             </option>
                         @endforeach
                     </select>
+                    @error('preferred_course') <span class="text-danger text-sm">{{ $message }}</span> @enderror
                 </div>
 
                 <script>
@@ -146,6 +150,7 @@
                     <label for="next_follow_up_at">Next Follow-up Date</label>
                     <input type="date" name="next_follow_up_at" id="next_follow_up_at" class="form-input"
                         value="{{ old('next_follow_up_at', optional($lead->next_follow_up_at)->format('Y-m-d')) }}" />
+                    @error('next_follow_up_at') <span class="text-danger text-sm">{{ $message }}</span> @enderror
                 </div>
             </div>
 
@@ -154,6 +159,7 @@
                 <p class="mb-2 text-xs text-white-dark">The current note will be saved with the selected follow-up date in history.</p>
                 <textarea name="notes" id="notes" class="form-textarea" rows="4"
                     placeholder="Brief details about the client interest...">{{ old('notes', $lead->notes) }}</textarea>
+                    @error('notes') <span class="text-danger text-sm">{{ $message }}</span> @enderror
             </div>
 
             <div class="mt-8 flex justify-end gap-4">

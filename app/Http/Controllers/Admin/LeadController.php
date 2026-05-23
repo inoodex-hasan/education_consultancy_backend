@@ -193,7 +193,7 @@ class LeadController extends Controller
 
     private function authorizeLeadOwner(Lead $lead): void
     {
-        abort_if(!$this->canViewAllLeads() && (int) $lead->created_by !== Auth::id(), 403);
+        abort_if(!$this->canViewAllLeads() && (int) $lead->created_by !== Auth::id(), 403, 'You can only access leads that you created.');
     }
 
     private function canViewAllLeads(): bool
