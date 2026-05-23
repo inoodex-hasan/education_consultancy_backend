@@ -70,7 +70,7 @@ class ApplicationController extends Controller
 
     public function create(Request $request)
     {
-        $students = Student::orderBy('first_name')->get(['id', 'first_name', 'last_name', 'email', 'phone']);
+        $students = Student::orderBy('first_name')->get(['id', 'first_name', 'last_name', 'email', 'phone', 'passport_number']);
         $countries = Country::where('status', '1')->orderBy('name')->get(['id', 'name']);
         $universities = University::where('status', '1')->orderBy('name')->get(['id', 'name']);
 

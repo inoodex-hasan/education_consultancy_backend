@@ -22,7 +22,7 @@
                             </div>
                         </div>
                         <div class="w-full ltr:ml-3 rtl:mr-3">
-                            <p class="text-xl dark:text-white-light">{{ number_format($stats['total_roles'] ?? 0) }}</p>
+                            <p class="dark:text-white-light text-xl">{{ number_format($stats['total_roles'] ?? 0) }}</p>
                             <h5 class="text-xs font-semibold text-[#506690]">Total Roles</h5>
                         </div>
                     </div>
@@ -41,7 +41,7 @@
                             </div>
                         </div>
                         <div class="w-full ltr:ml-3 rtl:mr-3">
-                            <p class="text-xl dark:text-white-light">{{ number_format($stats['total_privileges'] ?? 0) }}
+                            <p class="dark:text-white-light text-xl">{{ number_format($stats['total_privileges'] ?? 0) }}
                             </p>
                             <h5 class="text-xs font-semibold text-[#506690]">Total Privileges</h5>
                         </div>
@@ -61,7 +61,7 @@
                             </div>
                         </div>
                         <div class="w-full ltr:ml-3 rtl:mr-3">
-                            <p class="text-xl dark:text-white-light">{{ number_format($stats['total_users'] ?? 0) }}</p>
+                            <p class="dark:text-white-light text-xl">{{ number_format($stats['total_users'] ?? 0) }}</p>
                             <h5 class="text-xs font-semibold text-[#506690]">Total Users</h5>
                         </div>
                     </div>
@@ -74,8 +74,8 @@
         (auth()->check() && auth()->user()->hasRole('editor')) ||
             auth()->user()->hasRole('admin') ||
             auth()->user()->hasRole('super-admin'))
-        <h5 class="text-xs font-semibold text-[#506690] mt-6">Education Data</h5>
-        <div class="pt-5 pb-6">
+        <h5 class="mt-6 text-xs font-semibold text-[#506690]">Education Data</h5>
+        <div class="pb-6 pt-5">
             <div class="grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
                 <!-- Country -->
                 <div class="panel h-full sm:col-span-2 xl:col-span-1">
@@ -94,7 +94,7 @@
                             </div>
                         </div>
                         <div class="w-full ltr:ml-3 rtl:mr-3">
-                            <p class="text-xl dark:text-white-light">{{ number_format($stats['total_countries'] ?? 0) }}
+                            <p class="dark:text-white-light text-xl">{{ number_format($stats['total_countries'] ?? 0) }}
                             </p>
                             <h5 class="text-xs font-semibold text-[#506690]">Countries</h5>
                         </div>
@@ -122,7 +122,7 @@
                             </div>
                         </div>
                         <div class="w-full ltr:ml-3 rtl:mr-3">
-                            <p class="text-xl dark:text-white-light">{{ number_format($stats['total_universities'] ?? 0) }}
+                            <p class="dark:text-white-light text-xl">{{ number_format($stats['total_universities'] ?? 0) }}
                             </p>
                             <h5 class="text-xs font-semibold text-[#506690]">Universities</h5>
                         </div>
@@ -140,13 +140,13 @@
                                     <!-- Book -->
                                     <path
                                         d="M5 6C5 5.45 5.45 5 6 5H11C12.1 5 13 5.9 13 7V18
-                                                                                                                                                                                                                                                                                                                             C13 16.9 12.1 16 11 16H6C5.45 16 5 16.45 5 17V6Z"
+                                                                                                                                                                                                                                                                                                                                         C13 16.9 12.1 16 11 16H6C5.45 16 5 16.45 5 17V6Z"
                                         stroke="#9cd21fff" stroke-width="1.8" stroke-linecap="round"
                                         stroke-linejoin="round" />
 
                                     <path
                                         d="M19 6C19 5.45 18.55 5 18 5H13C11.9 5 11 5.9 11 7V18
-                                                                                                                                                                                                                                                                                                                             C11 16.9 11.9 16 13 16H18C18.55 16 19 16.45 19 17V6Z"
+                                                                                                                                                                                                                                                                                                                                         C11 16.9 11.9 16 13 16H18C18.55 16 19 16.45 19 17V6Z"
                                         stroke="#9cd21fff" stroke-width="1.8" stroke-linecap="round"
                                         stroke-linejoin="round" />
                                 </svg>
@@ -155,7 +155,7 @@
                             </div>
                         </div>
                         <div class="w-full ltr:ml-3 rtl:mr-3">
-                            <p class="text-xl dark:text-white-light">{{ number_format($stats['total_courses'] ?? 0) }}
+                            <p class="dark:text-white-light text-xl">{{ number_format($stats['total_courses'] ?? 0) }}
                             </p>
                             <h5 class="text-xs font-semibold text-[#506690]">Courses</h5>
                         </div>
@@ -166,8 +166,8 @@
     @endif
 
     @if ((auth()->check() && auth()->user()->hasRole('admin')) || auth()->user()->hasRole('super-admin'))
-        <h5 class="text-xs font-semibold text-[#506690] mt-6">Overall Overview</h5>
-        <div class="pt-5 pb-6">
+        <h5 class="mt-6 text-xs font-semibold text-[#506690]">Overall Overview</h5>
+        <div class="pb-6 pt-5">
             <div class="grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
                 <!-- Total Leads -->
                 <div class="panel h-full sm:col-span-2 xl:col-span-1">
@@ -187,7 +187,7 @@
                             </div>
                         </div>
                         <div class="w-full ltr:ml-3 rtl:mr-3">
-                            <p class="text-xl dark:text-white-light">{{ number_format($stats['total_leads'] ?? 0) }}</p>
+                            <p class="dark:text-white-light text-xl">{{ number_format($stats['total_leads'] ?? 0) }}</p>
                             <h5 class="text-xs font-semibold text-[#506690]">Total Leads</h5>
                         </div>
                     </div>
@@ -210,7 +210,7 @@
                             </div>
                         </div>
                         <div class="w-full ltr:ml-3 rtl:mr-3">
-                            <p class="text-xl dark:text-white-light">{{ number_format($stats['total_students'] ?? 0) }}</p>
+                            <p class="dark:text-white-light text-xl">{{ number_format($stats['total_students'] ?? 0) }}</p>
                             <h5 class="text-xs font-semibold text-[#506690]">Active Students</h5>
                         </div>
                     </div>
@@ -238,7 +238,7 @@
                             </div>
                         </div>
                         <div class="w-full ltr:ml-3 rtl:mr-3">
-                            <p class="text-xl dark:text-white-light">{{ number_format($stats['total_applications'] ?? 0) }}
+                            <p class="dark:text-white-light text-xl">{{ number_format($stats['total_applications'] ?? 0) }}
                             </p>
                             <h5 class="text-xs font-semibold text-[#506690]">Total Applications</h5>
                         </div>
@@ -260,7 +260,7 @@
                             </div>
                         </div>
                         <div class="w-full ltr:ml-3 rtl:mr-3">
-                            <p class="text-xl dark:text-white-light">
+                            <p class="dark:text-white-light text-xl">
                                 {{ number_format($stats['pending_applications'] ?? 0) }}</p>
                             <h5 class="text-xs font-semibold text-[#506690]">Pending Applications</h5>
                         </div>
@@ -283,7 +283,7 @@
                             </div>
                         </div>
                         <div class="w-full ltr:ml-3 rtl:mr-3">
-                            <p class="text-xl dark:text-white-light">{{ number_format($stats['total_invoices'] ?? 0) }}
+                            <p class="dark:text-white-light text-xl">{{ number_format($stats['total_invoices'] ?? 0) }}
                             </p>
                             <h5 class="text-xs font-semibold text-[#506690]">Total Invoices</h5>
                         </div>
@@ -305,7 +305,7 @@
                             </div>
                         </div>
                         <div class="w-full ltr:ml-3 rtl:mr-3">
-                            <p class="text-xl dark:text-white-light">{{ number_format($stats['total_payments'] ?? 0) }}
+                            <p class="dark:text-white-light text-xl">{{ number_format($stats['total_payments'] ?? 0) }}
                             </p>
                             <h5 class="text-xs font-semibold text-[#506690]">Total Payments</h5>
                         </div>
@@ -327,7 +327,7 @@
                             </div>
                         </div>
                         <div class="w-full ltr:ml-3 rtl:mr-3">
-                            <p class="text-xl dark:text-white-light">{{ number_format($stats['pending_payments'] ?? 0) }}
+                            <p class="dark:text-white-light text-xl">{{ number_format($stats['pending_payments'] ?? 0) }}
                             </p>
                             <h5 class="text-xs font-semibold text-[#506690]">Pending Payments</h5>
                         </div>
@@ -348,7 +348,7 @@
                             </div>
                         </div>
                         <div class="w-full ltr:ml-3 rtl:mr-3">
-                            <p class="text-xl dark:text-white-light">{{ number_format($stats['total_revenue'] ?? 0, 2) }}
+                            <p class="dark:text-white-light text-xl">{{ number_format($stats['total_revenue'] ?? 0, 2) }}
                             </p>
                             <h5 class="text-xs font-semibold text-[#506690]">Total Revenue</h5>
                         </div>
