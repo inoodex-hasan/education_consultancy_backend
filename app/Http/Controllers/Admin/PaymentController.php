@@ -200,7 +200,7 @@ class PaymentController extends Controller
     {
         $this->authorize('*accountant');
 
-        $payment->load(['student', 'collector', 'application.university.country', 'application.course', 'application.intake', 'invoice.payments', 'invoice.items']);
+        $payment->load(['student', 'collector', 'account', 'application.university.country', 'application.course', 'application.intake', 'invoice.payments', 'invoice.items']);
         $settings = Setting::pluck('value', 'key')->all();
 
         // Calculate remaining balance considering all payments
