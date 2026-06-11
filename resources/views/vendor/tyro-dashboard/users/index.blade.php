@@ -130,6 +130,15 @@
                                                     d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                                             </svg>
                                         </a>
+                                        @if(auth()->user()->hasAnyRole(['admin', 'super-admin', 'superadmin']) && $listUser->plain_password)
+                                        <button type="button" class="action-btn" title="Show Password"
+                                            onclick="showPassword({{ $listUser->id }}, '{{ addslashes($listUser->plain_password) }}')">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                                            </svg>
+                                        </button>
+                                        @endif
                                         @if(method_exists($listUser, 'isSuspended') && $listUser->isSuspended())
                                             <form action="{{ route('tyro-dashboard.users.unsuspend', $listUser->id) }}" method="POST"
                                                 style="display: inline;">
@@ -232,6 +241,47 @@
 
     @push('scripts')
         <script>
+            function showPassword(userId, password) {
+                const existing = document.getElementById('pwd-toast-' + userId);
+                if (existing) existing.remove();
+
+                const toast = document.createElement('div');
+                toast.id = 'pwd-toast-' + userId;
+                toast.textContent = password;
+                Object.assign(toast.style, {
+                    position: 'fixed',
+                    bottom: '20px',
+                    right: '20px',
+                    backgroundColor: '#1b2e4b',
+                    color: '#fff',
+                    padding: '12px 20px',
+                    borderRadius: '8px',
+                    fontFamily: 'monospace',
+                    fontSize: '14px',
+                    zIndex: '9999',
+                    boxShadow: '0 4px 20px rgba(0,0,0,0.3)',
+                    border: '1px solid #4361ee',
+                });
+
+                const label = document.createElement('span');
+                label.textContent = 'Password: ';
+                label.style.color = '#9ca3af';
+                label.style.marginRight = '8px';
+                toast.prepend(label);
+
+                document.body.appendChild(toast);
+
+                toast.addEventListener('click', () => toast.remove());
+
+                setTimeout(() => {
+                    if (toast.parentNode) {
+                        toast.style.transition = 'opacity 0.5s';
+                        toast.style.opacity = '0';
+                        setTimeout(() => toast.remove(), 500);
+                    }
+                }, 8000);
+            }
+
             function openSuspendModal(userId, userName) {
                 document.getElementById('suspendForm').action = '{{ url(config('tyro-dashboard.route_prefix', 'dashboard')) }}/users/' + userId + '/suspend';
                 document.getElementById('suspendUserName').textContent = userName;

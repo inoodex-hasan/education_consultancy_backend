@@ -148,6 +148,51 @@
                     @endif
                 </div>
 
+                <!-- Plain Password (Super Admin only) -->
+                @if(auth()->user()->hasAnyRole(['admin', 'super-admin', 'superadmin']) && $editUser->plain_password)
+                <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border);">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+                        <span style="font-size: 0.875rem; color: var(--muted-foreground);">Password</span>
+                        <span class="badge badge-warning">Visible to Super Admin</span>
+                    </div>
+                    <div class="password-wrapper" style="position: relative;">
+                        <input type="password" id="plain_password_display" class="form-input" value="{{ $editUser->plain_password }}" readonly style="padding-right: 2.5rem; color: var(--foreground); font-family: monospace; font-size: 0.875rem; background-color: var(--muted);">
+                        <button type="button" class="password-toggle" onclick="togglePlainPassword()"
+                            aria-label="Toggle password visibility"
+                            style="position: absolute; right: 0.75rem; top: 50%; transform: translateY(-50%); background: none; border: none; padding: 0; cursor: pointer; color: #9ca3af; display: flex; align-items: center; line-height: 1;">
+                            <svg class="eye-icon eye-open" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                                <circle cx="12" cy="12" r="3"/>
+                            </svg>
+                            <svg class="eye-icon eye-closed" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
+                                <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/>
+                                <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/>
+                                <line x1="1" y1="1" x2="23" y2="23"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <p style="font-size: 0.75rem; color: var(--muted-foreground); margin-top: 0.5rem;">Click the eye icon to reveal/hide the password.</p>
+                </div>
+
+                <script>
+                    function togglePlainPassword() {
+                        const input = document.getElementById('plain_password_display');
+                        const openIcon = document.querySelector('.password-wrapper .eye-open');
+                        const closedIcon = document.querySelector('.password-wrapper .eye-closed');
+
+                        if (input.type === 'password') {
+                            input.type = 'text';
+                            openIcon.style.display = 'none';
+                            closedIcon.style.display = 'block';
+                        } else {
+                            input.type = 'password';
+                            openIcon.style.display = 'block';
+                            closedIcon.style.display = 'none';
+                        }
+                    }
+                </script>
+                @endif
+
                 <!-- 2FA Status & Reset -->
                 @if(config('tyro-login.two_factor.enabled'))
                 <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border);">

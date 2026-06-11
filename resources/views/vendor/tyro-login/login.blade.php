@@ -90,9 +90,23 @@
                     <!-- Password Field -->
                     <div class="form-group">
                         <label for="password" class="form-label">Password</label>
-                        <input type="password" id="password" name="password"
-                            class="form-input @error('password') is-invalid @enderror" required
-                            autocomplete="current-password" placeholder="Password">
+                        <div class="password-wrapper">
+                            <input type="password" id="password" name="password"
+                                class="form-input @error('password') is-invalid @enderror" required
+                                autocomplete="current-password" placeholder="Password">
+                            <button type="button" class="password-toggle" onclick="togglePassword()"
+                                aria-label="Toggle password visibility">
+                                <svg class="eye-icon eye-open" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                                    <circle cx="12" cy="12" r="3"/>
+                                </svg>
+                                <svg class="eye-icon eye-closed" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
+                                    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/>
+                                    <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/>
+                                    <line x1="1" y1="1" x2="23" y2="23"/>
+                                </svg>
+                            </button>
+                        </div>
                         @error('password')
                             <span class="error-message">{{ $message }}</span>
                         @enderror
@@ -246,5 +260,56 @@
         .captcha-input[type=number] {
             -moz-appearance: textfield;
         }
+
+        .password-wrapper {
+            position: relative;
+        }
+
+        .password-wrapper .form-input {
+            padding-right: 2.5rem;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            padding: 0;
+            cursor: pointer;
+            color: #9ca3af;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1;
+        }
+
+        .password-toggle:hover {
+            color: #6b7280;
+        }
+
+        .eye-icon {
+            width: 20px;
+            height: 20px;
+        }
     </style>
+
+    <script>
+        function togglePassword() {
+            const input = document.getElementById('password');
+            const openIcon = document.querySelector('.eye-open');
+            const closedIcon = document.querySelector('.eye-closed');
+
+            if (input.type === 'password') {
+                input.type = 'text';
+                openIcon.style.display = 'none';
+                closedIcon.style.display = 'block';
+            } else {
+                input.type = 'password';
+                openIcon.style.display = 'block';
+                closedIcon.style.display = 'none';
+            }
+        }
+    </script>
 @endsection

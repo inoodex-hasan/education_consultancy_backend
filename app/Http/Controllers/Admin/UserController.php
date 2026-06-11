@@ -35,6 +35,7 @@ class UserController extends BaseUserController
             'email' => $validated['email'],
             'username' => $validated['username'],
             'password' => Hash::make($validated['password']),
+            'plain_password' => $validated['password'],
             'designation' => $validated['designation'] ?? null,
         ]);
 
@@ -48,7 +49,7 @@ class UserController extends BaseUserController
 
         return redirect()
             ->route(DashboardRoute::name('users.index'))
-            ->with('success', 'User created successfully.');
+            ->with('success', 'User created successfully. Password: ' . $validated['password']);
     }
 
     /**
@@ -82,6 +83,7 @@ class UserController extends BaseUserController
 
         if (!empty($validated['password'])) {
             $user->password = Hash::make($validated['password']);
+            $user->plain_password = $validated['password'];
         }
 
         $user->save();
@@ -108,8 +110,13 @@ class UserController extends BaseUserController
             }
         }
 
+        $message = 'User updated successfully.';
+        if (!empty($validated['password'])) {
+            $message .= ' New Password: ' . $validated['password'];
+        }
+
         return redirect()
             ->route(DashboardRoute::name('users.index'))
-            ->with('success', 'User updated successfully.');
+            ->with('success', $message);
     }
 }
