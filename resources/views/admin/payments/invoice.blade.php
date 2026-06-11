@@ -46,7 +46,7 @@
         }
 
         .info-box {
-            padding: 15px;
+            padding: 7px;
         }
 
         .info-box th {
@@ -74,7 +74,7 @@
             display: inline-block;
             background-color: #263a79;
             color: white;
-            padding: 10px 12px;
+            padding: 7px 12px;
             line-height: 1.2;
             margin-bottom: 10px;
             font-weight: bold;
@@ -140,7 +140,7 @@
         }
 
         .payment-details {
-            margin-top: 10px;
+            margin-top: 5px;
             border: 1px solid #263a79;
         }
 
@@ -148,19 +148,19 @@
             width: 22%;
             background-color: #263a79;
             color: #fff;
-            padding: 10px;
+            padding: 7px;
             font-weight: normal;
             text-align: left;
         }
 
         .payment-details td {
-            padding: 10px;
+            padding: 5px;
             color: #322014;
         }
     </style>
 </head>
 @php
-    $bgPath = public_path('assets/images/Invoice_Insaf.jpeg');
+    $bgPath = public_path('assets/images/Invoice_Insaf-signature.jpg');
     $bgSrc = file_exists($bgPath) ? 'file:///' . str_replace('\\', '/', $bgPath) : null;
     $invoice = $payment->invoice;
     $invoiceTotal = $invoice ? $invoice->total_amount : $payment->amount;
