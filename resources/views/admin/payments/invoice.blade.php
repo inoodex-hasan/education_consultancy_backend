@@ -253,62 +253,14 @@
             </tbody>
         </table>
 
+        <div style="padding-top: 10px; font-size: 12px; color: #4361EE;">
+            <div style="font-size: 14px; font-weight: bold;">Payment Method: @if ($payment->account) {{ $payment->account->account_type === 'cash' ? 'Cash' : 'Bank Transfer' }}@endif</div>
+            <div style="margin-top: 7px;">Account Number: {{ $payment->account->account_number ?? 'N/A' }}</div>
+            <div>Account Name: INSAF IMMIGRATION</div>
+            <div>Bank Name: {{ $payment->account->account_name ?? 'N/A' }}</div>
+        </div>
     </div>
 
-    <div class="content">
-        <table class="payment-details">
-            <tr>
-                <th>PAYMENT TYPE</th>
-                <td>{{ ucwords($payment->payment_type) }} Payment @if ($payment->account) | {{ str_replace('INSAF - ', '', $payment->account->account_name) }}@if ($payment->account->account_number && $payment->account->account_number !== '-') ({{ $payment->account->account_number }})@endif @endif
-                </td>
-            </tr>
-            <tr>
-                <th>AMOUNT</th>
-                <td><strong>BDT {{ number_format($payment->amount, 2) }}</strong></td>
-            </tr>
-            <tr>
-                <th>COLLECTED BY</th>
-                <td>{{ $payment->collector->name ?? 'N/A' }}</td>
-            </tr>
-            {{-- @if ($payment->account)
-            <tr>
-                <th>PAYMENT METHOD</th>
-                <td>{{ ucwords(str_replace('_', ' ', $payment->account->account_type)) }} — {{ $payment->account->account_name }}@if($payment->account->account_number) ({{ $payment->account->account_number }})@endif</td>
-            </tr>
-            @endif --}}
-        </table>
-    </div>
-
-    {{-- <div class="content" style="padding-top: 20px;">
-        <table style="width: 100%;">
-            <tr>
-                <td style="width: 50%; vertical-align: bottom;">
-                    <div style="text-align: center;">
-                        @php
-                            $signaturePath = public_path('assets/images/signature.png');
-                            $signatureSrc = file_exists($signaturePath) ? 'file:///' . str_replace('\\', '/', $signaturePath) : null;
-                        @endphp
-                        @if ($signatureSrc)
-                            <img src="{{ $signatureSrc }}" alt="Signature" style="height: 50px; margin-bottom: 5px;" />
-                        @else
-                            <div style="height: 50px; margin-bottom: 5px;"></div>
-                        @endif
-                        <div style="border-top: 1px solid #263a79; width: 200px; margin: 0 auto; padding-top: 5px;">
-                            <strong>Accountant Signature</strong>
-                        </div>
-                    </div>
-                </td>
-                <td style="width: 50%; vertical-align: bottom;">
-                    <div style="text-align: center;">
-                        <div style="height: 55px;"></div>
-                        <div style="border-top: 1px solid #263a79; width: 200px; margin: 0 auto; padding-top: 5px;">
-                            <strong>Authorized Signature</strong>
-                        </div>
-                    </div>
-                </td>
-            </tr>
-        </table>
-    </div> --}}
 </body>
 
 </html>
