@@ -26,11 +26,12 @@ return Application::configure(basePath: dirname(__DIR__))
             ], 404);
         });
 
-        // Session expired → show 419 page
+        // Session expired → redirect to login with flash message
         $exceptions->render(function (\Illuminate\Session\TokenMismatchException $e, $request) {
             if (!$request->expectsJson()) {
-                return response()->view('errors.419', ['exception' => $e], 419);
+                return redirect()->route('tyro-login.login')->with('error', 'Your session has expired. Please log in again.');
             }
+            return response()->json(['message' => 'Session expired. Please refresh the page and try again.'], 419);
         });
 
         // File too large (post_max_size / upload_max_filesize exceeded)
