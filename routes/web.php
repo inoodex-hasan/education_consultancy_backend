@@ -14,7 +14,7 @@ Route::get('/', function () {
     return redirect()->route('tyro-login.login');
 });
 
-Route::get('/dashboard', [DashboardController::class, 'index'])->name('tyro-dashboard.index');
+Route::get('/dashboard', [DashboardController::class, 'index'])->middleware('auth')->name('tyro-dashboard.index');
 
 Route::prefix('dashboard/settings')->name('admin.settings.')->middleware('can:manage-settings')->group(function () {
     Route::get('/', [SettingController::class, 'index'])->name('index');
