@@ -165,7 +165,7 @@
     </style>
 </head>
 @php
-    $bgPath = public_path('assets/images/Invoice_Insaf_02.jpg');
+    $bgPath = public_path('assets/images/inoodex_invoice.jpg');
     $bgSrc = file_exists($bgPath) ? 'file:///' . str_replace('\\', '/', $bgPath) : null;
     $companyName = $settings['company_name'] ?? ($settings['site_name'] ?? config('app.name'));
     $totalInc = $payments->sum('amount');

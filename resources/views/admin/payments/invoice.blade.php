@@ -160,7 +160,7 @@
     </style>
 </head>
 @php
-    $bgPath = public_path('assets/images/Invoice_Insaf-signature.jpg');
+    $bgPath = public_path('assets/images/inoodex_invoice.jpg');
     $bgSrc = file_exists($bgPath) ? 'file:///' . str_replace('\\', '/', $bgPath) : null;
     $invoice = $payment->invoice;
     $invoiceTotal = $invoice ? $invoice->total_amount : $payment->amount;
@@ -253,14 +253,14 @@
             </tbody>
         </table>
 
-        <div style="padding-top: 10px; font-size: 12px; color: #4361EE;">
+        {{-- <div style="padding-top: 10px; font-size: 12px; color: #4361EE;">
             <div style="font-size: 14px; font-weight: bold;">Payment Method: @if ($payment->account) {{ $payment->account->account_type === 'cash' ? 'Office Cash' : 'Bank Transfer' }}@endif</div>
             @if ($payment->account && $payment->account->account_type !== 'cash')
             <div style="margin-top: 7px;">Account Number: {{ $payment->account->account_number ?? 'N/A' }}</div>
             <div>Account Name: INSAF IMMIGRATION</div>
             <div>Bank Name: {{ $payment->account->account_name ?? 'N/A' }}</div>
             @endif
-        </div>
+        </div> --}}
     </div>
 
 </body>
