@@ -123,7 +123,7 @@
     </style>
 </head>
 @php
-    $bgPath = public_path('assets/images/inoodex_invoice.jpg');
+    $bgPath = public_path('assets/images/Invoice_Insaf.jpeg');
     $bgSrc = file_exists($bgPath) ? 'file:///' . str_replace('\\', '/', $bgPath) : null;
 @endphp
 
