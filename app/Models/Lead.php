@@ -20,6 +20,7 @@ class Lead extends Model
         'preferred_course',
         'source',
         'status',
+        'priority',
         'notes',
         'last_contacted_at',
         'next_follow_up_at',
@@ -33,6 +34,16 @@ class Lead extends Model
         'next_follow_up_at' => 'datetime',
         'follow_up_history' => 'array',
     ];
+
+    public function getPriorityBadgeClassAttribute(): string
+    {
+        return match (strtolower($this->priority ?? 'low')) {
+            'high' => 'badge-outline-danger',
+            'medium' => 'badge-outline-info',
+            'low' => 'badge-outline-secondary',
+            default => 'badge-outline-secondary',
+        };
+    }
 
     public function getFollowUpDateHistoryAttribute(): array
     {

@@ -2,6 +2,94 @@
 
 @section('title', 'Edit Data - Marketing')
 
+@push('styles')
+    <style>
+        .select2-container .select2-selection--single {
+            height: 42px !important;
+            border: 1px solid #e0e6ed !important;
+            border-radius: 6px !important;
+            padding: 6px 12px !important;
+            display: flex;
+            align-items: center;
+            background-color: #fff;
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__rendered {
+            color: #0e1726;
+            font-size: 14px;
+            line-height: normal;
+            padding-left: 0;
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__arrow {
+            height: 100%;
+            right: 10px;
+        }
+
+        .select2-dropdown {
+            border-radius: 6px !important;
+            border: 1px solid #e0e6ed !important;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            background-color: #fff;
+            z-index: 9999;
+        }
+
+        .select2-search__field {
+            padding: 6px !important;
+            border-radius: 4px !important;
+            border: 1px solid #e0e6ed !important;
+            background-color: #fff !important;
+            color: #0e1726 !important;
+        }
+
+        .select2-results__option {
+            padding: 8px 12px;
+            font-size: 14px;
+        }
+
+        .select2-results__option--highlighted {
+            background-color: #4361ee !important;
+            color: #fff !important;
+        }
+
+        .select2-results__option--selected {
+            background-color: #e0e6ed !important;
+            color: #0e1726 !important;
+        }
+
+        /* Dark mode support */
+        .dark .select2-container .select2-selection--single {
+            background-color: #1b2e4b !important;
+            border-color: #253b5c !important;
+        }
+
+        .dark .select2-container--default .select2-selection--single .select2-selection__rendered {
+            color: #bfc9d4 !important;
+        }
+
+        .dark .select2-dropdown {
+            background-color: #1b2e4b !important;
+            border-color: #253b5c !important;
+            color: #bfc9d4 !important;
+        }
+
+        .dark .select2-search__field {
+            background-color: #121e32 !important;
+            border-color: #253b5c !important;
+            color: #bfc9d4 !important;
+        }
+
+        .dark .select2-results__option--selected {
+            background-color: #253b5c !important;
+            color: #fff !important;
+        }
+
+        .dark .select2-container--default .select2-selection--single .select2-selection__placeholder {
+            color: #888ea8;
+        }
+    </style>
+@endpush
+
 @section('content')
     <div class="flex flex-wrap items-center justify-between gap-4">
         <h2 class="text-xl font-semibold uppercase">Edit Data</h2>
@@ -63,7 +151,7 @@
                 </div>
                 <div class="form-group">
                     <label for="preferred_country">Preferred Country</label>
-                    <select name="preferred_country" id="preferred_country" class="form-select">
+                    <select name="preferred_country" id="preferred_country" class="form-select select2">
                         <option value="">Select Country</option>
                         @foreach ($countries as $country)
                             <option value="{{ $country->id }}" {{ old('preferred_country', $lead->preferred_country) == $country->id ? 'selected' : '' }}>
@@ -75,10 +163,10 @@
                 </div>
                 <div class="form-group">
                     <label for="preferred_university">Preferred University</label>
-                    <select name="preferred_university" id="preferred_university" class="form-select">
+                    <select name="preferred_university" id="preferred_university" class="form-select select2">
                         <option value="">Select University</option>
                         @foreach ($universities as $university)
-                            <option value="{{ $university->id }}" {{ (isset($selectedUniversityId) && $selectedUniversityId == $university->id) ? 'selected' : '' }}>
+                            <option value="{{ $university->id }}" {{ (old('preferred_university', $selectedUniversityId) == $university->id) ? 'selected' : '' }}>
                                 {{ $university->name }}
                             </option>
                         @endforeach
@@ -86,7 +174,7 @@
                 </div>
                 <div class="form-group">
                     <label for="preferred_course">Preferred Course</label>
-                    <select name="preferred_course" id="preferred_course" class="form-select">
+                    <select name="preferred_course" id="preferred_course" class="form-select select2">
                         <option value="">Select Course</option>
                         @foreach ($courses as $course)
                             <option value="{{ $course->id }}" {{ old('preferred_course', $lead->preferred_course) == $course->id ? 'selected' : '' }}>
@@ -97,55 +185,16 @@
                     @error('preferred_course') <span class="text-danger text-sm">{{ $message }}</span> @enderror
                 </div>
 
-                <script>
-                    document.addEventListener('DOMContentLoaded', function () {
-                        const countrySelect = document.getElementById('preferred_country');
-                        const universitySelect = document.getElementById('preferred_university');
-                        const courseSelect = document.getElementById('preferred_course');
+                <div class="form-group">
+                    <label for="priority">Priority</label>
+                    <select name="priority" id="priority" class="form-select">
+                        <option value="low" {{ old('priority', $lead->priority ?? 'low') == 'low' ? 'selected' : '' }}>Low</option>
+                        <option value="medium" {{ old('priority', $lead->priority ?? 'low') == 'medium' ? 'selected' : '' }}>Medium</option>
+                        <option value="high" {{ old('priority', $lead->priority ?? 'low') == 'high' ? 'selected' : '' }}>High</option>
+                    </select>
+                    @error('priority') <span class="text-danger text-sm">{{ $message }}</span> @enderror
+                </div>
 
-                        function loadUniversities(countryId) {
-                            if (!countryId) {
-                                universitySelect.innerHTML = '<option value="">Select University</option>';
-                                return;
-                            }
-                            universitySelect.innerHTML = '<option value="">Loading...</option>';
-                            fetch(`{{ route('admin.marketing.leads.get-universities') }}?country_id=${countryId}`)
-                                .then(response => response.json())
-                                .then(data => {
-                                    universitySelect.innerHTML = '<option value="">Select University</option>';
-                                    data.forEach(university => {
-                                        universitySelect.innerHTML += `<option value="${university.id}">${university.name}</option>`;
-                                    });
-                                });
-                        }
-
-                        function loadCourses(universityId) {
-                            if (!universityId) {
-                                courseSelect.innerHTML = '<option value="">Select Course</option>';
-                                return;
-                            }
-                            courseSelect.innerHTML = '<option value="">Loading...</option>';
-                            fetch(`{{ route('admin.marketing.leads.get-courses') }}?university_id=${universityId}`)
-                                .then(response => response.json())
-                                .then(data => {
-                                    courseSelect.innerHTML = '<option value="">Select Course</option>';
-                                    data.forEach(course => {
-                                        courseSelect.innerHTML += `<option value="${course.id}">${course.name}</option>`;
-                                    });
-                                });
-                        }
-
-                        countrySelect.addEventListener('change', function () {
-                            loadUniversities(this.value);
-                            courseSelect.innerHTML = '<option value="">Select Course</option>'; // Reset courses
-                            universitySelect.innerHTML = '<option value="">Select University</option>'; // Reset university
-                        });
-
-                        universitySelect.addEventListener('change', function () {
-                            loadCourses(this.value);
-                        });
-                    });
-                </script>
                 <div class="form-group">
                     <label for="next_follow_up_at">Next Follow-up Date</label>
                     <input type="date" name="next_follow_up_at" id="next_follow_up_at" class="form-input"
@@ -159,7 +208,7 @@
                 <p class="mb-2 text-xs text-white-dark">The current note will be saved with the selected follow-up date in history.</p>
                 <textarea name="notes" id="notes" class="form-textarea" rows="4"
                     placeholder="Brief details about the client interest...">{{ old('notes', $lead->notes) }}</textarea>
-                    @error('notes') <span class="text-danger text-sm">{{ $message }}</span> @enderror
+                @error('notes') <span class="text-danger text-sm">{{ $message }}</span> @enderror
             </div>
 
             <div class="mt-8 flex justify-end gap-4">
@@ -170,3 +219,83 @@
         </form>
     </div>
 @endsection
+
+@push('scripts')
+    <script>
+        $(document).ready(function () {
+            // Initialize Select2
+            $('#preferred_country').select2({
+                placeholder: "Select Country",
+                allowClear: true,
+                width: '100%'
+            });
+
+            $('#preferred_university').select2({
+                placeholder: "Select University",
+                allowClear: true,
+                width: '100%'
+            });
+
+            $('#preferred_course').select2({
+                placeholder: "Select Course",
+                allowClear: true,
+                width: '100%'
+            });
+
+            // Country change event
+            $('#preferred_country').on('change', function () {
+                const countryId = $(this).val();
+
+                $('#preferred_university').html('<option value="">Select University</option>').trigger('change.select2');
+                $('#preferred_course').html('<option value="">Select Course</option>').trigger('change.select2');
+
+                if (countryId) {
+                    $('#preferred_university').html('<option value="">Loading...</option>').trigger('change.select2');
+                    $.ajax({
+                        url: "{{ route('admin.marketing.leads.get-universities') }}",
+                        type: "GET",
+                        data: { country_id: countryId },
+                        dataType: "json",
+                        success: function (data) {
+                            let options = '<option value="">Select University</option>';
+                            $.each(data, function (index, university) {
+                                options += `<option value="${university.id}">${university.name}</option>`;
+                            });
+                            $('#preferred_university').html(options).trigger('change.select2');
+                        },
+                        error: function () {
+                            $('#preferred_university').html('<option value="">Select University</option>').trigger('change.select2');
+                        }
+                    });
+                }
+            });
+
+            // University change event
+            $('#preferred_university').on('change', function () {
+                const universityId = $(this).val();
+
+                $('#preferred_course').html('<option value="">Select Course</option>').trigger('change.select2');
+
+                if (universityId) {
+                    $('#preferred_course').html('<option value="">Loading...</option>').trigger('change.select2');
+                    $.ajax({
+                        url: "{{ route('admin.marketing.leads.get-courses') }}",
+                        type: "GET",
+                        data: { university_id: universityId },
+                        dataType: "json",
+                        success: function (data) {
+                            let options = '<option value="">Select Course</option>';
+                            $.each(data, function (index, course) {
+                                options += `<option value="${course.id}">${course.name}</option>`;
+                            });
+                            $('#preferred_course').html(options).trigger('change.select2');
+                        },
+                        error: function () {
+                            $('#preferred_course').html('<option value="">Select Course</option>').trigger('change.select2');
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+@endpush

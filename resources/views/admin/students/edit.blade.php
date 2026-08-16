@@ -2,6 +2,94 @@
 
 @section('title', 'Edit Student')
 
+@push('styles')
+    <style>
+        .select2-container .select2-selection--single {
+            height: 42px !important;
+            border: 1px solid #e0e6ed !important;
+            border-radius: 6px !important;
+            padding: 6px 12px !important;
+            display: flex;
+            align-items: center;
+            background-color: #fff;
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__rendered {
+            color: #0e1726;
+            font-size: 14px;
+            line-height: normal;
+            padding-left: 0;
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__arrow {
+            height: 100%;
+            right: 10px;
+        }
+
+        .select2-dropdown {
+            border-radius: 6px !important;
+            border: 1px solid #e0e6ed !important;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            background-color: #fff;
+            z-index: 9999;
+        }
+
+        .select2-search__field {
+            padding: 6px !important;
+            border-radius: 4px !important;
+            border: 1px solid #e0e6ed !important;
+            background-color: #fff !important;
+            color: #0e1726 !important;
+        }
+
+        .select2-results__option {
+            padding: 8px 12px;
+            font-size: 14px;
+        }
+
+        .select2-results__option--highlighted {
+            background-color: #4361ee !important;
+            color: #fff !important;
+        }
+
+        .select2-results__option--selected {
+            background-color: #e0e6ed !important;
+            color: #0e1726 !important;
+        }
+
+        /* Dark mode support */
+        .dark .select2-container .select2-selection--single {
+            background-color: #1b2e4b !important;
+            border-color: #253b5c !important;
+        }
+
+        .dark .select2-container--default .select2-selection--single .select2-selection__rendered {
+            color: #bfc9d4 !important;
+        }
+
+        .dark .select2-dropdown {
+            background-color: #1b2e4b !important;
+            border-color: #253b5c !important;
+            color: #bfc9d4 !important;
+        }
+
+        .dark .select2-search__field {
+            background-color: #121e32 !important;
+            border-color: #253b5c !important;
+            color: #bfc9d4 !important;
+        }
+
+        .dark .select2-results__option--selected {
+            background-color: #253b5c !important;
+            color: #fff !important;
+        }
+
+        .dark .select2-container--default .select2-selection--single .select2-selection__placeholder {
+            color: #888ea8;
+        }
+    </style>
+@endpush
+
 @section('content')
     <div class="flex flex-wrap items-center justify-between gap-4">
         <h2 class="text-xl font-semibold uppercase">Edit Student</h2>
@@ -65,7 +153,7 @@
                 <div class="form-group">
                     <label for="passport_validity">Passport Validity</label>
                     <input type="date" name="passport_validity" id="passport_validity" class="form-input"
-                        value="{{ old('passport_validity', optional($student->passport_validity)->format('Y-m-d')) }}" />
+                        value="{{ old('passport_validity', $student->passport_validity ? \Carbon\Carbon::parse($student->passport_validity)->format('Y-m-d') : '') }}" />
                     @error('passport_validity') <span class="text-danger text-sm">{{ $message }}</span> @enderror
                 </div>
                 <div class="form-group">
@@ -75,25 +163,27 @@
                     @error('email') <span class="text-danger text-sm">{{ $message }}</span> @enderror
                 </div>
                 <div class="form-group">
-                    <label for="password">Password</label>
-                    <input type="text" name="password" id="password" class="form-input" placeholder="Leave blank to keep current" />
+                    <label for="password">Password (Leave blank to keep current)</label>
+                    <input type="text" name="password" id="password" class="form-input"
+                        value="{{ old('password', $student->plain_password) }}" />
                     @error('password') <span class="text-danger text-sm">{{ $message }}</span> @enderror
                 </div>
                 <div class="form-group md:col-span-2">
                     <label for="address">Address</label>
-                    <textarea name="address" id="address" class="form-textarea" rows="2">{{ old('address', $student->address) }}</textarea>
+                    <textarea name="address" id="address" class="form-textarea"
+                        rows="2">{{ old('address', $student->address) }}</textarea>
                     @error('address') <span class="text-danger text-sm">{{ $message }}</span> @enderror
                 </div>
                 <div class="form-group">
                     <label for="dob">Date of Birth</label>
                     <input type="date" name="dob" id="dob" class="form-input"
-                        value="{{ old('dob', optional($student->dob)->format('Y-m-d')) }}" />
+                        value="{{ old('dob', $student->dob ? \Carbon\Carbon::parse($student->dob)->format('Y-m-d') : '') }}" />
                     @error('dob') <span class="text-danger text-sm">{{ $message }}</span> @enderror
                 </div>
 
                 <div class="form-group">
                     <label for="country_id">Target Country</label>
-                    <select name="country_id" id="country_id" class="form-select">
+                    <select name="country_id" id="country_id" class="form-select select2">
                         <option value="">Select Country</option>
                         @foreach ($countries as $country)
                             <option value="{{ $country->id }}" {{ old('country_id', $student->country_id) == $country->id ? 'selected' : '' }}>
@@ -106,7 +196,7 @@
  
                 <div class="form-group">
                     <label for="university_id">Preferred University</label>
-                    <select name="university_id" id="university_id" class="form-select">
+                    <select name="university_id" id="university_id" class="form-select select2">
                         <option value="">Select University</option>
                         @foreach ($universities as $university)
                             <option value="{{ $university->id }}" data-country-id="{{ $university->country_id }}"
@@ -120,7 +210,7 @@
 
                 <div class="form-group">
                     <label for="course_id">Preferred Course</label>
-                    <select name="course_id" id="course_id" class="form-select">
+                    <select name="course_id" id="course_id" class="form-select select2">
                         <option value="">Select Course</option>
                         @foreach ($courses as $course)
                             <option value="{{ $course->id }}"
@@ -134,7 +224,7 @@
 
                 <div class="form-group">
                     <label for="course_intake_id">Preferred Intake</label>
-                    <select name="course_intake_id" id="course_intake_id" class="form-select">
+                    <select name="course_intake_id" id="course_intake_id" class="form-select select2">
                         <option value="">Select Intake</option>
                         @foreach (['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'] as $month)
                             <option value="{{ $month }}"
@@ -145,147 +235,23 @@
                     </select>
                     @error('course_intake_id') <span class="text-danger text-sm">{{ $message }}</span> @enderror
                 </div>
-                <!-- <div class="form-group">
-                    <label for="ssc_result">SSC Result</label>
-                    <input type="text" name="ssc_result" id="ssc_result" class="form-input"
-                        value="{{ old('ssc_result', $student->ssc_result) }}" />
-                    @error('ssc_result') <span class="text-danger text-sm">{{ $message }}</span> @enderror
-                </div>
-                <div class="form-group">
-                    <label for="hsc_result">HSC Result</label>
-                    <input type="text" name="hsc_result" id="hsc_result" class="form-input"
-                        value="{{ old('hsc_result', $student->hsc_result) }}" />
-                    @error('hsc_result') <span class="text-danger text-sm">{{ $message }}</span> @enderror
-                </div>
-                <div class="form-group">
-                    <label for="ielts_score">IELTS Score</label>
-                    <input type="text" name="ielts_score" id="ielts_score" class="form-input"
-                        value="{{ old('ielts_score', $student->ielts_score) }}" />
-                    @error('ielts_score') <span class="text-danger text-sm">{{ $message }}</span> @enderror
-                </div> -->
-                <div class="form-group">
+
+                <div class="form-group md:col-span-2">
                     <label for="subject">Subject</label>
                     <input type="text" name="subject" id="subject" class="form-input"
                         value="{{ old('subject', $student->subject) }}" />
                     @error('subject') <span class="text-danger text-sm">{{ $message }}</span> @enderror
                 </div>
-                <!-- <div class="form-group">
-                    <label for="current_stage">Current Stage <span class="text-danger">*</span></label>
-                    <select name="current_stage" id="current_stage" class="form-select" required>
-                        @foreach (['lead', 'counseling', 'payment', 'application', 'offer', 'visa', 'enrolled'] as $stage)
-                            <option value="{{ $stage }}"
-                                {{ old('current_stage', $student->current_stage) == $stage ? 'selected' : '' }}>
-                                {{ ucfirst($stage) }}
-                            </option>
-                        @endforeach
-                    </select>
-                    @error('current_stage') <span class="text-danger text-sm">{{ $message }}</span> @enderror
-                </div>
-                <div class="form-group">
-                    <label for="current_status">Application Status <span class="text-danger">*</span></label>
-                    <select name="current_status" id="current_status" class="form-select" required>
-                        @foreach (['pending', 'applied', 'rejected', 'withdrawn', 'visa_processing', 'enrolled'] as $status)
-                            <option value="{{ $status }}" {{ old('current_status', $student->current_status) == $status ? 'selected' : '' }}>
-                                {{ ucfirst(str_replace('_', ' ', $status)) }}
-                            </option>
-                        @endforeach
-                    </select>
-                    @error('current_status') <span class="text-danger text-sm">{{ $message }}</span> @enderror  
-                </div> -->
-
-                <!-- <div class="form-group">
-                    <label for="assigned_marketing_id">Assigned Marketing</label>
-                    <select name="assigned_marketing_id" id="assigned_marketing_id" class="form-select">
-                        <option value="">None</option>
-                        @foreach ($users as $user)
-                            <option value="{{ $user->id }}"
-                                {{ old('assigned_marketing_id', $student->assigned_marketing_id) == $user->id ? 'selected' : '' }}>
-                                {{ $user->name }}
-                            </option>
-                        @endforeach
-                    </select>
-                    @error('assigned_marketing_id') <span class="text-danger text-sm">{{ $message }}</span> @enderror
-                </div>
-                <div class="form-group">
-                    <label for="assigned_consultant_id">Assigned Consultant</label>
-                    <select name="assigned_consultant_id" id="assigned_consultant_id" class="form-select">
-                        <option value="">None</option>
-                        @foreach ($users as $user)
-                            <option value="{{ $user->id }}"
-                                {{ old('assigned_consultant_id', $student->assigned_consultant_id) == $user->id ? 'selected' : '' }}>
-                                {{ $user->name }}
-                            </option>
-                        @endforeach
-                    </select>
-                    @error('assigned_consultant_id') <span class="text-danger text-sm">{{ $message }}</span> @enderror
-                </div>
-                <div class="form-group">
-                    <label for="assigned_application_id">Assigned Application</label>
-                    <select name="assigned_application_id" id="assigned_application_id" class="form-select">
-                        <option value="">None</option>
-                        @foreach ($users as $user)
-                            <option value="{{ $user->id }}"
-                                {{ old('assigned_application_id', $student->assigned_application_id) == $user->id ? 'selected' : '' }}>
-                                {{ $user->name }}
-                            </option>
-                        @endforeach
-                    </select>
-                    @error('assigned_application_id') <span class="text-danger text-sm">{{ $message }}</span> @enderror
-                </div>
- -->
-                @if($student->documents && count($student->documents) > 0)
-                    <div class="form-group md:col-span-2 mt-4">
-                        <label>Existing Documents</label>
-                        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                            @foreach($student->documents as $index => $doc)
-                                <div class="flex items-center gap-3 p-3 border rounded-lg bg-gray-50 dark:bg-black/20">
-                                    <div class="flex-1 overflow-hidden">
-                                        <p class="text-sm font-medium truncate" title="{{ $doc['name'] }}">
-                                            {{ $doc['name'] }}
-                                        </p>
-                                        <a href="{{ \Illuminate\Support\Facades\Storage::url($doc['path']) }}" target="_blank" class="text-xs text-primary hover:underline">Download</a>
-                                    </div>
-                                    <div class="flex items-center gap-2">
-                                        <input type="checkbox" name="delete_documents[]" value="{{ $index }}" id="del_{{ $index }}" class="form-checkbox text-danger" />
-                                        <label for="del_{{ $index }}" class="text-xs text-danger cursor-pointer">Delete</label>
-                                    </div>
-                                </div>
-                            @endforeach
-                        </div>
-                    </div>
-                @endif
 
                 <div class="form-group md:col-span-2">
-                    <label for="documents">Upload New Documents</label>
+                    <label for="documents">Upload Additional Documents</label>
                     <input type="file" name="documents[]" id="documents" class="form-input" multiple />
                     <span class="text-xs text-white-dark">Multiple documents can be uploaded (PDF, DOC, JPG, PNG). Max 10MB per file.</span>
                     @error('documents.*') <span class="text-danger text-sm">{{ $message }}</span> @enderror
                 </div>
 
-                @if($student->translation_documents && count($student->translation_documents) > 0)
-                    <div class="form-group md:col-span-2 mt-4">
-                        <label>Existing Translation Documents</label>
-                        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                            @foreach($student->translation_documents as $index => $doc)
-                                <div class="flex items-center gap-3 p-3 border rounded-lg bg-gray-50 dark:bg-black/20">
-                                    <div class="flex-1 overflow-hidden">
-                                        <p class="text-sm font-medium truncate" title="{{ $doc['name'] }}">
-                                            {{ $doc['name'] }}
-                                        </p>
-                                        <a href="{{ \Illuminate\Support\Facades\Storage::url($doc['path']) }}" target="_blank" class="text-xs text-secondary hover:underline">Download</a>
-                                    </div>
-                                    <div class="flex items-center gap-2">
-                                        <input type="checkbox" name="delete_translation_documents[]" value="{{ $index }}" id="del_t_{{ $index }}" class="form-checkbox text-danger" />
-                                        <label for="del_t_{{ $index }}" class="text-xs text-danger cursor-pointer">Delete</label>
-                                    </div>
-                                </div>
-                            @endforeach
-                        </div>
-                    </div>
-                @endif
-
                 <div class="form-group md:col-span-2">
-                    <label for="translation_documents">Upload New Translation Documents</label>
+                    <label for="translation_documents">Upload Additional Translation Documents (Optional)</label>
                     <input type="file" name="translation_documents[]" id="translation_documents" class="form-input" multiple />
                     <span class="text-xs text-white-dark">Multiple translation documents can be uploaded (PDF, DOC, JPG, PNG). Max 10MB per file.</span>
                     @error('translation_documents.*') <span class="text-danger text-sm">{{ $message }}</span> @enderror
@@ -303,103 +269,95 @@
 
 @push('scripts')
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const countrySelect = document.getElementById('country_id');
-            const universitySelect = document.getElementById('university_id');
-            const courseSelect = document.getElementById('course_id');
-            const intakeSelect = document.getElementById('course_intake_id');
-            const intakeMonths = [
-                'January',
-                'February',
-                'March',
-                'April',
-                'May',
-                'June',
-                'July',
-                'August',
-                'September',
-                'October',
-                'November',
-                'December',
-            ];
+        $(document).ready(function() {
+            // Initialize Select2
+            $('#country_id').select2({
+                placeholder: "Select Country",
+                allowClear: true,
+                width: '100%'
+            });
 
-            function resetIntakeMonths(selectedValue = '') {
-                intakeSelect.innerHTML = '<option value="">Select Intake</option>';
-                intakeMonths.forEach(month => {
-                    const option = document.createElement('option');
-                    option.value = month;
-                    option.textContent = month;
-                    option.selected = selectedValue === month;
-                    intakeSelect.appendChild(option);
-                });
-            }
+            $('#university_id').select2({
+                placeholder: "Select University",
+                allowClear: true,
+                width: '100%'
+            });
+
+            $('#course_id').select2({
+                placeholder: "Select Course",
+                allowClear: true,
+                width: '100%'
+            });
+
+            $('#course_intake_id').select2({
+                placeholder: "Select Intake",
+                allowClear: true,
+                width: '100%'
+            });
+
+            // Handle Country selection
+            $('#country_id').on('change', function() {
+                const countryId = $(this).val();
+
+                $('#university_id').html('<option value="">Select University</option>').trigger('change.select2');
+                $('#course_id').html('<option value="">Select Course</option>').trigger('change.select2');
+
+                if (countryId) {
+                    $('#university_id').html('<option value="">Loading...</option>').trigger('change.select2');
+                    $.ajax({
+                        url: "{{ route('admin.applications.get-universities') }}",
+                        type: "GET",
+                        data: { country_id: countryId },
+                        dataType: "json",
+                        success: function(data) {
+                            let options = '<option value="">Select University</option>';
+                            $.each(data, function(index, university) {
+                                options += `<option value="${university.id}" data-country-id="${countryId}">${university.name}</option>`;
+                            });
+                            $('#university_id').html(options).trigger('change.select2');
+                        },
+                        error: function() {
+                            $('#university_id').html('<option value="">Select University</option>').trigger('change.select2');
+                        }
+                    });
+                }
+            });
 
             // Handle University selection
-            universitySelect.addEventListener('change', function() {
-                const universityId = this.value;
-                const selectedOption = this.options[this.selectedIndex];
-                const countryId = selectedOption ? selectedOption.getAttribute('data-country-id') : null;
+            $('#university_id').on('change', function() {
+                const universityId = $(this).val();
+                const selectedOption = $(this).find('option:selected');
+                const countryId = selectedOption.data('country-id');
 
-                // Auto-select Country
-                if (countryId) {
-                    countrySelect.value = countryId;
+                // Auto-select Country if not already selected
+                if (countryId && $('#country_id').val() != countryId) {
+                    $('#country_id').val(countryId).trigger('change.select2');
                 }
 
-                // Reset and Load Courses
-                courseSelect.innerHTML = '<option value="">Select Course</option>';
-                resetIntakeMonths();
+                $('#course_id').html('<option value="">Select Course</option>').trigger('change.select2');
 
                 if (universityId) {
-                    fetch(`{{ route('admin.applications.get-courses') }}?university_id=${universityId}`)
-                        .then(response => {
-                            if (!response.ok) throw new Error('Network response was not ok');
-                            return response.json();
-                        })
-                        .then(data => {
+                    $('#course_id').html('<option value="">Loading...</option>').trigger('change.select2');
+                    $.ajax({
+                        url: "{{ route('admin.applications.get-courses') }}",
+                        type: "GET",
+                        data: { university_id: universityId },
+                        dataType: "json",
+                        success: function(data) {
+                            let options = '<option value="">Select Course</option>';
                             if (data.length === 0) {
-                                const option = document.createElement('option');
-                                option.value = '';
-                                option.textContent = 'No courses available';
-                                option.disabled = true;
-                                courseSelect.appendChild(option);
-                                return;
+                                options = '<option value="" disabled>No courses available</option>';
+                            } else {
+                                $.each(data, function(index, course) {
+                                    options += `<option value="${course.id}">${course.name}</option>`;
+                                });
                             }
-                            data.forEach(course => {
-                                const option = document.createElement('option');
-                                option.value = course.id;
-                                option.textContent = course.name;
-                                courseSelect.appendChild(option);
-                            });
-                        })
-                        .catch(error => console.error('Error loading courses:', error));
-                }
-            });
-
-            // Handle Course selection
-            courseSelect.addEventListener('change', function() {
-                resetIntakeMonths(intakeSelect.value);
-            });
-
-            // Handle Country selection (optional filter for Universities)
-            countrySelect.addEventListener('change', function() {
-                const countryId = this.value;
-                universitySelect.innerHTML = '<option value="">Select University</option>';
-                courseSelect.innerHTML = '<option value="">Select Course</option>';
-                resetIntakeMonths();
-
-                if (countryId) {
-                    fetch(`{{ route('admin.applications.get-universities') }}?country_id=${countryId}`)
-                        .then(response => response.json())
-                        .then(data => {
-                            data.forEach(university => {
-                                const option = document.createElement('option');
-                                option.value = university.id;
-                                option.textContent = university.name;
-                                option.setAttribute('data-country-id', countryId);
-                                universitySelect.appendChild(option);
-                            });
-                        })
-                        .catch(error => console.error('Error loading universities:', error));
+                            $('#course_id').html(options).trigger('change.select2');
+                        },
+                        error: function() {
+                            $('#course_id').html('<option value="">Select Course</option>').trigger('change.select2');
+                        }
+                    });
                 }
             });
         });

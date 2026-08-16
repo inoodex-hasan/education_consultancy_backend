@@ -20,10 +20,15 @@
                 <div class="panel">
                     <div class="flex items-center justify-between mb-5">
                         <h5 class="font-semibold text-lg">Student Information</h5>
-                        <span
-                            class="badge @if ($lead->status == 'pending') badge-outline-warning @elseif($lead->status == 'interested') badge-outline-success @elseif($lead->status == 'forwarded') badge-outline-info @else badge-outline-danger @endif capitalize">
-                            {{ $lead->status }}
-                        </span>
+                        <div class="flex items-center gap-2">
+                            <span class="badge {{ $lead->priority_badge_class }} uppercase text-xs">
+                                {{ $lead->priority ?? 'low' }} Priority
+                            </span>
+                            <span
+                                class="badge @if ($lead->status == 'pending') badge-outline-warning @elseif($lead->status == 'interested') badge-outline-success @elseif($lead->status == 'forwarded') badge-outline-info @else badge-outline-danger @endif capitalize">
+                                {{ $lead->status }}
+                            </span>
+                        </div>
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
@@ -84,6 +89,14 @@
                             <label class="text-white-dark mb-1">Contact Source</label>
                             <p class="font-semibold text-gray-light">
                                 <span class="badge badge-outline-primary">{{ $lead->source }}</span>
+                            </p>
+                        </div>
+                        <div>
+                            <label class="text-white-dark mb-1">Priority</label>
+                            <p class="font-semibold text-gray-light">
+                                <span class="badge {{ $lead->priority_badge_class }} uppercase text-xs">
+                                    {{ $lead->priority ?? 'low' }}
+                                </span>
                             </p>
                         </div>
                         <div>

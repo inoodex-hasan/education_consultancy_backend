@@ -39,6 +39,11 @@ class LeadController extends Controller
             $query->where('status', $request->status);
         }
 
+        // Filter by priority
+        if ($request->has('priority') && $request->priority != '') {
+            $query->where('priority', $request->priority);
+        }
+
         // Admin users can filter by the user who collected the lead.
         if ($canViewAllLeads && $request->has('collected_by') && $request->collected_by != '') {
             $query->where('created_by', $request->collected_by);
@@ -97,6 +102,7 @@ class LeadController extends Controller
             'preferred_country' => 'nullable|exists:countries,id',
             'preferred_course' => 'nullable|exists:courses,id',
             'source' => 'nullable|string|max:255',
+            'priority' => 'nullable|in:low,medium,high',
             'next_follow_up_at' => 'nullable|date',
             'notes' => 'nullable|string',
         ]);
@@ -172,6 +178,7 @@ class LeadController extends Controller
             'preferred_course' => 'nullable|string|exists:courses,id',
             'source' => 'nullable|string|max:255',
             'status' => 'nullable|string',
+            'priority' => 'nullable|in:low,medium,high',
             'next_follow_up_at' => 'nullable|date',
             'notes' => 'nullable|string',
         ]);
@@ -226,7 +233,7 @@ class LeadController extends Controller
         return response()->json($courses);
     }
 
-    private function buildFollowUpHistory(?Lead $lead, ?string $nextFollowUpAt, ?string $notes): ?array
+    private function buildFollowUpHistory(?Lead $lead, mixed $nextFollowUpAt, ?string $notes): ?array
     {
         $history = collect($lead?->follow_up_history ?? [])
             ->map(fn ($entry) => $this->normalizeFollowUpHistoryEntry($entry))
@@ -266,8 +273,10 @@ class LeadController extends Controller
         if ($lead === null) {
             $validated['created_by'] = Auth::id();
             $validated['status'] = $validated['status'] ?? 'pending';
+            $validated['priority'] = $validated['priority'] ?? 'low';
         } else {
             $validated['status'] = $validated['status'] ?? $lead->status;
+            $validated['priority'] = $validated['priority'] ?? $lead->priority ?? 'low';
         }
 
         if (Schema::hasColumn('leads', 'follow_up_history')) {

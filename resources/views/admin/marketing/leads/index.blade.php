@@ -52,6 +52,12 @@
                         </option>
                         <option value="Walk-in" {{ request('source') == 'Walk-in' ? 'selected' : '' }}>Walk-in</option>
                     </select>
+                    <select name="priority" class="form-select w-full md:w-36">
+                        <option value="">Priority</option>
+                        <option value="low" {{ request('priority') == 'low' ? 'selected' : '' }}>Low</option>
+                        <option value="medium" {{ request('priority') == 'medium' ? 'selected' : '' }}>Medium</option>
+                        <option value="high" {{ request('priority') == 'high' ? 'selected' : '' }}>High</option>
+                    </select>
                     @if ($canViewAllLeads ?? false)
                         <select name="collected_by" class="form-select w-full min-w-[150px]">
                             <option value="">Collected By</option>
@@ -79,6 +85,7 @@
                         <tr>
                             <th>Student Name</th>
                             <th>Phone</th>
+                            <th>Priority</th>
                             <th>Contact Source</th>
                             <th>Follow-up Date</th>
                             {{-- <th>Status</th> --}}
@@ -118,6 +125,11 @@
                                     @else
                                         -
                                     @endif
+                                </td>
+                                <td>
+                                    <span class="badge {{ $lead->priority_badge_class }} uppercase text-xs">
+                                        {{ $lead->priority ?? 'low' }}
+                                    </span>
                                 </td>
                                 <td>
                                     <span class="badge badge-outline-primary">{{ $lead->source }}</span>
@@ -170,7 +182,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="6" class="text-center">No data found.</td>
+                                <td colspan="7" class="text-center">No data found.</td>
                             </tr>
                         @endforelse
                     </tbody>
